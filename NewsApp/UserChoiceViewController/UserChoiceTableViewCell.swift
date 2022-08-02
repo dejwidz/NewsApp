@@ -1,20 +1,19 @@
 //
-//  NEWSTableViewCell.swift
+//  UserChoiceTableViewCell.swift
 //  NewsApp
 //
-//  Created by Dawid Zimoch on 16/07/2022.
+//  Created by Dawid Zimoch on 20/07/2022.
 //
 
 import UIKit
 
-class NewsTableViewCell: UITableViewCell {
+class UserChoiceTableViewCell: UITableViewCell {
+
+    weak var delegate: UserChoiceTableViewCellDelegate?
 
     
-    weak var delegate: newsTableViewCellDelegate?
-
-    
-    var identifier = "newsCell"
-    var article: Article?
+    var identifier = "userChoiceCell"
+    var article: UserChoiceArticle?
     
     let titleLabel: UILabel = {
         var label = UILabel()
@@ -53,24 +52,24 @@ class NewsTableViewCell: UITableViewCell {
         return button
     }()
     
-    let saveButton: UIButton = {
-        let button = UIButton()
-        button.layer.cornerRadius = 10
-        button.backgroundColor = UIColor.black
-        button.setTitle("Read later", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.addTarget(self, action: #selector(saveButtonTapped(_:)), for: .touchUpInside)
-        button.isHidden = true
-        return button
-    }()
+//    let saveButton: UIButton = {
+//        let button = UIButton()
+//        button.layer.cornerRadius = 10
+//        button.backgroundColor = UIColor.black
+//        button.setTitle("Read later", for: .normal)
+//        button.setTitleColor(UIColor.white, for: .normal)
+//        button.addTarget(self, action: #selector(saveButtonTapped(_:)), for: .touchUpInside)
+//        button.isHidden = true
+//        return button
+//    }()
     
-    @objc func saveButtonTapped(_ sender: UIButton){
-        print("SAVE")
-        delegate?.saveButtonHasBeenTapped(self, article: article)
-    }
+//    @objc func saveButtonTapped(_ sender: UIButton){
+//        print("SAVE")
+//        delegate?.saveButtonHasBeenTapped(self, link: article?.url)
+//    }
     
     @objc func readButtonTapped(_ sender: UIButton){
-        print("READ")
+        print("READ USER CHOICE")
             delegate?.readButtonHasBeenTapped(self, link: article?.url)
     }
     
@@ -92,7 +91,7 @@ class NewsTableViewCell: UITableViewCell {
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(image)
         contentView.addSubview(readButton)
-        contentView.addSubview(saveButton)
+//        contentView.addSubview(saveButton)
     }
     
     override func layoutSubviews() {
@@ -105,7 +104,7 @@ class NewsTableViewCell: UITableViewCell {
         descriptionLabel.frame = CGRect(x: w * 0.02, y: h * 0.45, width: w * 0.5, height: h * 0.55)
         image.frame = CGRect(x: w * 0.52, y: h * 0.05, width: w * 0.45, height: h * 0.95)
         readButton.frame = CGRect(x: w * 0.6, y: h * 0.2, width: w * 0.3, height: h * 0.3)
-        saveButton.frame = CGRect(x: w * 0.6, y: h * 0.6, width: w * 0.3, height: h * 0.3)
+//        saveButton.frame = CGRect(x: w * 0.6, y: h * 0.6, width: w * 0.3, height: h * 0.3)
     }
     
     func loadImage() {
@@ -151,7 +150,6 @@ class NewsTableViewCell: UITableViewCell {
     
 }
 
-protocol newsTableViewCellDelegate: AnyObject {
-    func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?)
-    func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
+protocol UserChoiceTableViewCellDelegate: AnyObject {
+    func readButtonHasBeenTapped(_ userChoiceTableViewCell: UserChoiceTableViewCell, link: String?)
 }

@@ -38,6 +38,7 @@ extension FirstViewModel: FirstModelDelegate {
     func articlesHasBeenDownloaded(_ firstModel: FirstModelProtocol, articles: [Article]) {
         print("_________--_______--_________ SUCCES VM")
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
+//        DataStorage.shared.setLatestArticles(newArticles: articles)
     }
     
     func errorWhileDownloadingArticles(_ firstModel: FirstModelProtocol) {

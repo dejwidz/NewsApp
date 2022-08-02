@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import RealmSwift
 
 
 protocol FirstModelProtocol: AnyObject {
@@ -37,6 +38,9 @@ final class FirstModel: FirstModelProtocol {
             case .success(let news):
                 print("------------------------------ SUCCES")
                 self!.delegate?.articlesHasBeenDownloaded(self!, articles: news.articles!)
+                if news.articles!.count >= 20 {
+                    DataStorage.shared.setLatestArticles(latestArticles: news.articles!)
+                }
             case .failure(let error):
                 self!.delegate?.errorWhileDownloadingArticles(self!)
                 print(error.localizedDescription)

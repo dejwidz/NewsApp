@@ -20,31 +20,48 @@ class ViewController: UIViewController {
     let newsTableView: UITableView = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
-        let tablewView = UITableView()
-        tablewView.frame = CGRect(x: 0, y: 100, width: w, height: h * 0.8)
-        tablewView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
+        let tableView = UITableView()
+        tableView.frame = CGRect(x: 0, y: 100, width: w, height: h * 0.8)
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
         
-        return tablewView
+        return tableView
     }()
     
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Do any additional setup after loading the view.
-        title = "news"
+        title = "NewsApp"
         
         view.addSubview(newsTableView)
         newsTableView.delegate = self
         newsTableView.dataSource = self
         viewModel.delegate = self
-        
+        articlesToDisplay = DataStorage.shared.getLatestArticles()
         getArticles()
+        }
+    
+    override func viewWillLayoutSubviews() {
+        view.backgroundColor = UIColor.white
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+        navigationItem.rightBarButtonItem?.tintColor = .black
     }
+    
+    @objc func myChoiceButtonTapped() {
+let vc = UserChoiceViewController()
+//        vc.articlesToShow = articlesToDisplay
+//        vc.articlesToShow = DataStorage.shared.getLatestArticles()
+        present(vc, animated: true)
+        
+    }
+
     
     func getArticles() {
         viewModel.getArticlesToDisplay()
     }
+    
     
     
 }
@@ -60,10 +77,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
-        cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].description
-//        cell.loadImage()
+        cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
+//                cell.loadImage()
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
+        
         
         return cell
     }
@@ -99,17 +117,28 @@ extension ViewController: FirstViewModeleDelegate {
 }
 
 extension ViewController: newsTableViewCellDelegate {
+    func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?) {
+        DataStorage.shared.addUserChoiceArticle(newArticle: article!)
+    }
+    
     func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?) {
         guard let link = link else {return}
         guard let url = URL(string: link) else {return}
         print(link)
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true, completion: nil)
+//        DataStorage.shared.deleteAllUserChoiceArticles()
+//        let date = Date.now.formatted(date: .abbreviated, time: .omitted)
+//        print(date)
+        let date = Date.now
+        let formatter = DateFormatter()
+        formatter.dateFormat = "YYYY-MM-dd"
+        
+        
+        let ddate = formatter.string(from: date)
+        print(ddate)
     }
     
-    func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?) {
-        newsTableView.reloadData()
-    }
     
     
 }

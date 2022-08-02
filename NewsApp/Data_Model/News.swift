@@ -6,7 +6,7 @@
 //
 
 import Foundation
-
+//import RealmSwift
 
 struct News: Codable {
     
@@ -14,3 +14,4 @@ struct News: Codable {
     var totalResults: Int?
     var articles: [Article]?
 }
+
