@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let homeViewController = ViewController()
         let navigationController = UINavigationController(rootViewController: homeViewController)
+        navigationController.navigationBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height * 0.1)
         window.rootViewController = navigationController
         window.makeKeyAndVisible()
         self.window = window

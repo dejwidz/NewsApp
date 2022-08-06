@@ -13,9 +13,10 @@ class ViewController: UIViewController {
     let viewModel = FirstViewModel(model: FirstModel())
     var articlesToDisplay: [Article]? {
         didSet {
-            print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+            print("nowa ilość artykółów: \(articlesToDisplay?.count)")
         }
     }
+    
     
     let newsTableView: UITableView = {
         let w = UIScreen.main.bounds.width
@@ -27,36 +28,59 @@ class ViewController: UIViewController {
         return tableView
     }()
     
+    let bar = UISearchBar()
+
     
+    let searchController = UISearchController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
         title = "NewsApp"
-        
+     
         view.addSubview(newsTableView)
         newsTableView.delegate = self
         newsTableView.dataSource = self
         viewModel.delegate = self
         articlesToDisplay = DataStorage.shared.getLatestArticles()
         getArticles()
-        }
-    
-    override func viewWillLayoutSubviews() {
+        
         view.backgroundColor = UIColor.white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .black
+        
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+        navigationItem.leftBarButtonItem?.tintColor = .black
+        
+        searchController.searchResultsUpdater = self
+        navigationItem.searchController = searchController
+        bar.sizeToFit()
+        navigationController?.navigationBar.addSubview(bar)
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+    }
+    
+    override func viewWillLayoutSubviews() {
+//        view.backgroundColor = UIColor.white
+//        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+//        navigationItem.rightBarButtonItem?.tintColor = .black
+//
+//        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+//        navigationItem.leftBarButtonItem?.tintColor = .black
+        
+   
+
     }
     
     @objc func myChoiceButtonTapped() {
-let vc = UserChoiceViewController()
-//        vc.articlesToShow = articlesToDisplay
-//        vc.articlesToShow = DataStorage.shared.getLatestArticles()
+        let vc = UserChoiceViewController()
+        //        vc.articlesToShow = articlesToDisplay
+        //        vc.articlesToShow = DataStorage.shared.getLatestArticles()
         present(vc, animated: true)
         
     }
-
+    
     
     func getArticles() {
         viewModel.getArticlesToDisplay()
@@ -78,7 +102,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
-//                cell.loadImage()
+        //                cell.loadImage()
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
         
@@ -124,21 +148,32 @@ extension ViewController: newsTableViewCellDelegate {
     func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?) {
         guard let link = link else {return}
         guard let url = URL(string: link) else {return}
-        print(link)
+//        print(link)
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true, completion: nil)
-//        DataStorage.shared.deleteAllUserChoiceArticles()
-//        let date = Date.now.formatted(date: .abbreviated, time: .omitted)
-//        print(date)
+        //        DataStorage.shared.deleteAllUserChoiceArticles()
+        //        let date = Date.now.formatted(date: .abbreviated, time: .omitted)
+        //        print(date)
         let date = Date.now
         let formatter = DateFormatter()
         formatter.dateFormat = "YYYY-MM-dd"
         
         
         let ddate = formatter.string(from: date)
-        print(ddate)
+//        print(ddate)
     }
     
+    
+    
+}
+
+extension ViewController: UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard searchController.searchBar.text != "" else {return}
+        
+        print(searchController.searchBar.text)
+        
+    }
     
     
 }

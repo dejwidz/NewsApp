@@ -22,7 +22,7 @@ class UserChoiceViewController: UIViewController {
         return tableView
     }()
     
-    private var viewModel = UserChoiceViewModel(model: UserChoiceModel())
+    let viewModel = UserChoiceViewModel(model: UserChoiceModel())
     
     var articlesToShow: [UserChoiceArticle]?
     
@@ -32,6 +32,7 @@ class UserChoiceViewController: UIViewController {
         
         view.addSubview(userChoiceTableView)
         viewModel.delegate = self
+        viewModel.getUserChoiceArticlesFromModel()
         userChoiceTableView.delegate = self
         userChoiceTableView.dataSource = self
         
@@ -43,15 +44,13 @@ class UserChoiceViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        articlesToShow = DataStorage.shared.getUserChoiceArticles()
+//        articlesToShow = DataStorage.shared.getUserChoiceArticles()
     }
     
     
 }
 
-extension UserChoiceViewController: UserChoiceViewModelDelegate {
-    
-}
+
 
 extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -115,3 +114,11 @@ extension UserChoiceViewController: UserChoiceTableViewCellDelegate {
 
 }
 
+extension UserChoiceViewController: UserChoiceViewModelDelegate {
+    func userChoiceArticlesHasBeenDownloaded(_ userchoiceViewModel: UserChoiceViewModelProtocol, articles: [UserChoiceArticle]) {
+        articlesToShow = articles
+        userChoiceTableView.reloadData()
+         }
+    
+    
+}

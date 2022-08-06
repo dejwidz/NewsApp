@@ -8,10 +8,10 @@
 import UIKit
 
 class NewsTableViewCell: UITableViewCell {
-
+    
     
     weak var delegate: newsTableViewCellDelegate?
-
+    
     
     var identifier = "newsCell"
     var article: Article?
@@ -65,13 +65,13 @@ class NewsTableViewCell: UITableViewCell {
     }()
     
     @objc func saveButtonTapped(_ sender: UIButton){
-        print("SAVE")
+//        print("SAVE")
         delegate?.saveButtonHasBeenTapped(self, article: article)
     }
     
     @objc func readButtonTapped(_ sender: UIButton){
-        print("READ")
-            delegate?.readButtonHasBeenTapped(self, link: article?.url)
+//        print("READ")
+        delegate?.readButtonHasBeenTapped(self, link: article?.url)
     }
     
     override func awakeFromNib() {
@@ -121,19 +121,19 @@ class NewsTableViewCell: UITableViewCell {
     }
     
     func loadImageWithNetworkingServices() {
-//        NetworkingServices.networkSingleton.getImage(link: article?.urlToImage, completion: { result in
-//            switch result {
-//            case .failure(let error):
-//                print(error.localizedDescription)
-//                break
-//            case .success(let data):
-//                let image = UIImage(data: data)
-//                DispatchQueue.main.async {
-//                    self.image.image = image
-//                }
-//            }
-//
-//        })
+        //        NetworkingServices.networkSingleton.getImage(link: article?.urlToImage, completion: { result in
+        //            switch result {
+        //            case .failure(let error):
+        //                print(error.localizedDescription)
+        //                break
+        //            case .success(let data):
+        //                let image = UIImage(data: data)
+        //                DispatchQueue.main.async {
+        //                    self.image.image = image
+        //                }
+        //            }
+        //
+        //        })
         
         NetworkingServices.networkSingleton.getImageWithAlamo(link: article?.urlToImage, completion: { result in
             switch result {
@@ -141,7 +141,8 @@ class NewsTableViewCell: UITableViewCell {
                 self.image.image = UIImage(data: data)
             case .failure(let error):
                 self.image.image = UIImage(systemName: "moon.stars")
-                print(error.localizedDescription)
+//                print(error.localizedDescription)
+                print("mooooooon")
             }
             
             

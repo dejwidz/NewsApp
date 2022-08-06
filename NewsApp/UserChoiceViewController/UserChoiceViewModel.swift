@@ -9,10 +9,11 @@ import Foundation
 
 protocol UserChoiceViewModelProtocol: AnyObject {
     var delegate: UserChoiceViewModelDelegate? {get set}
+    func getUserChoiceArticlesFromModel()
 }
 
 protocol UserChoiceViewModelDelegate: AnyObject {
-    
+    func userChoiceArticlesHasBeenDownloaded(_ userchoiceViewModel: UserChoiceViewModelProtocol, articles: [UserChoiceArticle])
 }
 
 final class UserChoiceViewModel: UserChoiceViewModelProtocol {
@@ -26,8 +27,18 @@ final class UserChoiceViewModel: UserChoiceViewModelProtocol {
         model.delegate = self
     }
     
+    func getUserChoiceArticlesFromModel() {
+        model.getUserChoiceArticles()
+    }
+    
 }
 
 extension UserChoiceViewModel: UserChoiceModelDelegate {
+    func userChoiceArticlesHasBeenDownloaded(_ userChoiceModel: UserChoiceModelProtocol, articles: [UserChoiceArticle]) {
+        delegate?.userChoiceArticlesHasBeenDownloaded(self, articles: articles)
+        
+
+    }
+    
     
 }
