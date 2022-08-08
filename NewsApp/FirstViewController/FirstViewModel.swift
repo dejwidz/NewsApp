@@ -10,7 +10,7 @@ import Foundation
 protocol FirstViewModelProtocol: AnyObject {
     var delegate: FirstViewModeleDelegate? {get set}
     func getArticlesToDisplay()
-    
+    func searchTextHasChanged(newText: String)
 }
 
 protocol FirstViewModeleDelegate: AnyObject {
@@ -30,6 +30,21 @@ final class FirstViewModel: FirstViewModelProtocol {
     
     func getArticlesToDisplay() {
         model.getAriclesFromWeb()
+    }
+    
+    func searchTextHasChanged(newText: String) {
+//        print(newText)
+        let stringPreparedToMakeQuery = prepareStringToMakeQuery(stringToPrepare: newText)
+
+    }
+    
+    func prepareStringToMakeQuery(stringToPrepare: String) -> String {
+        var tempString = stringToPrepare.lowercased()
+        let prohibitSet = CharacterSet(charactersIn: " -_=+!@#$%^&*();.>,</?")
+        tempString = tempString.trimmingCharacters(in: prohibitSet)
+        tempString = tempString.replacingOccurrences(of: " ", with: "-")
+        print(tempString)
+        return tempString
     }
     
 }

@@ -47,7 +47,9 @@ class UserChoiceViewController: UIViewController {
 //        articlesToShow = DataStorage.shared.getUserChoiceArticles()
     }
     
-    
+    @objc func backButtonTapped() {
+        
+    }
 }
 
 

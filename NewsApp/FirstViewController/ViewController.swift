@@ -13,7 +13,7 @@ class ViewController: UIViewController {
     let viewModel = FirstViewModel(model: FirstModel())
     var articlesToDisplay: [Article]? {
         didSet {
-            print("nowa ilość artykółów: \(articlesToDisplay?.count)")
+            print("nowa ilość artykułów: \(articlesToDisplay?.count)")
         }
     }
 
@@ -46,7 +46,7 @@ class ViewController: UIViewController {
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .black
 
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(optionsButtonTapped))
         navigationItem.leftBarButtonItem?.tintColor = .black
         navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
@@ -54,13 +54,18 @@ class ViewController: UIViewController {
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.automaticallyShowsCancelButton = true
         searchController.searchBar.placeholder = "type what you are interested in"
-    
-
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
 
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
         present(vc, animated: true)
+    }
+    
+    @objc func optionsButtonTapped() {
+        let vc = OptionsViewController()
+        navigationController?.present(vc, animated: true, completion: nil)
+//        present(vc, animated: true)
     }
 
     func getArticles() {
@@ -147,10 +152,17 @@ extension ViewController: newsTableViewCellDelegate {
 //
 extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        guard searchController.searchBar.text != "" else {return}
+        
+        let temporaryString = searchController.searchBar.text
+        
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+            if temporaryString == searchController.searchBar.text {
+                self.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
 
-        print(searchController.searchBar.text)
-
+            }
+        }
+        
+        
     }
 
 

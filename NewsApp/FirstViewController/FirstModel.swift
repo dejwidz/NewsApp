@@ -10,7 +10,7 @@ import RealmSwift
 
 
 protocol FirstModelProtocol: AnyObject {
-    var delegate:FirstModelDelegate? {get set}
+    var delegate: FirstModelDelegate? {get set}
     func getAriclesFromWeb()
     func sendStoredArticles()
 }

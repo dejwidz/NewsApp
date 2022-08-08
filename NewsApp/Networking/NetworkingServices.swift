@@ -16,17 +16,23 @@ final class NetworkingServices {
     private init () {}
     var articlesToReturn: [Article]?
     
-    var mainURL = URL(string: "https://newsapi.org/v2/top-headlines?country=us&apiKey=715dc191ff584bb2b070568ffb2d6683")
-    var URLPart1 = "https://newsapi.org/v2/everything?"
+    var mainURL = URL(string: "https://newsapi.org/v2/everything?q=null&from=2022-07-10&to=2022-08-06&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683")
+    var URLFirstPart = "https://newsapi.org/v2/everything?"
     var queryMark = "q="
     var query = ""
-    var URLPart2 = "&from=2022-07-10&to=2022-07-10&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
+    var fromIndicator = "&from="
+    var dateFrom = "2022-07-10"
+    var toIndicator = "&to="
+    var dateTo = "2022-07-10"
+    var URLLastPart = "&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
+    
+//    "https://newsapi.org/v2/top-headlines?country=pl&category=science&pageSize=100&apiKey=715dc191ff584bb2b070568ffb2d6683"
     
 //    "https://newsapi.org/v2/everything?q=war&from=2022-07-10&to=2022-07-13&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
     
     //    https://newsapi.org/v2/top-headlines?country=pl&apiKey=715dc191ff584bb2b070568ffb2d6683
     
-    //    https://newsapi.org/v2/top-headlines?country=pl&category=sports&apiKey=715dc191ff584bb2b070568ffb2d6683
+    //    https://newsapi.org/v2/top-headlines?country=pl&category=sports&pageSize=100&apiKey=715dc191ff584bb2b070568ffb2d6683
     
     //https://newsapi.org/v2/top-headlines?country=pl&apiKey=715dc191ff584bb2b070568ffb2d6683
     
@@ -39,50 +45,6 @@ final class NetworkingServices {
         case wrongDecoding
     }
     
-    
-//    func downloadData(completion: @escaping ((Result<[Article], Error>) -> Void)) {
-//        guard let url = mainURL else {return}
-//
-//        let task = URLSession.shared.dataTask(with: url) {data, response, error  in
-//            if let error = error {
-//                completion(.failure(NetworkingErrors.wrongRequest))
-//            } else if let data = data {
-//                do {
-//                    let result = try JSONDecoder().decode(News.self, from: data)
-//                    completion(.success(result.articles ?? []))
-//                    print("ilość artykułów w result: \(result.articles?.count)"  )
-//                }
-//                catch {
-//                    completion(.failure(NetworkingErrors.wrongDecoding))
-//                }
-//            }
-//
-//
-//        }
-//        task.resume()
-//    }
-//
-//    func getImage(link: String?, completion: @escaping ((Result<Data, Error>) -> Void)) {
-//
-//        guard let link = link else {return}
-//
-//        guard let url = URL(string: link) else {return}
-//
-//        let session = URLSession.shared.dataTask(with: url) {data, _, error in
-//
-//            guard error == nil else {
-//                completion(.failure(error!))
-//                return}
-//
-//            guard let data = data else {
-//                completion(.failure(error!))
-//                return
-//            }
-//            completion(.success(data))
-//
-//        }
-//        session.resume()
-//    }
     
     func getArticlesWithAlamo(completion: @escaping ((Result<News, Error>) -> Void)){
         
@@ -110,9 +72,8 @@ final class NetworkingServices {
     
     
     func getArticlesWithSearch(query: String, completion: @escaping ((Result<News, Error>) -> Void)) {
-        self.query = query
-        var searchStringUrl = URLPart1 + queryMark + query + URLPart2
-        guard let url = URL(string: searchStringUrl) else {
+        
+        guard let url = URLBuilder.shared.getURLWithQuery() else {
             completion(.failure(NetworkingErrors.wrongURL))
             return
         }
@@ -153,24 +114,11 @@ final class NetworkingServices {
             return
         }
         
-        //        AF.request(request).validate().responseDecodable(of: Data.self) { response in
-        //            switch response.result {
-        //            case .failure(let error):
-        //                print("CHUJ AF")
-        //                completion(.failure(NetworkingErrors.wrongDecoding))
-        //                break
-        //            case .success(let data):
-        //                completion(.success(data))
-        //                break
-        //            }
-        //        }
-        
         AF.request(url ,method: .get).response{ response in
             switch response.result {
             case .success(let responseData):
-                //                self.myImageView.image = UIImage(data: responseData!, scale:1)
                 completion(.success(responseData!))
-                
+                break
             case .failure(let error):
                 print("CHUJJ AF")
                 completion(.failure(NetworkingErrors.wrongDecoding))
