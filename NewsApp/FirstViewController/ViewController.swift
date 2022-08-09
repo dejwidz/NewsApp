@@ -39,13 +39,12 @@ class ViewController: UIViewController {
         newsTableView.delegate = self
         newsTableView.dataSource = self
         viewModel.delegate = self
-        articlesToDisplay = DataStorage.shared.getLatestArticles()
+//        articlesToDisplay = DataStorage.shared.getLatestArticles()
         getArticles()
 
         view.backgroundColor = UIColor.white
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
         navigationItem.rightBarButtonItem?.tintColor = .black
-
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(optionsButtonTapped))
         navigationItem.leftBarButtonItem?.tintColor = .black
         navigationController?.navigationItem.searchController = searchController
@@ -56,6 +55,11 @@ class ViewController: UIViewController {
         searchController.searchBar.placeholder = "type what you are interested in"
         navigationItem.hidesSearchBarWhenScrolling = false
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewdidapper")
+        getArticles()
+    }
 
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
@@ -64,8 +68,8 @@ class ViewController: UIViewController {
     
     @objc func optionsButtonTapped() {
         let vc = OptionsViewController()
+        vc.delegate = self
         navigationController?.present(vc, animated: true, completion: nil)
-//        present(vc, animated: true)
     }
 
     func getArticles() {
@@ -82,14 +86,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell") as!
         NewsTableViewCell
-
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
-
-
         return cell
     }
 
@@ -111,9 +112,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.readButton.isHidden = true
         cell.saveButton.isHidden = true
     }
-
 }
-//
+
 extension ViewController: FirstViewModeleDelegate {
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
@@ -131,40 +131,27 @@ extension ViewController: newsTableViewCellDelegate {
     func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?) {
         guard let link = link else {return}
         guard let url = URL(string: link) else {return}
-//        print(link)
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true, completion: nil)
-        //        DataStorage.shared.deleteAllUserChoiceArticles()
-        //        let date = Date.now.formatted(date: .abbreviated, time: .omitted)
-        //        print(date)
-        let date = Date.now
-        let formatter = DateFormatter()
-        formatter.dateFormat = "YYYY-MM-dd"
-
-
-        let ddate = formatter.string(from: date)
-//        print(ddate)
     }
-
-
-
 }
-//
-extension ViewController: UISearchResultsUpdating {
+
+    extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        
         let temporaryString = searchController.searchBar.text
-        
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
             if temporaryString == searchController.searchBar.text {
                 self.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
-
             }
         }
-        
-        
     }
+}
 
-
+extension ViewController: OptionsDelegate {
+    func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController) {
+        getArticles()
+    }
+    
+    
 }
 

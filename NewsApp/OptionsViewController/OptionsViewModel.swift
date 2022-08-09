@@ -41,6 +41,7 @@ extension OptionsViewModel: OptionsViewModelProtocol {
         let stringDate = dateFormatter.string(from: sendedDate)
         let maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: sendedDate)
         delegate?.newMaximalDateForFromDate(self, newDate: maximumDate!)
+        model.toDateHasChanged(toDate: stringDate)
     }
     
     func fromDateHasChanged(sendedDate: Date) {
@@ -49,6 +50,7 @@ extension OptionsViewModel: OptionsViewModelProtocol {
         let stringDate = dateFormatter.string(from: sendedDate)
         let minimalDate = Calendar.current.date(byAdding: .day, value: 1, to: sendedDate)
         delegate?.newMinimalDateForToDate(self, newDate: minimalDate!)
+        model.fromDateHasChanged(fromDate: stringDate)
     }
     
     func countrySegmentedControlHasChanged() {

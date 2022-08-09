@@ -12,48 +12,62 @@ final class URLBuilder {
     static var shared = URLBuilder()
     private init() {}
     
-    let formatter = DateFormatter()
+    private let formatter = DateFormatter()
+    private var URLHasNotBeenSentToday = true
+//    https://newsapi.org/v2/everything?q=null&from=2022-07-10&to=2022-08-06&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683
     
-    
-    var URLFirstPart = "https://newsapi.org/v2/everything?"
-    var queryMark = "q="
-    var query = "null"
-    var fromIndicator = "&from="
-    var dateFrom = "2022-07-10"
-    var toIndicator = "&to="
-    var dateTo = "2022-07-10"
-    var URLLastPart = "&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
+    private var URLFirstPart = "https://newsapi.org/v2/everything?"
+    private var queryMark = "q="
+    private var query = "null"
+    private var fromIndicator = "&from="
+    private var dateFrom = "2022-07-10" {
+        willSet {
+            print(newValue)
+        }
+    }
+    private var toIndicator = "&to="
+    private var dateTo = "2022-07-11" {
+        willSet {
+            print(newValue)
+        }
+    }
+    private var URLLastPart = "&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
 
-    func setGeneralDates() {
+    private func setGeneralDates() {
         let endDate = Date.now
-        let startDate = Calendar.current.date(byAdding: .month, value: -1, to: endDate)
+        let startDate = Calendar.current.date(byAdding: .day, value: -30, to: endDate)
         formatter.dateFormat = "YYYY-MM-dd"
         dateFrom = formatter.string(from: startDate!)
+        print("datefrom--------------------------\(dateFrom)")
+
         dateTo = formatter.string(from: endDate)
+        print("dateto--------------------------\(dateTo)")
+
     }
     
-    func getGeneralURL() -> URL {
-        setGeneralDates()
+    func getGeneralURL() -> URL? {
+        if URLHasNotBeenSentToday {
+            setGeneralDates()
+            
+            URLHasNotBeenSentToday = false
+        }
         query = "null"
-        guard var url = URL(string: URLFirstPart) else {return URL(string: "")!}
-        url.appendPathComponent(queryMark)
-        url.appendPathComponent(query)
-        url.appendPathComponent(fromIndicator)
-        url.appendPathComponent(dateFrom)
-        url.appendPathComponent(toIndicator)
-        url.appendPathComponent(dateTo)
-        url.appendPathComponent(URLLastPart)
+        let urlString = URLFirstPart + queryMark + query + fromIndicator + dateFrom + toIndicator + dateTo + URLLastPart
+        
+        print(urlString)
+//        url = URL(string: "https://newsapi.org/v2/everything?q=null&from=2022-07-16&to=2022-07-17&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683")!
+        print(urlString)
+        let url = URL(string: urlString)
+        
         return url
     }
     
-    func setDateTo(newDateTo: Date) {
-        formatter.dateFormat = "YYYY-MM-dd"
-        dateTo = formatter.string(from: newDateTo)
+    func setDateTo(newDateTo: String) {
+        dateTo = newDateTo
     }
     
-    func setDateFrom(newDateFrom: Date) {
-        formatter.dateFormat = "YYYY-MM-dd"
-        dateFrom = formatter.string(from: newDateFrom)
+    func setDateFrom(newDateFrom: String) {
+        dateFrom = newDateFrom
     }
     
     func setQuery(newQuery: String) {
@@ -65,14 +79,13 @@ final class URLBuilder {
     }
     
     func getURLWithQuery() -> URL? {
-        guard var url = URL(string: URLFirstPart) else {return nil}
-        url.appendPathComponent(queryMark)
-        url.appendPathComponent(query)
-        url.appendPathComponent(fromIndicator)
-        url.appendPathComponent(dateFrom)
-        url.appendPathComponent(toIndicator)
-        url.appendPathComponent(dateTo)
-        url.appendPathComponent(URLLastPart)
+        let urlString = URLFirstPart + queryMark + query + fromIndicator + dateFrom + toIndicator + dateTo + URLLastPart
+        
+        print(urlString)
+//        url = URL(string: "https://newsapi.org/v2/everything?q=null&from=2022-07-16&to=2022-07-17&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683")!
+        print(urlString)
+        let url = URL(string: urlString)
+        
         return url
     }
     

@@ -10,7 +10,7 @@ import Foundation
 protocol OptionsModelProtocol: AnyObject {
     var delegate: OptionsModelDelegate? {get set}
     func toDateHasChanged(toDate: String)
-    func fromDateHasChanged(toDate: String)
+    func fromDateHasChanged(fromDate: String)
 }
 
 protocol OptionsModelDelegate: AnyObject {
@@ -26,12 +26,12 @@ final class OptionsModel {
 }
 
 extension OptionsModel: OptionsModelProtocol {
-    func fromDateHasChanged(toDate: String) {
-        
+    func fromDateHasChanged(fromDate: String) {
+        URLBuilder.shared.setDateFrom(newDateFrom: fromDate)
     }
     
     func toDateHasChanged(toDate: String) {
-        
+        URLBuilder.shared.setDateTo(newDateTo: toDate)
     }
     
     

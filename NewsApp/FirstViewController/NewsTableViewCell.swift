@@ -142,7 +142,7 @@ class NewsTableViewCell: UITableViewCell {
             case .failure(let error):
                 self.image.image = UIImage(systemName: "moon.stars")
 //                print(error.localizedDescription)
-                print("mooooooon")
+//                print("mooooooon")
             }
             
             

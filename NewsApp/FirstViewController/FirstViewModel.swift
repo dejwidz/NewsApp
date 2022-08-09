@@ -29,13 +29,20 @@ final class FirstViewModel: FirstViewModelProtocol {
     }
     
     func getArticlesToDisplay() {
+        model.sendStoredArticles()
         model.getAriclesFromWeb()
     }
     
     func searchTextHasChanged(newText: String) {
-//        print(newText)
         let stringPreparedToMakeQuery = prepareStringToMakeQuery(stringToPrepare: newText)
-
+        guard stringPreparedToMakeQuery != "" else {
+            model.sendStoredArticles()
+            model.setNewQuery(newQuery: "")
+            model.getAriclesFromWeb()
+            return
+        }
+        model.setNewQuery(newQuery: stringPreparedToMakeQuery)
+        model.getArticlesWithQuery()
     }
     
     func prepareStringToMakeQuery(stringToPrepare: String) -> String {
@@ -43,22 +50,21 @@ final class FirstViewModel: FirstViewModelProtocol {
         let prohibitSet = CharacterSet(charactersIn: " -_=+!@#$%^&*();.>,</?")
         tempString = tempString.trimmingCharacters(in: prohibitSet)
         tempString = tempString.replacingOccurrences(of: " ", with: "-")
-        print(tempString)
         return tempString
     }
     
 }
 
 extension FirstViewModel: FirstModelDelegate {
-    func latestArticlesHasBeenSended(_ firstModel: FirstModelProtocol, articles: [Article]) {
+    func latestArticlesHasBeenSent(_ firstModel: FirstModelProtocol, articles: [Article]) {
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
-//        print("VM Error -> latest articles*******************************************")
+        //        print("VM Error -> latest articles*******************************************")
     }
     
     func articlesHasBeenDownloaded(_ firstModel: FirstModelProtocol, articles: [Article]) {
-//        print("_________--_______--_________ SUCCES VM")
+        //        print("_________--_______--_________ SUCCES VM")
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
-//        DataStorage.shared.setLatestArticles(newArticles: articles)
+        //        DataStorage.shared.setLatestArticles(newArticles: articles)
     }
     
     func errorWhileDownloadingArticles(_ firstModel: FirstModelProtocol) {

@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol OptionsDelegate: AnyObject {
+    func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController)
+}
+
+
 class OptionsViewController: UIViewController {
     
     private var viewmodel = OptionsViewModel(model: OptionsModel())
+    weak var delegate: OptionsDelegate?
     
     let toDate: UIDatePicker = {
         let w = UIScreen.main.bounds.width
@@ -20,7 +26,7 @@ class OptionsViewController: UIViewController {
         datePicker.frame = CGRect(x: 0, y: h * 0.1, width: w * 0.8, height: h * 0.1)
         datePicker.datePickerMode = .date
         datePicker.maximumDate = now
-        datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -1, to: now)
+        datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -30, to: now)
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(toDateChanged(_:)), for: .valueChanged)
         
@@ -39,7 +45,7 @@ class OptionsViewController: UIViewController {
         datePicker.datePickerMode = .date
         let now = Date.now
         datePicker.maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: now)
-        datePicker.minimumDate = Calendar.current.date(byAdding: .month, value: -1, to: now)
+        datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -30, to: now)
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(fromDateChanged(_:)), for: .valueChanged)
         
@@ -143,6 +149,10 @@ class OptionsViewController: UIViewController {
         view.addSubview(countrySegmentedControl)
         view.addSubview(topicsSegmentedControl)
         
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        delegate?.newOptionsHasBeenSet(self)
     }
     
 }
