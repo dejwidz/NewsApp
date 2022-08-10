@@ -56,8 +56,12 @@ class ViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        newsTableView.reloadData()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
-        print("viewdidapper")
+       
         getArticles()
     }
 
@@ -103,7 +107,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
         cell.image.alpha = 0.3
         cell.readButton.isHidden = false
-        cell.saveButton.isHidden = false
+        cell.saveButton.isHidden = false        
     }
 
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

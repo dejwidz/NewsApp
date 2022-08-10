@@ -7,19 +7,19 @@
 
 import Foundation
 
-enum NetworkConstants {
-    static let mainURL = ""
-    static let basicURL = ""
-    static let usa = "us"
-    static let poland = "pl"
-    static let germany = "de"
-    static let France = "fr"
-    static let italy = "it"
-    static let general = "general"
-    static let science = "science"
-    static let sport = "sport"
-    static let bussines = "bussines"
-    static let technology = "technology"
+enum Categories: String {
+    case general = "general"
+    case science = "science"
+    case sport = "sports"
+    case bussines = "business"
+    case technology = "technology"
+}
 
-    
+enum Countries: String {
+    case world = ""
+    case usa = "us"
+    case poland = "pl"
+    case germany = "de"
+    case france = "fr"
+    case italy = "it"
 }

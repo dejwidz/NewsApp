@@ -48,7 +48,7 @@ final class NetworkingServices {
     
     func getArticlesWithAlamo(completion: @escaping ((Result<News, Error>) -> Void)){
         
-        guard let url = URLBuilder.shared.getGeneralURL() else {
+        guard let url = URLBuilder.shared.getURLWithoutQuery() else {
             completion(.failure(NetworkingErrors.wrongURL))
             print("chuj nie url")
             return}

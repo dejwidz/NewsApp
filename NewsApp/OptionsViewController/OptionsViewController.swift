@@ -35,6 +35,7 @@ class OptionsViewController: UIViewController {
     
     @objc func toDateChanged(_ sender: UIDatePicker) {
         viewmodel.toDateHasChanged(sendedDate: sender.date)
+        viewmodel.setEndDate(newDate: sender.date)
     }
     
     let fromDate: UIDatePicker = {
@@ -54,6 +55,7 @@ class OptionsViewController: UIViewController {
     
     @objc func fromDateChanged(_ sender: UIDatePicker) {
         viewmodel.fromDateHasChanged(sendedDate: sender.date)
+        viewmodel.setStartDate(newDate: sender.date)
     }
     
     let toDateLabel: UILabel = {
@@ -99,7 +101,9 @@ class OptionsViewController: UIViewController {
     }()
     
     @objc func countrySelectedControlChanged(_ sender: UISegmentedControl) {
-        
+        let index = sender.selectedSegmentIndex
+        viewmodel.countrySegmentedControlHasChanged(index: index)
+        viewmodel.setCountryIndex(newIndex: index)
     }
     
     let topicsSegmentedControl: UISegmentedControl = {
@@ -119,7 +123,9 @@ class OptionsViewController: UIViewController {
     }()
     
     @objc func topicsSegmentedControlChanged(_ sender: UISegmentedControl) {
-        
+        let index = sender.selectedSegmentIndex
+        viewmodel.TopicsSegmentedControlHasChanged(index: index)
+        viewmodel.setCategoryIndex(newIndex: index)
     }
     
     
@@ -151,6 +157,13 @@ class OptionsViewController: UIViewController {
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        viewmodel.getEndDate()
+        viewmodel.getStartDate()
+        viewmodel.getCountryIndex()
+        viewmodel.getCategoryIndex()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.newOptionsHasBeenSet(self)
     }
@@ -158,6 +171,24 @@ class OptionsViewController: UIViewController {
 }
 
 extension OptionsViewController: OptionsViewModelDelegate {
+    func sendStartDate(_ optionsViewModelProtocol: OptionsViewModel, date: Date?) {
+        guard let date = date else {return}
+        fromDate.date = date
+    }
+    
+    func sendEndDate(_ optionsViewModelProtocol: OptionsViewModel, date: Date?) {
+        guard let date = date else {return}
+        toDate.date = date
+    }
+    
+    func sendCountryIndex(_ optionsViewModelProtocol: OptionsViewModel, index: Int) {
+        countrySegmentedControl.selectedSegmentIndex = index
+    }
+    
+    func sendCategoryIndex(_ optionsViewModelProtocol: OptionsViewModel, index: Int) {
+        topicsSegmentedControl.selectedSegmentIndex = index
+    }
+    
     func newMaximalDateForFromDate(_ optionsViewModel: OptionsViewModelProtocol, newDate: Date) {
         fromDate.maximumDate = newDate
     }
