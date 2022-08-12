@@ -17,12 +17,28 @@ class ViewController: UIViewController {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 100, width: w, height: h * 0.8)
+        tableView.frame = CGRect(x: 0, y: 100, width: w, height: h * 0.77)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
         tableView.allowsMultipleSelection = false
-        tableView.selectionFollowsFocus = false
         return tableView
     }()
+    
+    let weatherButton: UIButton = {
+        let w = UIScreen.main.bounds.width
+        let h = UIScreen.main.bounds.height
+        let button = UIButton()
+        button.frame = CGRect(x: w * 0.05, y: h * 0.89, width: w * 0.9, height: h * 0.08)
+        button.backgroundColor = UIColor.black
+        button.setTitle("Check weather", for: .normal)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.layer.cornerRadius = h * 0.025
+        button.addTarget(self, action: #selector(weatherButtonTapped(_:)), for: .touchUpInside)
+        return button
+    }()
+    
+    @objc func weatherButtonTapped(_ sender: UIButton) {
+        print("something")
+    }
     
     let searchController = UISearchController()
     
@@ -32,6 +48,7 @@ class ViewController: UIViewController {
         title = "NewsApp"
         
         view.addSubview(newsTableView)
+        view.addSubview(weatherButton)
         newsTableView.delegate = self
         newsTableView.dataSource = self
         viewModel.delegate = self
@@ -51,14 +68,14 @@ class ViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        newsTableView.reloadData()
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        
-        getArticles()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        newsTableView.reloadData()
+//        viewModel.searchTextHasChanged(newText: (navigationController?.navigationItem.searchController?.searchBar.text)!)
+//    }
+//
+//    override func viewDidAppear(_ animated: Bool) {
+//        getArticles()
+//    }
     
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
@@ -103,6 +120,8 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.image.alpha = 0.3
         cell.readButton.isHidden = false
         cell.saveButton.isHidden = false
+        navigationItem.searchController?.resignFirstResponder()
+        cell.becomeFirstResponder()
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -113,10 +132,16 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
+//MARK: - gggg
+
 extension ViewController: FirstViewModeleDelegate {
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
+        navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
+        guard  navigationController?.navigationItem.searchController?.searchBar.text != "" else {return}
+        let index = NSIndexPath(row: 0, section: 0)
+        newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
     }
 }
 
@@ -136,9 +161,10 @@ extension ViewController: newsTableViewCellDelegate {
 extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let temporaryString = searchController.searchBar.text
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 1) {
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             if temporaryString == searchController.searchBar.text {
                 self.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
+
             }
         }
     }
