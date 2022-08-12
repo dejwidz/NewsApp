@@ -33,12 +33,8 @@ final class URLBuilder {
     private let specificURLPageSize = "&pageSize=100&"
     private var specificURLLastPart = "apiKey=715dc191ff584bb2b070568ffb2d6683"
     
-    
-    
-    
-    
     func getURLWithoutQuery() -> URL? {
-        return userIsInterestedInSpecificTopic ? getURLWithSpecificTopic() : getGeneralURL()
+        return userIsInterestedInSpecificTopic ? getURLWithTopic() : getGeneralURL()
     }
     
     func getGeneralURL() -> URL? {
@@ -59,7 +55,7 @@ final class URLBuilder {
         return url
     }
     
-    func getURLWithSpecificTopic() -> URL? {
+    func getURLWithTopic() -> URL? {
         let urlString = specificURLFirstPart +
         specificURLCountryIndicator +
         specificURLCountryName +
@@ -91,7 +87,6 @@ final class URLBuilder {
         userIsInterestedInSpecificTopic = newIndcatorValue
     }
     
-    
     func setDateTo(newDateTo: String) {
         generalURLDateTo = newDateTo
     }
@@ -120,5 +115,4 @@ final class URLBuilder {
         let url = URL(string: urlString)
         return url
     }
-    
 }

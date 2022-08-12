@@ -11,12 +11,9 @@ import RealmSwift
 class DataStorage {
     
     static var shared = DataStorage()
-    
-    private init() {}
-    
     private var storedArticles = try! Realm()
     
-   
+    private init() {}
     
     func addUserChoiceArticle(newArticle: Article) {
         let newUserChoiceArticle = UserChoiceArticle(newArticle: newArticle)
@@ -66,21 +63,5 @@ class DataStorage {
             storedArticles.delete(latestArticles)
         })
     }
-    
-    //MARK: - temporary
-    
-    func deleteAllUserChoiceArticles() {
-        try! storedArticles.write({
-            let userArticles = storedArticles.objects(UserChoiceArticle.self)
-            storedArticles.delete(userArticles)
-        })
-    }
-    
-    
-    
-    
-    
-    
-    
 }
 

@@ -12,7 +12,6 @@ class NewsTableViewCell: UITableViewCell {
     
     weak var delegate: newsTableViewCellDelegate?
     
-    
     var identifier = "newsCell"
     var article: Article?
     
@@ -65,12 +64,10 @@ class NewsTableViewCell: UITableViewCell {
     }()
     
     @objc func saveButtonTapped(_ sender: UIButton){
-//        print("SAVE")
         delegate?.saveButtonHasBeenTapped(self, article: article)
     }
     
     @objc func readButtonTapped(_ sender: UIButton){
-//        print("READ")
         delegate?.readButtonHasBeenTapped(self, link: article?.url)
     }
     
@@ -108,48 +105,18 @@ class NewsTableViewCell: UITableViewCell {
         saveButton.frame = CGRect(x: w * 0.6, y: h * 0.6, width: w * 0.3, height: h * 0.3)
     }
     
-    func loadImage() {
-        guard let url = URL(string: article?.urlToImage ?? "") else {return}
-        
-        let session = URLSession.shared.dataTask(with: url) { [weak self] data,_ , error in
-            guard let data = data, error == nil else {return}
-            DispatchQueue.main.async {
-                self?.image.image = UIImage(data: data)
-            }
-        }
-        session.resume()
-    }
     
     func loadImageWithNetworkingServices() {
-        //        NetworkingServices.networkSingleton.getImage(link: article?.urlToImage, completion: { result in
-        //            switch result {
-        //            case .failure(let error):
-        //                print(error.localizedDescription)
-        //                break
-        //            case .success(let data):
-        //                let image = UIImage(data: data)
-        //                DispatchQueue.main.async {
-        //                    self.image.image = image
-        //                }
-        //            }
-        //
-        //        })
-        
-        NetworkingServices.networkSingleton.getImageWithAlamo(link: article?.urlToImage, completion: { result in
+        NetworkingServices.shared.getImageWithAlamo(link: article?.urlToImage, completion: { result in
             switch result {
             case .success(let data):
                 self.image.image = UIImage(data: data)
             case .failure(let error):
                 self.image.image = UIImage(systemName: "moon.stars")
-//                print(error.localizedDescription)
-//                print("mooooooon")
+                print(error.localizedDescription)
             }
-            
-            
         })
-        
     }
-    
 }
 
 protocol newsTableViewCellDelegate: AnyObject {

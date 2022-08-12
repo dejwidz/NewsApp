@@ -30,11 +30,10 @@ protocol OptionsViewModelDelegate: AnyObject {
     func sendEndDate(_ optionsViewModelProtocol: OptionsViewModel, date: Date?)
     func sendCountryIndex(_ optionsViewModelProtocol: OptionsViewModel, index: Int)
     func sendCategoryIndex(_ optionsViewModelProtocol: OptionsViewModel, index: Int)
-    
 }
 
 final class OptionsViewModel {
- 
+    
     weak var delegate: OptionsViewModelDelegate?
     private var model: OptionsModelProtocol
     
@@ -42,7 +41,6 @@ final class OptionsViewModel {
         self.model = model
         model.delegate = self
     }
-    
 }
 
 extension OptionsViewModel: OptionsViewModelProtocol {
@@ -77,7 +75,6 @@ extension OptionsViewModel: OptionsViewModelProtocol {
     func getCategoryIndex() {
         model.getCategoryIndex()
     }
-    
     
     func toDateHasChanged(sendedDate: Date) {
         let dateFormatter = DateFormatter()
@@ -114,7 +111,6 @@ extension OptionsViewModel: OptionsViewModelProtocol {
         default:
             print("nothing")
         }
-        
     }
     
     func TopicsSegmentedControlHasChanged(index: Int) {
@@ -133,8 +129,6 @@ extension OptionsViewModel: OptionsViewModelProtocol {
             print("nothing")
         }
     }
-    
-    
 }
 
 extension OptionsViewModel: OptionsModelDelegate {
@@ -153,6 +147,4 @@ extension OptionsViewModel: OptionsModelDelegate {
     func sendCategoryIndex(_ optionsModelProtocol: OptionsModel, index: Int) {
         delegate?.sendCategoryIndex(self, index: index)
     }
-    
-    
 }

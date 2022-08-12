@@ -38,7 +38,4 @@ struct Article: Codable {
         self.publishedAt = newArticle.publishedAt
         self.content = newArticle.content
     }
-    
-    
-    
 }

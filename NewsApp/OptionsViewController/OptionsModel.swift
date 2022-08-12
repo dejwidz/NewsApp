@@ -32,9 +32,7 @@ protocol OptionsModelDelegate: AnyObject {
 
 
 final class OptionsModel {
-    var delegate: OptionsModelDelegate?
-    
-    
+    weak var delegate: OptionsModelDelegate?
 }
 
 extension OptionsModel: OptionsModelProtocol {
@@ -90,6 +88,4 @@ extension OptionsModel: OptionsModelProtocol {
     func toDateHasChanged(toDate: String) {
         URLBuilder.shared.setDateTo(newDateTo: toDate)
     }
-    
-    
 }

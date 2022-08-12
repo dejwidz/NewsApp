@@ -10,13 +10,13 @@ import RealmSwift
 
 class UserChoiceArticle: Object {
     
-   @Persisted var author: String?
-   @Persisted var title: String?
-   @Persisted var descriptionn: String?
-   @Persisted var url: String?
-   @Persisted var urlToImage: String?
-   @Persisted var publishedAt: String?
-   @Persisted var content: String?
+    @Persisted var author: String?
+    @Persisted var title: String?
+    @Persisted var descriptionn: String?
+    @Persisted var url: String?
+    @Persisted var urlToImage: String?
+    @Persisted var publishedAt: String?
+    @Persisted var content: String?
     
     override init() {}
     

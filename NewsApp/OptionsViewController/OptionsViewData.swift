@@ -10,12 +10,12 @@ import Foundation
 final class OptionsViewData {
     
     static var shared = OptionsViewData()
-    private init(){}
-    
     private var startDate: Date?
     private var endDate: Date?
     private var countryIndex = 0
     private var categoryIndex = 0
+    
+    private init(){}
     
     func setStartDate(newDate: Date) {
         startDate = newDate
@@ -48,5 +48,4 @@ final class OptionsViewData {
     func getcategoryIndex() -> Int {
         return categoryIndex
     }
-    
 }

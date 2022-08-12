@@ -17,42 +17,26 @@ class UserChoiceViewController: UIViewController {
         let tableView = UITableView()
         tableView.frame = CGRect(x: 0, y: 44, width: w, height: h)
         tableView.register(UserChoiceTableViewCell.self, forCellReuseIdentifier: "userChoiceCell")
-        
-        
         return tableView
     }()
     
     let viewModel = UserChoiceViewModel(model: UserChoiceModel())
-    
     var articlesToShow: [UserChoiceArticle]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "My Choice"
-        
         view.addSubview(userChoiceTableView)
         viewModel.delegate = self
         viewModel.getUserChoiceArticlesFromModel()
         userChoiceTableView.delegate = self
         userChoiceTableView.dataSource = self
-        
-        
     }
     
     override func viewWillLayoutSubviews() {
         navigationItem.backBarButtonItem?.title = "Back"
     }
-    
-    override func viewWillAppear(_ animated: Bool) {
-//        articlesToShow = DataStorage.shared.getUserChoiceArticles()
-    }
-    
-    @objc func backButtonTapped() {
-        
-    }
 }
-
-
 
 extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -66,7 +50,6 @@ extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
         cell.article = articlesToShow?[indexPath.row]
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
-        
         return cell
     }
     
@@ -93,16 +76,12 @@ extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else {return}
-        
-        
         DataStorage.shared.deleteArticleFromUserChoice(articleToDelete: articlesToShow![indexPath.row])
-        
         userChoiceTableView.beginUpdates()
         articlesToShow?.remove(at: indexPath.row)
         userChoiceTableView.deleteRows(at: [indexPath], with: .right)
         userChoiceTableView.endUpdates()
     }
-    
 }
 
 extension UserChoiceViewController: UserChoiceTableViewCellDelegate {
@@ -112,15 +91,11 @@ extension UserChoiceViewController: UserChoiceTableViewCellDelegate {
         let vc = SFSafariViewController(url: url)
         present(vc, animated: true, completion: nil)
     }
-    
-
 }
 
 extension UserChoiceViewController: UserChoiceViewModelDelegate {
     func userChoiceArticlesHasBeenDownloaded(_ userchoiceViewModel: UserChoiceViewModelProtocol, articles: [UserChoiceArticle]) {
         articlesToShow = articles
         userChoiceTableView.reloadData()
-         }
-    
-    
+    }
 }

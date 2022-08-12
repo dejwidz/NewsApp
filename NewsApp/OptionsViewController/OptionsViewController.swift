@@ -11,7 +11,6 @@ protocol OptionsDelegate: AnyObject {
     func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController)
 }
 
-
 class OptionsViewController: UIViewController {
     
     private var viewmodel = OptionsViewModel(model: OptionsModel())
@@ -22,14 +21,12 @@ class OptionsViewController: UIViewController {
         let h = UIScreen.main.bounds.height
         let datePicker = UIDatePicker()
         let now = Date.now
-        
         datePicker.frame = CGRect(x: 0, y: h * 0.1, width: w * 0.8, height: h * 0.1)
         datePicker.datePickerMode = .date
         datePicker.maximumDate = now
         datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -30, to: now)
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(toDateChanged(_:)), for: .valueChanged)
-        
         return datePicker
     }()
     
@@ -49,7 +46,6 @@ class OptionsViewController: UIViewController {
         datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -30, to: now)
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(fromDateChanged(_:)), for: .valueChanged)
-        
         return datePicker
     }()
     
@@ -65,9 +61,7 @@ class OptionsViewController: UIViewController {
         label.frame = CGRect(x: 0, y: h * 0.07, width: w * 0.5, height: h * 0.1)
         label.text = "Select end date"
         label.textColor = UIColor.black
-//        label.traitCollection.legibilityWeight = .regular
         label.textAlignment = .right
-        
         return label
     }()
     
@@ -78,9 +72,7 @@ class OptionsViewController: UIViewController {
         label.frame = CGRect(x: 0, y: h * 0.17, width: w * 0.5, height: h * 0.1)
         label.text = "Select start date"
         label.textColor = UIColor.black
-//        label.traitCollection.legibilityWeight = .regular
         label.textAlignment = .right
-        
         return label
     }()
     
@@ -90,13 +82,10 @@ class OptionsViewController: UIViewController {
         let segment = UISegmentedControl(items: ["World", "US", "PL", "DE", "FR", "IT"])
         segment.frame = CGRect(x: w * 0.01, y: h * 0.3, width: w * 0.98, height: h * 0.1)
         segment.selectedSegmentIndex = 0
-//        segment.tintColor = UIColor.white
-//        segment.selectedSegmentTintColor = UIColor.white
         segment.backgroundColor = UIColor.black
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
         segment.addTarget(self, action: #selector(countrySelectedControlChanged(_:)), for: .valueChanged)
-        
         return segment
     }()
     
@@ -112,13 +101,10 @@ class OptionsViewController: UIViewController {
         let segment = UISegmentedControl(items: ["General", "Science", "Sport", "Bussines", "Technology"])
         segment.frame = CGRect(x: w * 0.01, y: h * 0.45, width: w * 0.98, height: h * 0.1)
         segment.selectedSegmentIndex = 0
-//        segment.tintColor = UIColor.white
-//        segment.selectedSegmentTintColor = UIColor.white
         segment.backgroundColor = UIColor.black
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.black], for: .selected)
         segment.addTarget(self, action: #selector(topicsSegmentedControlChanged(_:)), for: .valueChanged)
-        
         return segment
     }()
     
@@ -127,21 +113,6 @@ class OptionsViewController: UIViewController {
         viewmodel.TopicsSegmentedControlHasChanged(index: index)
         viewmodel.setCategoryIndex(newIndex: index)
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -154,7 +125,6 @@ class OptionsViewController: UIViewController {
         view.addSubview(fromDateLabel)
         view.addSubview(countrySegmentedControl)
         view.addSubview(topicsSegmentedControl)
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -167,7 +137,6 @@ class OptionsViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         delegate?.newOptionsHasBeenSet(self)
     }
-    
 }
 
 extension OptionsViewController: OptionsViewModelDelegate {
@@ -196,6 +165,4 @@ extension OptionsViewController: OptionsViewModelDelegate {
     func newMinimalDateForToDate(_ optionsViewModel: OptionsViewModelProtocol, newDate: Date) {
         toDate.minimumDate = newDate
     }
-    
-    
 }

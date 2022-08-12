@@ -17,9 +17,7 @@ protocol UserChoiceViewModelDelegate: AnyObject {
 }
 
 final class UserChoiceViewModel: UserChoiceViewModelProtocol {
-    var delegate: UserChoiceViewModelDelegate?
-    
-    
+    weak var delegate: UserChoiceViewModelDelegate?
     private var model: UserChoiceModel
     
     init(model: UserChoiceModel) {
@@ -36,9 +34,5 @@ final class UserChoiceViewModel: UserChoiceViewModelProtocol {
 extension UserChoiceViewModel: UserChoiceModelDelegate {
     func userChoiceArticlesHasBeenDownloaded(_ userChoiceModel: UserChoiceModelProtocol, articles: [UserChoiceArticle]) {
         delegate?.userChoiceArticlesHasBeenDownloaded(self, articles: articles)
-        
-
     }
-    
-    
 }

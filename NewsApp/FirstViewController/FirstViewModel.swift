@@ -19,8 +19,6 @@ protocol FirstViewModeleDelegate: AnyObject {
 
 final class FirstViewModel: FirstViewModelProtocol {
     weak var delegate: FirstViewModeleDelegate?
-    
-    
     private var model: FirstModelProtocol
     
     init(model: FirstModelProtocol) {
@@ -52,25 +50,19 @@ final class FirstViewModel: FirstViewModelProtocol {
         tempString = tempString.replacingOccurrences(of: " ", with: "-")
         return tempString
     }
-    
 }
 
 extension FirstViewModel: FirstModelDelegate {
     func latestArticlesHasBeenSent(_ firstModel: FirstModelProtocol, articles: [Article]) {
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
-        //        print("VM Error -> latest articles*******************************************")
     }
     
     func articlesHasBeenDownloaded(_ firstModel: FirstModelProtocol, articles: [Article]) {
-        //        print("_________--_______--_________ SUCCES VM")
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
-        //        DataStorage.shared.setLatestArticles(newArticles: articles)
     }
     
     func errorWhileDownloadingArticles(_ firstModel: FirstModelProtocol) {
         model.sendStoredArticles()
     }
-    
-    
 }
 
