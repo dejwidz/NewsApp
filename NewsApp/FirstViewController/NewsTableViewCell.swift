@@ -103,6 +103,7 @@ class NewsTableViewCell: UITableViewCell {
         image.frame = CGRect(x: w * 0.52, y: h * 0.05, width: w * 0.45, height: h * 0.95)
         readButton.frame = CGRect(x: w * 0.6, y: h * 0.2, width: w * 0.3, height: h * 0.3)
         saveButton.frame = CGRect(x: w * 0.6, y: h * 0.6, width: w * 0.3, height: h * 0.3)
+
     }
     
     

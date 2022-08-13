@@ -28,16 +28,21 @@ class ViewController: UIViewController {
         let h = UIScreen.main.bounds.height
         let button = UIButton()
         button.frame = CGRect(x: w * 0.05, y: h * 0.89, width: w * 0.9, height: h * 0.08)
-        button.backgroundColor = UIColor.black
+        button.backgroundColor = UIColor.white
+        button.layer.borderWidth = CGFloat(w * 0.01)
+        button.layer.borderColor = UIColor.black.cgColor
         button.setTitle("Check weather", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
+        button.titleLabel?.layer.cornerRadius = h * 0.025
         button.addTarget(self, action: #selector(weatherButtonTapped(_:)), for: .touchUpInside)
         return button
     }()
     
     @objc func weatherButtonTapped(_ sender: UIButton) {
-        print("something")
+        let vc = WeatherViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        
     }
     
     let searchController = UISearchController()
@@ -67,16 +72,7 @@ class ViewController: UIViewController {
         searchController.searchBar.placeholder = "type what you are interested in"
         navigationItem.hidesSearchBarWhenScrolling = false
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        newsTableView.reloadData()
-//        viewModel.searchTextHasChanged(newText: (navigationController?.navigationItem.searchController?.searchBar.text)!)
-//    }
-//
-//    override func viewDidAppear(_ animated: Bool) {
-//        getArticles()
-//    }
-    
+
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
         present(vc, animated: true)
@@ -91,6 +87,12 @@ class ViewController: UIViewController {
     func getArticles() {
         viewModel.getArticlesToDisplay()
     }
+    
+    func scrollUp() {
+       guard newsTableView.numberOfRows(inSection: 0) > 0 else {return}
+       let index = NSIndexPath(row: 0, section: 0)
+       newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
+   }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -132,16 +134,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
 }
 
-//MARK: - gggg
-
 extension ViewController: FirstViewModeleDelegate {
+     
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
-        guard  navigationController?.navigationItem.searchController?.searchBar.text != "" else {return}
-        let index = NSIndexPath(row: 0, section: 0)
-        newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
+        scrollUp()
     }
 }
 
