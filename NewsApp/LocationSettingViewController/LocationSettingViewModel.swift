@@ -18,8 +18,7 @@ protocol LocationSettingViewModelProtocol: AnyObject {
 }
 
 protocol LocationSettingViewModelDelegate: AnyObject {
-    //  func jakaśTamFunkcja(_ viewModelName: ViewModelNameProtocol)
-}
+    func locationHasBeenSet(_ locationSettingViewModel: LocationSettingViewModelProtocol)}
 
 final class LocationSettingViewModel {
     
@@ -47,12 +46,16 @@ extension LocationSettingViewModel: LocationSettingViewModelProtocol {
     }
     
     func getWeatherForNewPosition() {
-        model.getWeatherForNewPosition()
+//        model.getWeatherForNewPosition(newPosition: <#CLLocation#>)
     }
     
     
 }
 
 extension LocationSettingViewModel: LocationSettingModelDelegate {
+    func locationHasBeenSet(_ locationSettingModel: LocationSettingModelProtocol) {
+        delegate?.locationHasBeenSet(self)
+    }
+    
     
 }

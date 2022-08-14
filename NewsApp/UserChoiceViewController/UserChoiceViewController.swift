@@ -20,7 +20,7 @@ class UserChoiceViewController: UIViewController {
         return tableView
     }()
     
-    let viewModel = UserChoiceViewModel(model: UserChoiceModel())
+    private let viewModel = UserChoiceViewModel(model: UserChoiceModel())
     var articlesToShow: [UserChoiceArticle]?
     
     override func viewDidLoad() {

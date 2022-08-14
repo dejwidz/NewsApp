@@ -10,7 +10,7 @@ import SafariServices
 
 class ViewController: UIViewController {
     
-    let viewModel = FirstViewModel(model: FirstModel())
+    private let viewModel = FirstViewModel(model: FirstModel())
     var articlesToDisplay: [Article]?
     
     let newsTableView: UITableView = {

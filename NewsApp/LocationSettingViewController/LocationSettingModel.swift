@@ -18,7 +18,7 @@ protocol LocationSettingModelProtocol: AnyObject {
 }
 
 protocol LocationSettingModelDelegate: AnyObject {
-    //    func jakaśTamFunkcja(_ modelName: ModelNameProtocol)
+    func locationHasBeenSet(_ locationSettingModel: LocationSettingModelProtocol)
     
 }
 
@@ -33,7 +33,8 @@ final class LocationSettingModel {
 
 extension LocationSettingModel: LocationSettingModelProtocol {
     func setUpNewPosition(newPosition: CLLocation) {
-        
+        URLBuilder.shared.setLocation(newLocation: newPosition)
+        delegate?.locationHasBeenSet(self)
     }
     
     func getWeatherForCurrentPosition() {
@@ -47,7 +48,6 @@ extension LocationSettingModel: LocationSettingModelProtocol {
     func getWeatherForNewPosition(newPosition: CLLocation) {
         
     }
-    
     
 }
 

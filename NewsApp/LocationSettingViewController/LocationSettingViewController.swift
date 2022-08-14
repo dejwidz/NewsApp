@@ -11,9 +11,10 @@ import CoreLocation
 
 class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
-    let viewModel = LocationSettingViewModel(model: LocationSettingModel())
+    private let viewModel = LocationSettingViewModel(model: LocationSettingModel())
     let locationManager = CLLocationManager()
     var currentUserLocation: CLLocation?
+    private var locationIsNotSet = true
     
     let currentPositionButton: UIButton = {
         let w = UIScreen.main.bounds.width
@@ -115,7 +116,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.tintColor = UIColor.black
-        title = "Weather"
+        title = "Choose location"
         viewModel.delegate = self
         locationManager.delegate = self
         view.addSubview(currentPositionButton)
@@ -127,6 +128,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         map.addGestureRecognizer(longPress)
         
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        locationIsNotSet = true
     }
     
     @objc func longPressUccured(_ sender: UILongPressGestureRecognizer) {
@@ -141,13 +146,20 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let weatherLocation = CLLocation(latitude: latitude, longitude: longitutde)
         print("nowe koordynaty: \(coordinates)")
         print("nowa lokacja:  \(weatherLocation)")
-        
+        guard locationIsNotSet else {return}
+        locationIsNotSet = false
+        viewModel.setUpNewPosition(newPosition: weatherLocation)
     }
 
     
 }
 
 extension LocationSettingViewController: LocationSettingViewModelDelegate {
+    func locationHasBeenSet(_ locationSettingViewModel: LocationSettingViewModelProtocol) {
+        let vc = WeatherViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     
 }
 
@@ -161,6 +173,8 @@ extension LocationSettingViewController: CLLocationManagerDelegate {
         locationManager.stopUpdatingLocation()
         print("\(currentUserLocation)")
         guard let currentUserLocation = currentUserLocation else {return}
+        guard locationIsNotSet else {return}
+        locationIsNotSet = false
         viewModel.setUpNewPosition(newPosition: currentUserLocation)
     }
 }

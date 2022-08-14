@@ -92,4 +92,28 @@ final class NetworkingServices {
             }
         }
     }
+    
+    func getWeather(completion: @escaping ((Result<Weather, Error>) -> Void)) {
+        
+        guard let url = URLBuilder.shared.getWeatherURL() else {
+            completion(.failure(NetworkingErrors.wrongURL))
+            return
+        }
+        guard let request = try? URLRequest(url: url, method: .get) else {
+            completion(.failure(NetworkingErrors.wrongRequest))
+            return
+        }
+        
+        AF.request(request).validate().responseDecodable(of: Weather.self) { response in
+            switch response.result {
+            case .failure(_):
+                completion(.failure(NetworkingErrors.wrongDecoding))
+                break
+            case .success(let weather):
+                completion(.success(weather))
+                break
+            }
+        }
+    }
+    
 }
