@@ -40,7 +40,7 @@ class ViewController: UIViewController {
     }()
     
     @objc func weatherButtonTapped(_ sender: UIButton) {
-        let vc = WeatherViewController()
+        let vc = LocationSettingViewController()
         navigationController?.pushViewController(vc, animated: true)
         
     }

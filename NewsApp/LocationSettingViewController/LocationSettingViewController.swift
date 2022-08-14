@@ -1,5 +1,5 @@
 //
-//  WeatherViewController.swift
+//  LocationSettingViewController.swift
 //  NewsApp
 //
 //  Created by Dawid Zimoch on 13/08/2022.
@@ -9,9 +9,9 @@ import UIKit
 import MapKit
 import CoreLocation
 
-class WeatherViewController: UIViewController {
+class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
-    let viewModel = WeatherViewModel(model: WeatherModel())
+    let viewModel = LocationSettingViewModel(model: LocationSettingModel())
     let locationManager = CLLocationManager()
     var currentUserLocation: CLLocation?
     
@@ -57,7 +57,7 @@ class WeatherViewController: UIViewController {
     }()
     
     @objc func lastPositionButtonTapped(_ sender: UIButton) {
-
+        
     }
     
     let customPositionButton: UIButton = {
@@ -123,17 +123,35 @@ class WeatherViewController: UIViewController {
         view.addSubview(customPositionButton)
         view.backgroundColor = UIColor.white
         
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
+        map.addGestureRecognizer(longPress)
+        
+        
     }
     
+    @objc func longPressUccured(_ sender: UILongPressGestureRecognizer) {
+        let touchPoint = sender.location(in: self.map)
+        let coordinates = map.convert(touchPoint, toCoordinateFrom: self.map)
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coordinates
+        annotation.title = "Here"
+        map.addAnnotation(annotation)
+        let latitude = coordinates.latitude
+        let longitutde = coordinates.longitude
+        let weatherLocation = CLLocation(latitude: latitude, longitude: longitutde)
+        print("nowe koordynaty: \(coordinates)")
+        print("nowa lokacja:  \(weatherLocation)")
+        
+    }
 
     
 }
 
-extension WeatherViewController: WeatherViewModelDelegate {
+extension LocationSettingViewController: LocationSettingViewModelDelegate {
     
 }
 
-extension WeatherViewController: CLLocationManagerDelegate {
+extension LocationSettingViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard !locations.isEmpty, currentUserLocation == nil else {
             locationManager.stopUpdatingLocation()

@@ -1,5 +1,5 @@
 //
-//  WeatherViewModel.swift
+//  LocationSettingViewModel.swift
 //  NewsApp
 //
 //  Created by Dawid Zimoch on 13/08/2022.
@@ -8,8 +8,8 @@
 import Foundation
 import CoreLocation
 
-protocol WeatherViewModelProtocol: AnyObject {
-    var delegate: WeatherViewModelDelegate? {get set}
+protocol LocationSettingViewModelProtocol: AnyObject {
+    var delegate: LocationSettingViewModelDelegate? {get set}
     func getWeatherForCurrentPosition()
     func getWeatherForLastPosition()
     func getWeatherForNewPosition()
@@ -17,23 +17,23 @@ protocol WeatherViewModelProtocol: AnyObject {
 
 }
 
-protocol WeatherViewModelDelegate: AnyObject {
+protocol LocationSettingViewModelDelegate: AnyObject {
     //  func jakaśTamFunkcja(_ viewModelName: ViewModelNameProtocol)
 }
 
-final class WeatherViewModel {
+final class LocationSettingViewModel {
     
-    weak var delegate: WeatherViewModelDelegate?
-    private var model: WeatherModelProtocol
+    weak var delegate: LocationSettingViewModelDelegate?
+    private var model: LocationSettingModelProtocol
     
-    init(model: WeatherModelProtocol) {
+    init(model: LocationSettingModelProtocol) {
         self.model = model
         model.delegate = self
     }
     
 }
 
-extension WeatherViewModel: WeatherViewModelProtocol {
+extension LocationSettingViewModel: LocationSettingViewModelProtocol {
     func setUpNewPosition(newPosition: CLLocation) {
         model.setUpNewPosition(newPosition: newPosition)
     }
@@ -53,6 +53,6 @@ extension WeatherViewModel: WeatherViewModelProtocol {
     
 }
 
-extension WeatherViewModel: WeatherModelDelegate {
+extension LocationSettingViewModel: LocationSettingModelDelegate {
     
 }
