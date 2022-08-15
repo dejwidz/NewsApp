@@ -13,8 +13,7 @@ protocol WeatherModelProtocol: AnyObject {
 }
 
 protocol WeatherModelDelegate: AnyObject {
-    //    func jakaśTamFunkcja(_ modelName: ModelNameProtocol)
-    
+    func weatherHasBeenDownloaded(_ weatherModel: WeatherModelProtocol, weather: Weather)
 }
 
 final class WeatherModel {
@@ -23,13 +22,8 @@ final class WeatherModel {
     
     init() {}
     
-    var dayName: [String]?
-    var hour: [String]?
-    var temperature: [Double]?
-    var rain: [Double]?
-    var cloudcover: [Double]?
-    var snow: [Double]?
-    var code: [Double]?
+    
+    
     
 }
 
@@ -40,21 +34,7 @@ extension WeatherModel: WeatherModelProtocol {
         NetworkingServices.shared.getWeather(completion: {[weak self] result in
             switch result {
             case .success(let weather):
-                let d = Date.now
-                let c = DateFormatter()
-                c.dateFormat = "cccc"
-                let e: String = c.string(from: d)
-                print(e)
-                print("sukces")
-                print(weather)
-                
-                self?.hour = weather.hourly?.time
-                self?.temperature = weather.hourly?.temperature_2m
-                self?.rain = weather.hourly?.rain
-                self?.cloudcover = weather.hourly?.cloudcover
-                self?.snow = weather.hourly?.snowfall
-                self?.code = weather.hourly?.weathercode
-                self?.buildHourlyWeatherArray()
+                self?.delegate?.weatherHasBeenDownloaded(self!, weather: weather)
             case .failure(let error):
                 print(error.localizedDescription)
             }
@@ -63,14 +43,3 @@ extension WeatherModel: WeatherModelProtocol {
     
 }
 
-extension WeatherModel {
-    
-    func buildHourlyWeatherArray(){
-        var weatherArray: [HourlyWeather] = []
-        
-        
-    }
-    
-    
-    
-}
