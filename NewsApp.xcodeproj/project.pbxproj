@@ -46,6 +46,7 @@
 		6D6BD64828A9ABAE00954951 /* WeatherModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BD64728A9ABAE00954951 /* WeatherModel.swift */; };
 		6D6BD64B28A9B67700954951 /* HourlyWeather.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BD64A28A9B67700954951 /* HourlyWeather.swift */; };
 		6D6BD64D28AA776C00954951 /* WeatherTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BD64C28AA776C00954951 /* WeatherTableViewCell.swift */; };
+		6D6BD65128AB9CA300954951 /* UserLocation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BD65028AB9CA300954951 /* UserLocation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		6D6BD64728A9ABAE00954951 /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		6D6BD64A28A9B67700954951 /* HourlyWeather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HourlyWeather.swift; sourceTree = "<group>"; };
 		6D6BD64C28AA776C00954951 /* WeatherTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherTableViewCell.swift; sourceTree = "<group>"; };
+		6D6BD65028AB9CA300954951 /* UserLocation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserLocation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,6 +197,7 @@
 				6D14FB5F288DC304001BD963 /* DataStorage.swift */,
 				6D6BD64128A9863600954951 /* WeatherData.swift */,
 				6D6BD64A28A9B67700954951 /* HourlyWeather.swift */,
+				6D6BD65028AB9CA300954951 /* UserLocation.swift */,
 			);
 			path = Data_Model;
 			sourceTree = "<group>";
@@ -307,6 +310,7 @@
 				6D6BD64428A9AB9300954951 /* WeatherViewController.swift in Sources */,
 				6D6BD64B28A9B67700954951 /* HourlyWeather.swift in Sources */,
 				6D14FB7128A427A6001BD963 /* OptionsViewData.swift in Sources */,
+				6D6BD65128AB9CA300954951 /* UserLocation.swift in Sources */,
 				6D542A2E288196220035BE7F /* FirstModel.swift in Sources */,
 				6D542A3C2882D57A0035BE7F /* Article.swift in Sources */,
 				6D542A3A2882D5710035BE7F /* News.swift in Sources */,

@@ -7,6 +7,7 @@
 
 import Foundation
 import RealmSwift
+import CoreLocation
 
 class DataStorage {
     
@@ -63,5 +64,35 @@ class DataStorage {
             storedArticles.delete(latestArticles)
         })
     }
+    
+    func setLastLocation(newLocation: CLLocation) {
+        guard !storedArticles.objects(UserLocation.self).isEmpty else {
+            setFirstLocation(firstLocation: newLocation)
+            return
+        }
+        let location = storedArticles.objects(UserLocation.self).first
+        location?.setLocation(newLocation: newLocation)
+    }
+    
+    private func setFirstLocation(firstLocation: CLLocation) {
+        let locationToStore = UserLocation(location: firstLocation)
+        try! storedArticles.write {
+            storedArticles.add(locationToStore)
+        }
+    }
+    
+    func getLastLocationLatitude() -> String {
+        let location = storedArticles.objects(UserLocation.self).first
+        return (location?.getLatitude())!
+    }
+    
+    func getLastLocationLongitude() -> String {
+        let location = storedArticles.objects(UserLocation.self).first
+        return (location?.getLongitude())!
+    }
+    
+    
+    
+    
 }
 

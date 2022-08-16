@@ -35,9 +35,10 @@ class NewsTableViewCell: UITableViewCell {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
-        image.contentMode = .scaleAspectFill
-        image.backgroundColor = UIColor.lightGray
         image.isHidden = false
+        image.contentMode = .scaleAspectFill
+        image.backgroundColor = UIColor.white
+        image.tintColor = UIColor.black
         return image
     }()
     
@@ -113,7 +114,7 @@ class NewsTableViewCell: UITableViewCell {
             case .success(let data):
                 self.image.image = UIImage(data: data)
             case .failure(let error):
-                self.image.image = UIImage(systemName: "moon.stars")
+                self.image.image = UIImage(systemName: "pause.fill")
                 print(error.localizedDescription)
             }
         })

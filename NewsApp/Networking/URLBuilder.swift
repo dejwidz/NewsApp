@@ -33,16 +33,7 @@ final class URLBuilder {
     private var specificURLCategoryName = "sports"
     private let specificURLPageSize = "&pageSize=100&"
     private var specificURLLastPart = "apiKey=715dc191ff584bb2b070568ffb2d6683"
-    
-    private var weatherLocation: CLLocation?
-    
-//    https://api.open-meteo.com/v1/forecast?latitude=50.35&longitude=18.69&hourly=temperature_2m,rain,cloudcover,weathercode
-    
 
-    
-    
-    
-    
     func getURLWithoutQuery() -> URL? {
         return userIsInterestedInSpecificTopic ? getURLWithTopic() : getGeneralURL()
     }
@@ -126,20 +117,22 @@ final class URLBuilder {
         return url
     }
     
-    func setLocation(newLocation: CLLocation) {
-        weatherLocation = newLocation
-    }
-    
-    func getWeatherURL () -> URL? {
-        guard let weatherLocation = weatherLocation else {
-            return nil
-        }
-
-        let latitude = weatherLocation.coordinate.latitude
-        let longitude = weatherLocation.coordinate.longitude
-        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
+    func getWeatherURL() -> URL? {
+        let latitude = DataStorage.shared.getLastLocationLatitude()
+        let longitude = DataStorage.shared.getLastLocationLongitude()
+//        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
+//        let url = URL(string: urlString)
+//        return url
+        
+        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
         let url = URL(string: urlString)
         return url
+        
+        
+        
+        
+        
+        
     }
     
 }

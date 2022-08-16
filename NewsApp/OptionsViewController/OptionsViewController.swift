@@ -24,7 +24,7 @@ class OptionsViewController: UIViewController {
         datePicker.frame = CGRect(x: 0, y: h * 0.1, width: w * 0.8, height: h * 0.1)
         datePicker.datePickerMode = .date
         datePicker.maximumDate = now
-        datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -30, to: now)
+        datePicker.minimumDate = Calendar.current.date(byAdding: .day, value: -29, to: now)
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(toDateChanged(_:)), for: .valueChanged)
         return datePicker
