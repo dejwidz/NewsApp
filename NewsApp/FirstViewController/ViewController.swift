@@ -52,6 +52,7 @@ class ViewController: UIViewController {
         
         title = "NewsApp"
         
+        DataStorage.shared.setFirstLocation()
         view.addSubview(newsTableView)
         view.addSubview(weatherButton)
         newsTableView.delegate = self

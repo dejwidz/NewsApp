@@ -12,19 +12,19 @@ import CoreLocation
 class DataStorage {
     
     static var shared = DataStorage()
-    private var storedArticles = try! Realm()
+    private var storedInformation = try! Realm()
     
     private init() {}
     
     func addUserChoiceArticle(newArticle: Article) {
         let newUserChoiceArticle = UserChoiceArticle(newArticle: newArticle)
-        try! storedArticles.write {
-            storedArticles.add(newUserChoiceArticle)
+        try! storedInformation.write {
+            storedInformation.add(newUserChoiceArticle)
         }
     }
     
     func getUserChoiceArticles() -> [UserChoiceArticle] {
-        let userChoiceArticles = storedArticles.objects(UserChoiceArticle.self)
+        let userChoiceArticles = storedInformation.objects(UserChoiceArticle.self)
         var articlesToReturn: [UserChoiceArticle] = []
         for i in userChoiceArticles {
             articlesToReturn.append(i)
@@ -33,8 +33,8 @@ class DataStorage {
     }
     
     func deleteArticleFromUserChoice(articleToDelete: UserChoiceArticle) {
-        try! storedArticles.write {
-            storedArticles.delete(articleToDelete)
+        try! storedInformation.write {
+            storedInformation.delete(articleToDelete)
         }
     }
     
@@ -42,14 +42,14 @@ class DataStorage {
         deleteLatestArticles()
         for i in latestArticles {
             let latestArticle = LatestArticle(newArticle: i)
-            try! storedArticles.write({
-                storedArticles.add(latestArticle)
+            try! storedInformation.write({
+                storedInformation.add(latestArticle)
             })
         }
     }
     
     func getLatestArticles() -> [Article] {
-        let articles = storedArticles.objects(LatestArticle.self)
+        let articles = storedInformation.objects(LatestArticle.self)
         var articlesToReturn: [Article] = []
         for i in articles {
             let nextArticle = Article(newArticle: i)
@@ -59,35 +59,41 @@ class DataStorage {
     }
     
     func deleteLatestArticles() {
-        try! storedArticles.write({
-            let latestArticles = storedArticles.objects(LatestArticle.self)
-            storedArticles.delete(latestArticles)
+        try! storedInformation.write({
+            let latestArticles = storedInformation.objects(LatestArticle.self)
+            storedInformation.delete(latestArticles)
         })
     }
     
     func setLastLocation(newLocation: CLLocation) {
-        guard !storedArticles.objects(UserLocation.self).isEmpty else {
-            setFirstLocation(firstLocation: newLocation)
+        guard !storedInformation.objects(UserLocation.self).isEmpty else {
+            setFirstLocation()
             return
         }
-        let location = storedArticles.objects(UserLocation.self).first
+        try! storedInformation.write {
+        let location = storedInformation.objects(UserLocation.self).first
         location?.setLocation(newLocation: newLocation)
+        }
     }
     
-    private func setFirstLocation(firstLocation: CLLocation) {
-        let locationToStore = UserLocation(location: firstLocation)
-        try! storedArticles.write {
-            storedArticles.add(locationToStore)
+    func setFirstLocation() {
+        guard storedInformation.objects(UserLocation.self).isEmpty else {
+            return
+        }
+        let location = UserLocation(location: CLLocation.init(latitude: +37.78583400, longitude: -122.40641700))
+        
+        try! storedInformation.write {
+            storedInformation.add(location)
         }
     }
     
     func getLastLocationLatitude() -> String {
-        let location = storedArticles.objects(UserLocation.self).first
+        let location = storedInformation.objects(UserLocation.self).first
         return (location?.getLatitude())!
     }
     
     func getLastLocationLongitude() -> String {
-        let location = storedArticles.objects(UserLocation.self).first
+        let location = storedInformation.objects(UserLocation.self).first
         return (location?.getLongitude())!
     }
     

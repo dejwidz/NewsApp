@@ -9,9 +9,11 @@ import Foundation
 import RealmSwift
 import CoreLocation
 
-final class UserLocation: Object {
-    @Persisted private var latitude: String?
-    @Persisted private var longitude: String?
+ class UserLocation: Object {
+    @Persisted var latitude: String?
+    @Persisted var longitude: String?
+     
+     override init() {}
     
     init(location: CLLocation) {
         self.latitude = "\(location.coordinate.latitude)"

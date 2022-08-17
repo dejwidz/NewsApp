@@ -10,11 +10,8 @@ import CoreLocation
 
 protocol LocationSettingViewModelProtocol: AnyObject {
     var delegate: LocationSettingViewModelDelegate? {get set}
-    func getWeatherForCurrentPosition()
     func getWeatherForLastPosition()
-    func getWeatherForNewPosition()
     func setUpNewPosition(newPosition: CLLocation)
-
 }
 
 protocol LocationSettingViewModelDelegate: AnyObject {
@@ -37,19 +34,9 @@ extension LocationSettingViewModel: LocationSettingViewModelProtocol {
         model.setUpNewPosition(newPosition: newPosition)
     }
     
-    func getWeatherForCurrentPosition() {
-        model.getWeatherForCurrentPosition()
-    }
-    
     func getWeatherForLastPosition() {
-        model.getWeatherForLastPosition()
+        delegate?.locationHasBeenSet(self)
     }
-    
-    func getWeatherForNewPosition() {
-//        model.getWeatherForNewPosition(newPosition: <#CLLocation#>)
-    }
-    
-    
 }
 
 extension LocationSettingViewModel: LocationSettingModelDelegate {

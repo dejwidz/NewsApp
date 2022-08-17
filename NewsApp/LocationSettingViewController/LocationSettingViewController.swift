@@ -58,7 +58,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     }()
     
     @objc func lastPositionButtonTapped(_ sender: UIButton) {
-        
+        viewModel.getWeatherForLastPosition()
     }
     
     let customPositionButton: UIButton = {
@@ -171,7 +171,7 @@ extension LocationSettingViewController: CLLocationManagerDelegate {
         }
         currentUserLocation = locations.first
         locationManager.stopUpdatingLocation()
-        print("\(currentUserLocation)")
+        print("aktualna lokalizacjia-----   \(currentUserLocation)")
         guard let currentUserLocation = currentUserLocation else {return}
         guard locationIsNotSet else {return}
         locationIsNotSet = false

@@ -11,9 +11,6 @@ import CoreLocation
 
 protocol LocationSettingModelProtocol: AnyObject {
     var delegate: LocationSettingModelDelegate? {get set}
-    func getWeatherForCurrentPosition()
-    func getWeatherForLastPosition()
-    func getWeatherForNewPosition(newPosition: CLLocation)
     func setUpNewPosition(newPosition: CLLocation)
 }
 
@@ -33,20 +30,8 @@ final class LocationSettingModel {
 
 extension LocationSettingModel: LocationSettingModelProtocol {
     func setUpNewPosition(newPosition: CLLocation) {
-        URLBuilder.shared.setLocation(newLocation: newPosition)
+        DataStorage.shared.setLastLocation(newLocation: newPosition)
         delegate?.locationHasBeenSet(self)
-    }
-    
-    func getWeatherForCurrentPosition() {
-        
-    }
-    
-    func getWeatherForLastPosition() {
-        
-    }
-    
-    func getWeatherForNewPosition(newPosition: CLLocation) {
-        
     }
     
 }
