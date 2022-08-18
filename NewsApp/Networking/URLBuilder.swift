@@ -24,16 +24,16 @@ final class URLBuilder {
     private var generalURLDateFrom = "2022-07-10"
     private let generalURLToIndicator = "&to="
     private var generalURLDateTo = "2022-07-11"
-    private let generalURLLastPart = "&sortBy=popularity&apiKey=715dc191ff584bb2b070568ffb2d6683"
+    private let generalURLLastPart = "&sortBy=relevancy&apiKey=715dc191ff584bb2b070568ffb2d6683"
     
     private let specificURLFirstPart = "https://newsapi.org/v2/top-headlines?"
     private let specificURLCountryIndicator = "country="
     private var specificURLCountryName = "pl"
     private let specificURLCategoryIndicator = "&category="
-    private var specificURLCategoryName = "sports"
+    private var specificURLCategoryName = "general"
     private let specificURLPageSize = "&pageSize=100&"
     private var specificURLLastPart = "apiKey=715dc191ff584bb2b070568ffb2d6683"
-
+    
     func getURLWithoutQuery() -> URL? {
         return userIsInterestedInSpecificTopic ? getURLWithTopic() : getGeneralURL()
     }
@@ -43,7 +43,12 @@ final class URLBuilder {
             setGeneralDates()
             URLHasNotBeenSentToday = false
         }
-        generalURLQuery = "null"
+        if specificURLCategoryName == "general" {
+            generalURLQuery = "null"
+        }
+        else {
+            generalURLQuery = specificURLCategoryName
+        }
         let urlString = generalURLFirstPart +
         generalURLQueryMark +
         generalURLQuery +
@@ -120,19 +125,12 @@ final class URLBuilder {
     func getWeatherURL() -> URL? {
         let latitude = DataStorage.shared.getLastLocationLatitude()
         let longitude = DataStorage.shared.getLastLocationLongitude()
-//        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=\(latitude)&longitude=\(longitude)&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
-//        let url = URL(string: urlString)
-//        return url
-        
-        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=" + latitude + "&longitude=" + longitude + "&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
+        let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=" +
+        latitude +
+        "&longitude=" +
+        longitude +
+        "&hourly=temperature_2m,rain,cloudcover,snowfall,weathercode"
         let url = URL(string: urlString)
         return url
-        
-        
-        
-        
-        
-        
     }
-    
 }

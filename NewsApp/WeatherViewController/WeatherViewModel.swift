@@ -31,15 +31,12 @@ final class WeatherViewModel {
     var cloudcover: [Double] = []
     var snow: [Double] = []
     var code: [Double] = []
-    
 }
 
 extension WeatherViewModel: WeatherViewModelProtocol {
     func GetWeatherData() {
         model.getWeatherData()
     }
-    
-    
 }
 
 extension WeatherViewModel: WeatherModelDelegate {
@@ -51,8 +48,6 @@ extension WeatherViewModel: WeatherModelDelegate {
         self.code = weather.hourly?.weathercode ?? []
         buildHourlyWeatherArray()
     }
-    
-    
 }
 
 extension WeatherViewModel {
@@ -114,6 +109,4 @@ extension WeatherViewModel {
         }
         return dayName
     }
-    
-    
 }

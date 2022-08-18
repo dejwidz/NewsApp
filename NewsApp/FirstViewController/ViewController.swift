@@ -42,7 +42,6 @@ class ViewController: UIViewController {
     @objc func weatherButtonTapped(_ sender: UIButton) {
         let vc = LocationSettingViewController()
         navigationController?.pushViewController(vc, animated: true)
-        
     }
     
     let searchController = UISearchController()
@@ -73,7 +72,7 @@ class ViewController: UIViewController {
         searchController.searchBar.placeholder = "type what you are interested in"
         navigationItem.hidesSearchBarWhenScrolling = false
     }
-
+    
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
         present(vc, animated: true)
@@ -90,10 +89,10 @@ class ViewController: UIViewController {
     }
     
     func scrollUp() {
-       guard newsTableView.numberOfRows(inSection: 0) > 0 else {return}
-       let index = NSIndexPath(row: 0, section: 0)
-       newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
-   }
+        guard newsTableView.numberOfRows(inSection: 0) > 0 else {return}
+        let index = NSIndexPath(row: 0, section: 0)
+        newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
+    }
 }
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
@@ -136,7 +135,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 extension ViewController: FirstViewModeleDelegate {
-     
+    
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
@@ -164,7 +163,6 @@ extension ViewController: UISearchResultsUpdating {
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
             if temporaryString == searchController.searchBar.text {
                 self.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
-
             }
         }
     }

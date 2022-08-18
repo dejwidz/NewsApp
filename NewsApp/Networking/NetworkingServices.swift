@@ -12,7 +12,6 @@ import Alamofire
 final class NetworkingServices {
     
     static var shared = NetworkingServices()
-    
     private init () {}
     var articlesToReturn: [Article]?
     
@@ -115,5 +114,4 @@ final class NetworkingServices {
             }
         }
     }
-    
 }

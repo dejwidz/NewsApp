@@ -22,15 +22,11 @@ final class WeatherModel {
     
     init() {}
     
-    
-    
-    
 }
 
 extension WeatherModel: WeatherModelProtocol {
     
     func getWeatherData() {
-        print("w pogodzie---------------------------------------------_________------")
         NetworkingServices.shared.getWeather(completion: {[weak self] result in
             switch result {
             case .success(let weather):
@@ -40,6 +36,5 @@ extension WeatherModel: WeatherModelProtocol {
             }
         })
     }
-    
 }
 

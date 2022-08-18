@@ -16,7 +16,6 @@ protocol LocationSettingModelProtocol: AnyObject {
 
 protocol LocationSettingModelDelegate: AnyObject {
     func locationHasBeenSet(_ locationSettingModel: LocationSettingModelProtocol)
-    
 }
 
 final class LocationSettingModel {
@@ -25,7 +24,6 @@ final class LocationSettingModel {
     private var position: CLLocation?
     
     init() {}
-    
 }
 
 extension LocationSettingModel: LocationSettingModelProtocol {
@@ -33,6 +31,5 @@ extension LocationSettingModel: LocationSettingModelProtocol {
         DataStorage.shared.setLastLocation(newLocation: newPosition)
         delegate?.locationHasBeenSet(self)
     }
-    
 }
 

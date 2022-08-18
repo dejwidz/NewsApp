@@ -71,8 +71,8 @@ class DataStorage {
             return
         }
         try! storedInformation.write {
-        let location = storedInformation.objects(UserLocation.self).first
-        location?.setLocation(newLocation: newLocation)
+            let location = storedInformation.objects(UserLocation.self).first
+            location?.setLocation(newLocation: newLocation)
         }
     }
     

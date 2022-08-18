@@ -30,7 +30,6 @@ protocol OptionsModelDelegate: AnyObject {
     func sendCategoryIndex(_ optionsModelProtocol: OptionsModel, index: Int)
 }
 
-
 final class OptionsModel {
     weak var delegate: OptionsModelDelegate?
 }

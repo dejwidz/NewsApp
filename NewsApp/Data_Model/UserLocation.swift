@@ -38,7 +38,4 @@ import CoreLocation
         }
         return longitude
     }
-    
-    
-    
 }

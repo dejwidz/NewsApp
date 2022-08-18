@@ -8,7 +8,7 @@
 import UIKit
 
 class WeatherTableViewCell: UITableViewCell {
-  
+    
     var identifier = "weatherCell"
     var weatherData: HourlyWeather?
     
@@ -212,26 +212,6 @@ class WeatherTableViewCell: UITableViewCell {
         return imageName
     }
     
-    /*
-     sun.max.fill
-     cloud.sun.fill
-     icloud.fill
-     cloud.heavyrain.fill
-     cloud.sun.rain.fill
-     cloud.snow.fill
-     cloud.bolt.fill
-     cloud.bolt.rain.fill
-     
-     moon.stars.fill
-     cloud.moon.fill
-     cloud.moon.rain.fill
-     
-     cloud.hail.fill
-     cloud.drizzle.fill
-     
-     pause.fill
-     */
-    
     func setImageForNight() -> String {
         guard let code = weatherData?.code,
               let rain = weatherData?.rain,
@@ -271,7 +251,6 @@ class WeatherTableViewCell: UITableViewCell {
             imageName = "moon.stars.fill"
         }
         return imageName
-        
     }
 }
 

@@ -29,7 +29,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
-        
         return button
     }()
     
@@ -37,7 +36,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         print("here")
-
     }
     
     let lastPositionButton: UIButton = {
@@ -53,7 +51,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
-        
         return button
     }()
     
@@ -74,7 +71,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
-        
         return button
     }()
     
@@ -94,7 +90,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         view.addSubview(map)
         animateMapPosition()
         animateMapFrameSize()
-        }
+    }
     
     func animateMapPosition() {
         UIView.animate(withDuration: 1.1)
@@ -104,7 +100,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
             self.map.frame = CGRect(x: w * 0.1, y: h * 0.4, width: w * 0.8, height: h * 0.1)
         }
     }
-
+    
     func animateMapFrameSize() {
         UIView.animate(withDuration: 1, delay: 0.8, options: .allowAnimatedContent, animations: {
             let h = UIScreen.main.bounds.height
@@ -123,11 +119,8 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         view.addSubview(lastPositionButton)
         view.addSubview(customPositionButton)
         view.backgroundColor = UIColor.white
-        
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
         map.addGestureRecognizer(longPress)
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,14 +137,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let latitude = coordinates.latitude
         let longitutde = coordinates.longitude
         let weatherLocation = CLLocation(latitude: latitude, longitude: longitutde)
-        print("nowe koordynaty: \(coordinates)")
-        print("nowa lokacja:  \(weatherLocation)")
         guard locationIsNotSet else {return}
         locationIsNotSet = false
         viewModel.setUpNewPosition(newPosition: weatherLocation)
     }
-
-    
 }
 
 extension LocationSettingViewController: LocationSettingViewModelDelegate {
@@ -159,8 +148,6 @@ extension LocationSettingViewController: LocationSettingViewModelDelegate {
         let vc = WeatherViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    
 }
 
 extension LocationSettingViewController: CLLocationManagerDelegate {
@@ -171,7 +158,6 @@ extension LocationSettingViewController: CLLocationManagerDelegate {
         }
         currentUserLocation = locations.first
         locationManager.stopUpdatingLocation()
-        print("aktualna lokalizacjia-----   \(currentUserLocation)")
         guard let currentUserLocation = currentUserLocation else {return}
         guard locationIsNotSet else {return}
         locationIsNotSet = false

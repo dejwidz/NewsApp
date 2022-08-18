@@ -8,7 +8,7 @@
 import UIKit
 
 class WeatherViewController: UIViewController {
-
+    
     private let viewModel = WeatherViewModel(model: WeatherModel())
     private var weatherToDisplay: [HourlyWeather] = []
     
@@ -18,7 +18,6 @@ class WeatherViewController: UIViewController {
         let tableView = UITableView()
         tableView.frame = CGRect(x: 0, y: 100, width: w, height: h - 100)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
-
         return tableView
     }()
     
@@ -30,14 +29,11 @@ class WeatherViewController: UIViewController {
         weatherTableView.delegate = self
         weatherTableView.dataSource = self
         view.addSubview(weatherTableView)
-
     }
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.GetWeatherData()
     }
-    
-
 }
 
 extension WeatherViewController: WeatherViewModelDelegate {
@@ -45,8 +41,6 @@ extension WeatherViewController: WeatherViewModelDelegate {
         weatherToDisplay = weather
         weatherTableView.reloadData()
     }
-    
-
 }
 
 extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {

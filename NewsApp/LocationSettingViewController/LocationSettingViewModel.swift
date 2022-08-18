@@ -26,7 +26,6 @@ final class LocationSettingViewModel {
         self.model = model
         model.delegate = self
     }
-    
 }
 
 extension LocationSettingViewModel: LocationSettingViewModelProtocol {
@@ -43,6 +42,4 @@ extension LocationSettingViewModel: LocationSettingModelDelegate {
     func locationHasBeenSet(_ locationSettingModel: LocationSettingModelProtocol) {
         delegate?.locationHasBeenSet(self)
     }
-    
-    
 }
