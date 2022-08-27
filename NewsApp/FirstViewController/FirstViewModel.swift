@@ -11,6 +11,7 @@ protocol FirstViewModelProtocol: AnyObject {
     var delegate: FirstViewModeleDelegate? {get set}
     func getArticlesToDisplay()
     func searchTextHasChanged(newText: String)
+    func setWeatherIndicator(weatherIndicator: Bool)
 }
 
 protocol FirstViewModeleDelegate: AnyObject {
@@ -18,6 +19,8 @@ protocol FirstViewModeleDelegate: AnyObject {
 }
 
 final class FirstViewModel: FirstViewModelProtocol {
+
+    
     weak var delegate: FirstViewModeleDelegate?
     private var model: FirstModelProtocol
     
@@ -40,7 +43,8 @@ final class FirstViewModel: FirstViewModelProtocol {
             return
         }
         model.setNewQuery(newQuery: stringPreparedToMakeQuery)
-        model.getArticlesWithQuery()
+//        model.getArticlesWithQuery()
+        model.getAriclesFromWeb()
     }
     
     func prepareStringToMakeQuery(stringToPrepare: String) -> String {
@@ -50,6 +54,11 @@ final class FirstViewModel: FirstViewModelProtocol {
         tempString = tempString.replacingOccurrences(of: " ", with: "-")
         return tempString
     }
+    
+    func setWeatherIndicator(weatherIndicator: Bool) {
+        model.setWeatherIndicator(weatherIndicator: weatherIndicator)
+    }
+    
 }
 
 extension FirstViewModel: FirstModelDelegate {

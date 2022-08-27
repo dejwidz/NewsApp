@@ -75,16 +75,11 @@ extension WeatherViewModel {
         for i in 0...23 {
             let dayname = getDayName(counter: counter)
             let hour = "\(i):00"
-            let temperatureLevel = self.temperature[0]
-            self.temperature.remove(at: 0)
-            let rainLevel = self.rain[0]
-            self.rain.remove(at: 0)
-            let cloudcoverLevel = self.cloudcover[0]
-            self.cloudcover.remove(at: 0)
-            let snowLevel = self.snow[0]
-            self.snow.remove(at: 0)
-            let weatherCode = self.code[0]
-            self.code.remove(at: 0)
+            let temperatureLevel = self.temperature.remove(at: 0)
+            let rainLevel = self.rain.remove(at: 0)
+            let cloudcoverLevel = self.cloudcover.remove(at: 0)
+            let snowLevel = self.snow.remove(at: 0)
+            let weatherCode = self.code.remove(at: 0)
             let newHourlyWeather = HourlyWeather(dayName: dayname, hour: hour, temperature: temperatureLevel, rain: rainLevel, cloudcover: cloudcoverLevel, snow: snowLevel, code: weatherCode)
             weatherArray.append(newHourlyWeather)
         }

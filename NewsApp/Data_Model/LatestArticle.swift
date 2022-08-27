@@ -10,13 +10,13 @@ import RealmSwift
 
 final class LatestArticle: Object {
     
-    @Persisted private var author: String?
-    @Persisted private var title: String?
-    @Persisted private var descriptionn: String?
-    @Persisted private var url: String?
-    @Persisted private var urlToImage: String?
-    @Persisted private var publishedAt: String?
-    @Persisted private var content: String?
+    @Persisted var author: String?
+    @Persisted var title: String?
+    @Persisted var descriptionn: String?
+    @Persisted var url: String?
+    @Persisted var urlToImage: String?
+    @Persisted var publishedAt: String?
+    @Persisted var content: String?
     
     override init() {}
     

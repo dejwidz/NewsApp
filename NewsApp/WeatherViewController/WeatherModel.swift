@@ -27,7 +27,7 @@ final class WeatherModel {
 extension WeatherModel: WeatherModelProtocol {
     
     func getWeatherData() {
-        NetworkingServices.shared.getWeather(completion: {[weak self] result in
+        NetworkingServices.shared.getDataFromWeb(typename: Weather(), completion: {[weak self] result in
             switch result {
             case .success(let weather):
                 self?.delegate?.weatherHasBeenDownloaded(self!, weather: weather)

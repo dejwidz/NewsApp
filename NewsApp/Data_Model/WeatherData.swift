@@ -63,11 +63,11 @@ import Foundation
 //}
 
 struct Weather: Codable {
-    
     var hourly: Hourly?
 }
 
 struct Hourly: Codable {
+    
     var time: [String]?
     var temperature_2m: [Double]?
     var rain: [Double]?

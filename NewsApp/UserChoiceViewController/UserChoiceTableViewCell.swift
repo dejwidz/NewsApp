@@ -85,17 +85,6 @@ class UserChoiceTableViewCell: UITableViewCell {
         readButton.frame = CGRect(x: w * 0.6, y: h * 0.2, width: w * 0.3, height: h * 0.3)
     }
     
-    func loadImage() {
-        guard let url = URL(string: article?.urlToImage ?? "") else {return}
-        let session = URLSession.shared.dataTask(with: url) { [weak self] data,_ , error in
-            guard let data = data, error == nil else {return}
-            DispatchQueue.main.async {
-                self?.image.image = UIImage(data: data)
-            }
-        }
-        session.resume()
-    }
-    
     func loadImageWithNetworkingServices() {
         NetworkingServices.shared.getImageWithAlamo(link: article?.urlToImage, completion: { result in
             switch result {

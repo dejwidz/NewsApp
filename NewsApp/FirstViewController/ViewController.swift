@@ -40,6 +40,7 @@ class ViewController: UIViewController {
     }()
     
     @objc func weatherButtonTapped(_ sender: UIButton) {
+        viewModel.setWeatherIndicator(weatherIndicator: true)
         let vc = LocationSettingViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -72,6 +73,11 @@ class ViewController: UIViewController {
         searchController.searchBar.placeholder = "type what you are interested in"
         navigationItem.hidesSearchBarWhenScrolling = false
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        viewModel.setWeatherIndicator(weatherIndicator: false)
+    }
+    
     
     @objc func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()

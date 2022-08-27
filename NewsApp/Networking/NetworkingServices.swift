@@ -21,50 +21,6 @@ final class NetworkingServices {
         case wrongDecoding
     }
     
-    func getArticlesWithAlamo(completion: @escaping ((Result<News, Error>) -> Void)){
-        
-        guard let url = URLBuilder.shared.getURLWithoutQuery() else {
-            completion(.failure(NetworkingErrors.wrongURL))
-            return}
-        guard let request = try? URLRequest(url: url, method: .get) else {
-            completion(.failure(NetworkingErrors.wrongRequest))
-            return
-        }
-        
-        AF.request(request).validate().responseDecodable(of: News.self) {response in
-            switch response.result {
-            case .success(let news):
-                completion(.success(news))
-            case .failure(_):
-                completion(.failure(NetworkingErrors.wrongDecoding))
-            }
-        }
-    }
-    
-    
-    func getArticlesWithSearch(completion: @escaping ((Result<News, Error>) -> Void)) {
-        
-        guard let url = URLBuilder.shared.getURLWithQuery() else {
-            completion(.failure(NetworkingErrors.wrongURL))
-            return
-        }
-        guard let request = try? URLRequest(url: url, method: .get) else {
-            completion(.failure(NetworkingErrors.wrongRequest))
-            return
-        }
-        
-        AF.request(request).validate().responseDecodable(of: News.self) { response in
-            switch response.result {
-            case .failure(_):
-                completion(.failure(NetworkingErrors.wrongDecoding))
-                break
-            case .success(let news):
-                completion(.success(news))
-                break
-            }
-        }
-    }
-    
     func getImageWithAlamo(link: String?, completion: @escaping ((Result<Data, Error>) -> Void)) {
         guard let link = link else {
             completion(.failure(NetworkingErrors.wrongURL))
@@ -76,10 +32,10 @@ final class NetworkingServices {
             return
         }
         
-        guard let request = try? URLRequest(url: url, method: .get) else {
-            completion(.failure(NetworkingErrors.wrongRequest))
-            return
-        }
+//        guard let request = try? URLRequest(url: url, method: .get) else {
+//            completion(.failure(NetworkingErrors.wrongRequest))
+//            return
+//        }
         
         AF.request(url ,method: .get).response{ response in
             switch response.result {
@@ -92,24 +48,28 @@ final class NetworkingServices {
         }
     }
     
-    func getWeather(completion: @escaping ((Result<Weather, Error>) -> Void)) {
-        
-        guard let url = URLBuilder.shared.getWeatherURL() else {
-            completion(.failure(NetworkingErrors.wrongURL))
-            return
+    func prepareRequest() -> URLRequest? {
+        guard let url = URLBuilder.shared.getURL() else {
+            return nil
         }
         guard let request = try? URLRequest(url: url, method: .get) else {
+            return nil
+        }
+        return request
+    }
+    
+    func getDataFromWeb<T: Decodable>(typename: T, completion: @escaping ((Result<T, Error>) -> Void)) {
+        guard let request = prepareRequest() else {
             completion(.failure(NetworkingErrors.wrongRequest))
             return
         }
-        
-        AF.request(request).validate().responseDecodable(of: Weather.self) { response in
+        AF.request(request).validate().responseDecodable(of: T.self) { response in
             switch response.result {
             case .failure(_):
                 completion(.failure(NetworkingErrors.wrongDecoding))
                 break
-            case .success(let weather):
-                completion(.success(weather))
+            case .success(let data):
+                completion(.success(data))
                 break
             }
         }

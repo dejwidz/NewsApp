@@ -13,8 +13,9 @@ protocol FirstModelProtocol: AnyObject {
     var delegate: FirstModelDelegate? {get set}
     func getAriclesFromWeb()
     func sendStoredArticles()
-    func getArticlesWithQuery()
+//    func getArticlesWithQuery()
     func setNewQuery(newQuery: String)
+    func setWeatherIndicator(weatherIndicator: Bool)
 }
 
 protocol FirstModelDelegate: AnyObject {
@@ -24,13 +25,28 @@ protocol FirstModelDelegate: AnyObject {
 }
 
 final class FirstModel: FirstModelProtocol {
+   
+    
     
     weak var delegate: FirstModelDelegate?
     
     init() {}
     
     func getAriclesFromWeb() {
-        NetworkingServices.shared.getArticlesWithAlamo(completion: {[weak self] result in
+        //        NetworkingServices.shared.getArticlesWithAlamo(completion: {[weak self] result in
+        //            switch result {
+        //            case .success(let news):
+        //                self!.delegate?.articlesHasBeenDownloaded(self!, articles: news.articles!)
+        //                if news.articles!.count >= 20 {
+        //                    DataStorage.shared.setLatestArticles(latestArticles: news.articles!)
+        //                }
+        //            case .failure(let error):
+        //                self!.delegate?.errorWhileDownloadingArticles(self!)
+        //                print(error.localizedDescription)
+        //            }
+        //        })
+        
+        NetworkingServices.shared.getDataFromWeb(typename: News(), completion: {[weak self] result in
             switch result {
             case .success(let news):
                 self!.delegate?.articlesHasBeenDownloaded(self!, articles: news.articles!)
@@ -42,22 +58,30 @@ final class FirstModel: FirstModelProtocol {
                 print(error.localizedDescription)
             }
         })
+        
+        
+        
+        
+        
+        
+        
+        
     }
     
-    func getArticlesWithQuery() {
-        NetworkingServices.shared.getArticlesWithSearch(completion: {[weak self] result in
-            switch result {
-            case .success(let news):
-                self!.delegate?.articlesHasBeenDownloaded(self!, articles: news.articles!)
-                if news.articles!.count >= 20 {
-                    DataStorage.shared.setLatestArticles(latestArticles: news.articles!)
-                }
-            case .failure(let error):
-                self!.delegate?.errorWhileDownloadingArticles(self!)
-                print(error.localizedDescription)
-            }
-        })
-    }
+//    func getArticlesWithQuery() {
+//        NetworkingServices.shared.getArticlesWithSearch(completion: {[weak self] result in
+//            switch result {
+//            case .success(let news):
+//                self!.delegate?.articlesHasBeenDownloaded(self!, articles: news.articles!)
+//                if news.articles!.count >= 20 {
+//                    DataStorage.shared.setLatestArticles(latestArticles: news.articles!)
+//                }
+//            case .failure(let error):
+//                self!.delegate?.errorWhileDownloadingArticles(self!)
+//                print(error.localizedDescription)
+//            }
+//        })
+//    }
     
     func sendStoredArticles() {
         let articlesToSend = DataStorage.shared.getLatestArticles()
@@ -67,4 +91,9 @@ final class FirstModel: FirstModelProtocol {
     func setNewQuery(newQuery: String) {
         URLBuilder.shared.setQuery(newQuery: newQuery)
     }
+    
+    func setWeatherIndicator(weatherIndicator: Bool) {
+        URLBuilder.shared.setWeatherIndicator(newWeatherIndicator: weatherIndicator)
+    }
+    
 }

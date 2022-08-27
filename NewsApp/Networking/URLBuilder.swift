@@ -16,6 +16,7 @@ final class URLBuilder {
     private let formatter = DateFormatter()
     private var URLHasNotBeenSentToday = true
     private var userIsInterestedInSpecificTopic = false
+    private var userIsInterestedInWeather = false
     
     private let generalURLFirstPart = "https://newsapi.org/v2/everything?"
     private let generalURLQueryMark = "q="
@@ -34,8 +35,16 @@ final class URLBuilder {
     private let specificURLPageSize = "&pageSize=100&"
     private var specificURLLastPart = "apiKey=715dc191ff584bb2b070568ffb2d6683"
     
-    func getURLWithoutQuery() -> URL? {
-        return userIsInterestedInSpecificTopic ? getURLWithTopic() : getGeneralURL()
+    func getURL() -> URL? {
+        if userIsInterestedInWeather {
+            return getWeatherURL()
+        }
+        else if  !userIsInterestedInSpecificTopic && generalURLQuery != "null" {
+            return getURLWithQuery()
+        }
+        else {
+            return userIsInterestedInSpecificTopic ? getURLWithTopic() : getGeneralURL()
+        }
     }
     
     func getGeneralURL() -> URL? {
@@ -100,6 +109,11 @@ final class URLBuilder {
     func setDateFrom(newDateFrom: String) {
         generalURLDateFrom = newDateFrom
     }
+    
+    func setWeatherIndicator(newWeatherIndicator: Bool) {
+        userIsInterestedInWeather = newWeatherIndicator
+    }
+    
     
     func setQuery(newQuery: String) {
         guard newQuery != "" else {
