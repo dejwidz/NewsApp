@@ -51,7 +51,6 @@ class UserChoiceTableViewCell: UITableViewCell {
     }()
     
     @objc func readButtonTapped(_ sender: UIButton){
-        print("READ USER CHOICE")
         delegate?.readButtonHasBeenTapped(self, link: article?.url)
     }
     
@@ -91,7 +90,7 @@ class UserChoiceTableViewCell: UITableViewCell {
             case .success(let data):
                 self.image.image = UIImage(data: data)
             case .failure(let error):
-                self.image.image = UIImage(systemName: "moon.stars")
+                self.image.image = UIImage(systemName: "pause.fill")
                 print(error.localizedDescription)
             }
         })

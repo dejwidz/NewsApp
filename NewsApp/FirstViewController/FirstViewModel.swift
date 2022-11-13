@@ -43,7 +43,6 @@ final class FirstViewModel: FirstViewModelProtocol {
             return
         }
         model.setNewQuery(newQuery: stringPreparedToMakeQuery)
-//        model.getArticlesWithQuery()
         model.getAriclesFromWeb()
     }
     

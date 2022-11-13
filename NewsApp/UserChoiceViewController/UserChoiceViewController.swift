@@ -49,6 +49,8 @@ extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
         cell.descriptionLabel.text = articlesToShow?[indexPath.row].content
         cell.article = articlesToShow?[indexPath.row]
         cell.loadImageWithNetworkingServices()
+        cell.readButton.isHidden = true
+        cell.image.alpha = 1
         cell.delegate = self
         return cell
     }

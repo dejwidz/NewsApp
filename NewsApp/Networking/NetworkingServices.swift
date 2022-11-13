@@ -32,11 +32,6 @@ final class NetworkingServices {
             return
         }
         
-//        guard let request = try? URLRequest(url: url, method: .get) else {
-//            completion(.failure(NetworkingErrors.wrongRequest))
-//            return
-//        }
-        
         AF.request(url ,method: .get).response{ response in
             switch response.result {
             case .success(let responseData):

@@ -17,10 +17,22 @@ class DataStorage {
     private init() {}
     
     func addUserChoiceArticle(newArticle: Article) {
+        guard articleHasNotBeenAddedYet(newArticle: newArticle) else { return }
         let newUserChoiceArticle = UserChoiceArticle(newArticle: newArticle)
         try! storedInformation.write {
             storedInformation.add(newUserChoiceArticle)
         }
+    }
+    
+    func articleHasNotBeenAddedYet(newArticle: Article) -> Bool {
+        var articleHasNotBeenAddedYet = true
+        let userChoiceArticles = storedInformation.objects(UserChoiceArticle.self)
+        for i in userChoiceArticles {
+            if i.url == newArticle.url {
+                articleHasNotBeenAddedYet = false
+            }
+        }
+        return articleHasNotBeenAddedYet
     }
     
     func getUserChoiceArticles() -> [UserChoiceArticle] {
@@ -96,9 +108,6 @@ class DataStorage {
         let location = storedInformation.objects(UserLocation.self).first
         return (location?.getLongitude())!
     }
-    
-    
-    
     
 }
 

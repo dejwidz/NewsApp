@@ -46,6 +46,7 @@ class ViewController: UIViewController {
     }
     
     let searchController = UISearchController()
+    var selectedRow: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -87,6 +88,11 @@ class ViewController: UIViewController {
     @objc func optionsButtonTapped() {
         let vc = OptionsViewController()
         vc.delegate = self
+//        let navi = UINavigationController(rootViewController: vc)
+//        vc.title = "Options"
+//        navi.present(vc, animated: true, completion: nil)
+
+//        vc.modalPresentationStyle = .popover
         navigationController?.present(vc, animated: true, completion: nil)
     }
     
@@ -101,20 +107,33 @@ class ViewController: UIViewController {
     }
 }
 
+//MARK: - table view extension
+
 extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articlesToDisplay?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell") as!
+        let cell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as!
         NewsTableViewCell
         cell.isSelected = false
+        cell.contentView.backgroundColor = .white
+        cell.readButton.isHidden = true
+        cell.saveButton.isHidden = true
+        cell.image.alpha = 1
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
+        
+        if selectedRow == indexPath.row {
+            cell.contentView.backgroundColor = .lightGray
+            cell.image.alpha = 0.3
+            cell.readButton.isHidden = false
+            cell.saveButton.isHidden = false
+        }
         return cell
     }
     
@@ -124,7 +143,22 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+    
+        
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
+        
+        guard cell.readButton.isHidden else {
+            selectedRow = nil
+            cell.image.alpha = 1
+            cell.readButton.isHidden = true
+            cell.saveButton.isHidden = true
+            cell.contentView.backgroundColor = .white
+            return
+        }
+        selectedRow = indexPath.row
+        
+        cell.contentView.backgroundColor = .lightGray
         cell.image.alpha = 0.3
         cell.readButton.isHidden = false
         cell.saveButton.isHidden = false
@@ -134,21 +168,27 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
+        cell.contentView.backgroundColor = .white
         cell.image.alpha = 1
         cell.readButton.isHidden = true
         cell.saveButton.isHidden = true
     }
 }
 
+//MARK: - ViewModel Delegate extension
+
 extension ViewController: FirstViewModeleDelegate {
     
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
+        selectedRow = nil
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
         scrollUp()
     }
 }
+
+//MARK: - cell Delegate extension
 
 extension ViewController: newsTableViewCellDelegate {
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?) {
@@ -163,6 +203,8 @@ extension ViewController: newsTableViewCellDelegate {
     }
 }
 
+//MARK: - searching extension
+
 extension ViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let temporaryString = searchController.searchBar.text
@@ -173,6 +215,8 @@ extension ViewController: UISearchResultsUpdating {
         }
     }
 }
+
+//MARK: - OptionsViewController Delegate extension
 
 extension ViewController: OptionsDelegate {
     func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController) {
