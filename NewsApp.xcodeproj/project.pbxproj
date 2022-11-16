@@ -190,11 +190,11 @@
 		6D542A3D2882D5860035BE7F /* Data_Model */ = {
 			isa = PBXGroup;
 			children = (
+				6D14FB5F288DC304001BD963 /* DataStorage.swift */,
 				6D542A392882D5710035BE7F /* News.swift */,
 				6D542A3B2882D57A0035BE7F /* Article.swift */,
 				6D14FB612897C7BE001BD963 /* UserChoiceArticle.swift */,
 				6D14FB632897CAF3001BD963 /* LatestArticle.swift */,
-				6D14FB5F288DC304001BD963 /* DataStorage.swift */,
 				6D6BD64128A9863600954951 /* WeatherData.swift */,
 				6D6BD64A28A9B67700954951 /* HourlyWeather.swift */,
 				6D6BD65028AB9CA300954951 /* UserLocation.swift */,

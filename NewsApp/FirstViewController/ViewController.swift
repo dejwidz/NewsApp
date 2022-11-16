@@ -11,13 +11,16 @@ import SafariServices
 class ViewController: UIViewController {
     
     private let viewModel = FirstViewModel(model: FirstModel())
-    var articlesToDisplay: [Article]?
+    private var articlesToDisplay: [Article]?
+    private let searchController = UISearchController()
+    private var selectedRow = IndexPath(row: 0, section: 0)
+    private var formerSelectedRow = IndexPath(row: 0, section: 0)
     
     let newsTableView: UITableView = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 100, width: w, height: h * 0.77)
+        tableView.frame = CGRect(x: 0, y: 144, width: w, height: h * 0.77)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
         tableView.allowsMultipleSelection = false
         return tableView
@@ -44,9 +47,6 @@ class ViewController: UIViewController {
         let vc = LocationSettingViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
-    
-    let searchController = UISearchController()
-    var selectedRow: Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -88,11 +88,6 @@ class ViewController: UIViewController {
     @objc func optionsButtonTapped() {
         let vc = OptionsViewController()
         vc.delegate = self
-//        let navi = UINavigationController(rootViewController: vc)
-//        vc.title = "Options"
-//        navi.present(vc, animated: true, completion: nil)
-
-//        vc.modalPresentationStyle = .popover
         navigationController?.present(vc, animated: true, completion: nil)
     }
     
@@ -117,20 +112,18 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as!
         NewsTableViewCell
-        cell.isSelected = false
-        cell.contentView.backgroundColor = .white
-        cell.readButton.isHidden = true
-        cell.saveButton.isHidden = true
-        cell.image.alpha = 1
+//        cell.isSelected = false
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
         
-        if selectedRow == indexPath.row {
-            cell.contentView.backgroundColor = .lightGray
-            cell.image.alpha = 0.3
+        
+        if selectedRow == indexPath && selectedRow != formerSelectedRow {
+            cell.isSelected = true
+            cell.contentView.backgroundColor = .white
+            cell.image.alpha = 0.6
             cell.readButton.isHidden = false
             cell.saveButton.isHidden = false
         }
@@ -139,39 +132,55 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let h = UIScreen.main.bounds.height
-        return h * 0.2
+        var height = CGFloat(0)
+        
+        if selectedRow == formerSelectedRow && selectedRow == indexPath {
+            height = h * 0.2
+        }
+        else {
+            height = selectedRow == indexPath ? h * 0.4 : h * 0.2
+        }
+        return height
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-    
-        
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
         
-        guard cell.readButton.isHidden else {
-            selectedRow = nil
-            cell.image.alpha = 1
-            cell.readButton.isHidden = true
-            cell.saveButton.isHidden = true
-            cell.contentView.backgroundColor = .white
-            return
-        }
-        selectedRow = indexPath.row
+//        guard selectedRow == indexPath.row else {
+            selectedRow = indexPath
+            cell.readButton.isHidden = false
+            cell.saveButton.isHidden = false
+            cell.image.alpha = 0.6
+//            cell.isSelected = true
+            newsTableView.scrollToRow(at: indexPath, at: .top, animated: true)
         
-        cell.contentView.backgroundColor = .lightGray
-        cell.image.alpha = 0.3
-        cell.readButton.isHidden = false
-        cell.saveButton.isHidden = false
-        navigationItem.searchController?.resignFirstResponder()
-        cell.becomeFirstResponder()
+            
+            newsTableView.reloadRows(at: [selectedRow, formerSelectedRow], with: .right)
+            
+            formerSelectedRow = selectedRow
+//            return
+//        }
+        
+//        selectedRow = nil
+//        cell.readButton.isHidden = true
+//        cell.saveButton.isHidden = true
+//        cell.image.alpha = 1
+//        cell.contentView.backgroundColor = UIColor.white
+//        cell.isSelected = false
     }
+    
+    
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
-        cell.contentView.backgroundColor = .white
+        cell.contentView.backgroundColor = UIColor.white
         cell.image.alpha = 1
         cell.readButton.isHidden = true
         cell.saveButton.isHidden = true
+//        newsTableView.reloadRows(at: [indexPath], with: .none)
+        print(#function)
     }
 }
 
@@ -182,7 +191,7 @@ extension ViewController: FirstViewModeleDelegate {
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
-        selectedRow = nil
+//        selectedRow = nil
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
         scrollUp()
     }

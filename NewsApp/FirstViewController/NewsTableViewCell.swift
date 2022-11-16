@@ -117,9 +117,21 @@ class NewsTableViewCell: UITableViewCell {
             }
         })
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        isSelected = false
+        self.image.alpha = 1
+        self.readButton.isHidden = true
+        self.saveButton.isHidden = true
+        self.contentView.backgroundColor = .white
+    }
+    
+    
 }
 
 protocol newsTableViewCellDelegate: AnyObject {
     func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?)
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
 }
+

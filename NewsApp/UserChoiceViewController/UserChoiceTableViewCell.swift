@@ -34,7 +34,8 @@ class UserChoiceTableViewCell: UITableViewCell {
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
         image.contentMode = .scaleAspectFill
-        image.backgroundColor = UIColor.lightGray
+        image.backgroundColor = UIColor.white
+        image.tintColor = UIColor.black
         image.isHidden = false
         return image
     }()
