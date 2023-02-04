@@ -15,7 +15,8 @@ class UserChoiceViewController: UIViewController {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 44, width: w, height: h)
+        tableView.frame = CGRect(x: 0, y: 0, width: w, height: h)
+        tableView.contentInsetAdjustmentBehavior = .always
         tableView.register(UserChoiceTableViewCell.self, forCellReuseIdentifier: "userChoiceCell")
         return tableView
     }()

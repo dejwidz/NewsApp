@@ -112,7 +112,7 @@ class NewsTableViewCell: UITableViewCell {
             case .success(let data):
                 self.image.image = UIImage(data: data)
             case .failure(let error):
-                self.image.image = UIImage(systemName: "pause.fill")
+                self.image.image = UIImage(named: "newsAppIcon")
                 print(error.localizedDescription)
             }
         })
@@ -125,6 +125,7 @@ class NewsTableViewCell: UITableViewCell {
         self.readButton.isHidden = true
         self.saveButton.isHidden = true
         self.contentView.backgroundColor = .white
+        self.image.image = UIImage(named: "newsAppIcon")
     }
     
     

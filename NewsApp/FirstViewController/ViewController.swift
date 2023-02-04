@@ -20,9 +20,12 @@ class ViewController: UIViewController {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 144, width: w, height: h * 0.77)
+        tableView.frame = CGRect(x: 0, y: 0, width: w, height: h * 0.9)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
         tableView.allowsMultipleSelection = false
+        tableView.contentInsetAdjustmentBehavior = .always
+        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth, .flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
+        tableView.isDirectionalLockEnabled = true
         return tableView
     }()
     
@@ -116,6 +119,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
+//        cell.image.image = UIImage(systemName: "pause.fill")
         cell.loadImageWithNetworkingServices()
         cell.delegate = self
         
@@ -126,6 +130,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.image.alpha = 0.6
             cell.readButton.isHidden = false
             cell.saveButton.isHidden = false
+            cell.selectionStyle = .none
         }
         return cell
     }
@@ -153,7 +158,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.saveButton.isHidden = false
             cell.image.alpha = 0.6
 //            cell.isSelected = true
-            newsTableView.scrollToRow(at: indexPath, at: .top, animated: true)
+            newsTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
         
             
             newsTableView.reloadRows(at: [selectedRow, formerSelectedRow], with: .right)
@@ -182,6 +187,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
 //        newsTableView.reloadRows(at: [indexPath], with: .none)
         print(#function)
     }
+    
 }
 
 //MARK: - ViewModel Delegate extension

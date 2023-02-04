@@ -252,5 +252,12 @@ class WeatherTableViewCell: UITableViewCell {
         }
         return imageName
     }
+    
+    override func prepareForReuse() {
+        self.layer.borderColor = UIColor.clear.cgColor
+        self.layer.borderWidth = 0
+    }
+    
+    
 }
 

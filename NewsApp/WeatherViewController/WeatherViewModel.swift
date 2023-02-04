@@ -10,10 +10,12 @@ import Foundation
 protocol WeatherViewModelProtocol: AnyObject {
     var delegate: WeatherViewModelDelegate? {get set}
     func GetWeatherData()
+    func getCurrentHourWithoutMinuts()
 }
 
 protocol WeatherViewModelDelegate: AnyObject {
     func weatherHasBeenBuilt(_ weatherViewModel: WeatherViewModelProtocol, weather: [HourlyWeather])
+    func currentHourWithoutMinuts(_ weatherViewModel: WeatherViewModelProtocol, currentHourWithoutMinuts: Int)
 }
 
 final class WeatherViewModel {
@@ -34,6 +36,14 @@ final class WeatherViewModel {
 }
 
 extension WeatherViewModel: WeatherViewModelProtocol {
+    func getCurrentHourWithoutMinuts() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH"
+        let hour = formatter.string(from: .now)
+        let hourInt = Int(hour)!
+        delegate?.currentHourWithoutMinuts(self, currentHourWithoutMinuts: hourInt)
+    }
+    
     func GetWeatherData() {
         model.getWeatherData()
     }

@@ -69,4 +69,37 @@ final class NetworkingServices {
             }
         }
     }
+    
+//    func getImages( images: [ImageHolder]) -> [ImageHolder] {
+//        var imagesToReturn: [ImageHolder] = []
+//        Task {
+//            for image in images {
+//                guard let url = image.urlToImage else {return}
+//                let newImage = ImageHolder(urlToImage: url)
+//                await newImage.ImageData = getImage(urlToImage: url)
+//                await addImage(array: imagesToReturn, image: newImage)
+//            }
+//        }
+//    }
+//
+//    func addImage(array: [ImageHolder], image: ImageHolder) async {
+//       try? await array.append(image)
+//    }
+    
+    
+    func getImage(urlToImage: String) async -> Data?  {
+        var imageData: Data? = nil
+        
+        try? await NetworkingServices.shared.getImageWithAlamo(link: urlToImage, completion: { result in
+            switch result {
+            case .success(let data):
+            imageData = data
+            case .failure(let error):
+               imageData = nil
+            }
+        })
+        return imageData
+    }
+    
+    
 }

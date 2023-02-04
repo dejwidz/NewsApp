@@ -26,6 +26,7 @@
 		6D14FB7528A82027001BD963 /* LocationSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D14FB7428A82027001BD963 /* LocationSettingViewController.swift */; };
 		6D14FB7728A82063001BD963 /* LocationSettingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D14FB7628A82063001BD963 /* LocationSettingViewModel.swift */; };
 		6D14FB7928A8206C001BD963 /* LocationSettingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D14FB7828A8206C001BD963 /* LocationSettingModel.swift */; };
+		6D45E1FA2926B8180083F32E /* ImageHolder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D45E1F92926B8180083F32E /* ImageHolder.swift */; };
 		6D542A182881925A0035BE7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D542A172881925A0035BE7F /* AppDelegate.swift */; };
 		6D542A1A2881925A0035BE7F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D542A192881925A0035BE7F /* SceneDelegate.swift */; };
 		6D542A1C2881925A0035BE7F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D542A1B2881925A0035BE7F /* ViewController.swift */; };
@@ -68,6 +69,7 @@
 		6D14FB7428A82027001BD963 /* LocationSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingViewController.swift; sourceTree = "<group>"; };
 		6D14FB7628A82063001BD963 /* LocationSettingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingViewModel.swift; sourceTree = "<group>"; };
 		6D14FB7828A8206C001BD963 /* LocationSettingModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSettingModel.swift; sourceTree = "<group>"; };
+		6D45E1F92926B8180083F32E /* ImageHolder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageHolder.swift; sourceTree = "<group>"; };
 		6D542A142881925A0035BE7F /* NewsApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NewsApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D542A172881925A0035BE7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6D542A192881925A0035BE7F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				6D6BD64128A9863600954951 /* WeatherData.swift */,
 				6D6BD64A28A9B67700954951 /* HourlyWeather.swift */,
 				6D6BD65028AB9CA300954951 /* UserLocation.swift */,
+				6D45E1F92926B8180083F32E /* ImageHolder.swift */,
 			);
 			path = Data_Model;
 			sourceTree = "<group>";
@@ -334,6 +337,7 @@
 				6D14FB5D2887F891001BD963 /* UserChoiceTableViewCell.swift in Sources */,
 				6D14FB6A289FD66A001BD963 /* OptionsModel.swift in Sources */,
 				6D14FB622897C7BE001BD963 /* UserChoiceArticle.swift in Sources */,
+				6D45E1FA2926B8180083F32E /* ImageHolder.swift in Sources */,
 				6D6BD64D28AA776C00954951 /* WeatherTableViewCell.swift in Sources */,
 				6D542A1A2881925A0035BE7F /* SceneDelegate.swift in Sources */,
 				6D14FB642897CAF3001BD963 /* LatestArticle.swift in Sources */,
