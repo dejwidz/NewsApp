@@ -13,33 +13,22 @@ class ViewController: UIViewController {
     private let viewModel = FirstViewModel(model: FirstModel())
     private var articlesToDisplay: [Article]?
     private let searchController = UISearchController()
-    private var selectedRow = IndexPath(row: 0, section: 0)
-    private var formerSelectedRow = IndexPath(row: 0, section: 0)
-    private var imageDataHolders: [ImageHolder]? {
-        didSet {
-            print("ZMIENIONO HOLDERSY, \(imageDataHolders?.count)")
-//            imageDataHolders?.forEach {$0.downloadImage()}
-        }
-    }
+    private var imageDataHolders: [ImageHolder]?
     
     let newsTableView: UITableView = {
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 0, width: w, height: h * 0.9)
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "newsCell")
-        tableView.allowsMultipleSelection = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.contentInsetAdjustmentBehavior = .always
-        tableView.autoresizingMask = [.flexibleHeight, .flexibleWidth, .flexibleTopMargin, .flexibleBottomMargin, .flexibleLeftMargin, .flexibleRightMargin]
         tableView.isDirectionalLockEnabled = true
         return tableView
     }()
     
     let weatherButton: UIButton = {
+        let button = UIButton()
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
-        let button = UIButton()
-        button.frame = CGRect(x: w * 0.05, y: h * 0.89, width: w * 0.9, height: h * 0.08)
+        button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.white
         button.layer.borderWidth = CGFloat(w * 0.01)
         button.layer.borderColor = UIColor.black.cgColor
@@ -63,26 +52,12 @@ class ViewController: UIViewController {
         title = "NewsApp"
         
         DataStorage.shared.setFirstLocation()
-        view.addSubview(newsTableView)
-        view.addSubview(weatherButton)
+        setupInterface()
         newsTableView.delegate = self
         newsTableView.dataSource = self
         newsTableView.prefetchDataSource = self
         viewModel.delegate = self
         getArticles()
-        
-        view.backgroundColor = UIColor.white
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .black
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(optionsButtonTapped))
-        navigationItem.leftBarButtonItem?.tintColor = .black
-        navigationController?.navigationItem.searchController = searchController
-        navigationItem.searchController = searchController
-        searchController.searchResultsUpdater = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        searchController.automaticallyShowsCancelButton = true
-        searchController.searchBar.placeholder = "type what you are interested in"
-        navigationItem.hidesSearchBarWhenScrolling = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -113,15 +88,47 @@ class ViewController: UIViewController {
     
     func setupImageHolders(longitude: Int) {
         imageDataHolders = []
+        
+        guard longitude > 1 else {return}
+        
         for i in 0...longitude - 1 {
             imageDataHolders?.append(ImageHolder(imageURL: articlesToDisplay![i].urlToImage ?? ""))
             imageDataHolders![i].id = i
         }
-//        imageDataHolders?.forEach {$0.downloadImage()}
-
-//
     }
     
+    func setupInterface() {
+        let h = UIScreen.main.bounds.height
+        
+        view.backgroundColor = UIColor.white
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
+        navigationItem.rightBarButtonItem?.tintColor = .black
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(optionsButtonTapped))
+        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationController?.navigationItem.searchController = searchController
+        navigationItem.searchController = searchController
+        searchController.searchResultsUpdater = self
+        searchController.hidesNavigationBarDuringPresentation = false
+        searchController.automaticallyShowsCancelButton = true
+        searchController.searchBar.placeholder = "type what you are interested in"
+        navigationItem.hidesSearchBarWhenScrolling = false
+        
+        view.addSubview(newsTableView)
+        view.addSubview(weatherButton)
+    
+        NSLayoutConstraint.activate([
+
+            newsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            newsTableView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.95),
+            newsTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            newsTableView.bottomAnchor.constraint(equalTo: weatherButton.topAnchor, constant: -1),
+            
+            weatherButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            weatherButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            weatherButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            weatherButton.heightAnchor.constraint(equalToConstant: h * 0.1)
+        ])
+    }
 }
 
 //MARK: - table view extension
@@ -136,28 +143,10 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = newsTableView.dequeueReusableCell(withIdentifier: "newsCell", for: indexPath) as!
         NewsTableViewCell
-//        cell.isSelected = false
         cell.article = articlesToDisplay?[indexPath.row]
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
-//        cell.image.image = UIImage(systemName: "pause.fill")
-//        cell.loadImageWithNetworkingServices()
         cell.delegate = self
-        
-        
-        if selectedRow == indexPath && selectedRow != formerSelectedRow {
-            cell.isSelected = true
-            cell.contentView.backgroundColor = .white
-            cell.image.alpha = 0.6
-            cell.readButton.isHidden = false
-            cell.saveButton.isHidden = false
-            cell.selectionStyle = .none
-        }
-        
-//        guard let ih = imageDataHolders?[indexPath.row] else {
-//            cell.loadImageWithNetworkingServices()
-//            return cell
-//        }
         
         guard let image = imageDataHolders?[indexPath.row].cachedImage else {
             cell.loadImageWithNetworkingServices()
@@ -166,54 +155,21 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
         
         cell.image.image = image
         cell.setImageHolder(imageHolder: imageDataHolders![indexPath.row])
-        
-       
-        
-        
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let h = UIScreen.main.bounds.height
-        var height = CGFloat(0)
-        
-        if selectedRow == formerSelectedRow && selectedRow == indexPath {
-            height = h * 0.2
-        }
-        else {
-            height = selectedRow == indexPath ? h * 0.4 : h * 0.2
-        }
-        return height
+        return 200
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
-    {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
-        
-//        guard selectedRow == indexPath.row else {
-            selectedRow = indexPath
+
             cell.readButton.isHidden = false
             cell.saveButton.isHidden = false
             cell.image.alpha = 0.6
-//            cell.isSelected = true
             newsTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
-        
-            
-            newsTableView.reloadRows(at: [selectedRow, formerSelectedRow], with: .right)
-            
-            formerSelectedRow = selectedRow
-//            return
-//        }
-        
-//        selectedRow = nil
-//        cell.readButton.isHidden = true
-//        cell.saveButton.isHidden = true
-//        cell.image.alpha = 1
-//        cell.contentView.backgroundColor = UIColor.white
-//        cell.isSelected = false
     }
-    
-    
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         
@@ -222,21 +178,14 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
         cell.image.alpha = 1
         cell.readButton.isHidden = true
         cell.saveButton.isHidden = true
-//        newsTableView.reloadRows(at: [indexPath], with: .none)
-        print(#function)
     }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
         for ip in indexPaths {
-            let imageH = imageDataHolders![ip.row]
-            imageH.imageURL = articlesToDisplay![ip.row].urlToImage
-            imageH.id = ip.row
-            imageH.downloadImage()
-
-            print("ŚCIĄGANIE ", ip.row)
-
-
-
+            let imageHolder = imageDataHolders![ip.row]
+            imageHolder.imageURL = articlesToDisplay![ip.row].urlToImage
+            imageHolder.id = ip.row
+            imageHolder.downloadImage()
         }
     }
     

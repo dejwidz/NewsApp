@@ -14,13 +14,10 @@ class WeatherViewController: UIViewController {
     private var currentHourWithoutMinuts = 0
     
     let weatherTableView: UITableView = {
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 0, width: w, height: h)
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
         tableView.contentInsetAdjustmentBehavior = .always
-        tableView.allowsSelection = false
+        tableView.allowsSelection = true
         return tableView
     }()
     
@@ -31,12 +28,25 @@ class WeatherViewController: UIViewController {
         viewModel.delegate = self
         weatherTableView.delegate = self
         weatherTableView.dataSource = self
-        view.addSubview(weatherTableView)
+        setupWeatherTableView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         viewModel.GetWeatherData()
     }
+    
+    func setupWeatherTableView() {
+        weatherTableView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(weatherTableView)
+        
+        NSLayoutConstraint.activate([
+            weatherTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            weatherTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            weatherTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            weatherTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+    }
+    
     
 }
 
@@ -76,6 +86,12 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return UIScreen.main.bounds.height * 0.15
+        return 160
     }
+        
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        weatherTableView.scrollToRow(at: IndexPath(row: currentHourWithoutMinuts, section: 0), at: .middle, animated: true)
+    }
+    
+    
 }

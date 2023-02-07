@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol newsTableViewCellDelegate: AnyObject {
+    func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?)
+    func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
+}
+
 class NewsTableViewCell: UITableViewCell {
-    
-    
+
     weak var delegate: newsTableViewCellDelegate?
     
     var identifier = "newsCell"
@@ -22,6 +26,7 @@ class NewsTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
         label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -30,6 +35,7 @@ class NewsTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -41,6 +47,7 @@ class NewsTableViewCell: UITableViewCell {
         image.contentMode = .scaleAspectFill
         image.backgroundColor = UIColor.white
         image.tintColor = UIColor.black
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
@@ -52,6 +59,7 @@ class NewsTableViewCell: UITableViewCell {
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(readButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -63,6 +71,7 @@ class NewsTableViewCell: UITableViewCell {
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(saveButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -101,11 +110,32 @@ class NewsTableViewCell: UITableViewCell {
         let w = contentView.frame.size.width
         let h = contentView.frame.size.height
         
-        titleLabel.frame = CGRect(x: w * 0.02, y: h * 0.05, width: w * 0.5, height: h * 0.4)
-        descriptionLabel.frame = CGRect(x: w * 0.02, y: h * 0.45, width: w * 0.5, height: h * 0.55)
-        image.frame = CGRect(x: w * 0.52, y: h * 0.05, width: w * 0.45, height: h * 0.95)
-        readButton.frame = CGRect(x: w * 0.6, y: h * 0.2, width: w * 0.3, height: h * 0.3)
-        saveButton.frame = CGRect(x: w * 0.6, y: h * 0.6, width: w * 0.3, height: h * 0.3)
+        NSLayoutConstraint.activate([
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: h * 0.05),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.02),
+            titleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
+            titleLabel.heightAnchor.constraint(equalToConstant: h * 0.4),
+            
+            descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
+            descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
+            descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
+            descriptionLabel.heightAnchor.constraint(equalToConstant: h * 0.5),
+            
+            image.topAnchor.constraint(equalTo: titleLabel.topAnchor),
+            image.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
+            image.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.45),
+            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.015)),
+            
+            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: h * 0.15),
+            readButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
+            readButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.3),
+            readButton.heightAnchor.constraint(equalToConstant: h * 0.3),
+            
+            saveButton.topAnchor.constraint(equalTo: readButton.bottomAnchor, constant: h * 0.1),
+            saveButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
+            saveButton.widthAnchor.constraint(equalTo: readButton.widthAnchor),
+            saveButton.heightAnchor.constraint(equalTo: readButton.heightAnchor)
+        ])
     }
     
     func loadImageWithNetworkingServices() {
@@ -122,7 +152,7 @@ class NewsTableViewCell: UITableViewCell {
     
     func setImageHolder(imageHolder: ImageHolder) {
         self.imageHolder = imageHolder
-        imageHolder.imageIsReady = setupImage(image:)
+//        imageHolder.imageIsReady = setupImage(image:)
         self.image.image = imageHolder.cachedImage
     }
     
@@ -139,12 +169,7 @@ class NewsTableViewCell: UITableViewCell {
         self.contentView.backgroundColor = .white
         self.image.image = UIImage(named: "newsAppIcon")
     }
-    
-    
 }
 
-protocol newsTableViewCellDelegate: AnyObject {
-    func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?)
-    func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
-}
+
 

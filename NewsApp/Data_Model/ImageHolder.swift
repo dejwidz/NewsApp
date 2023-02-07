@@ -13,19 +13,13 @@ final class ImageHolder {
     var imageURL: String?
     var isAlreadyDownloading = false
     var id: Int?
-    var cachedImage: UIImage? {
-        didSet {
-            print("zaladowano image ", id)
-        }
-    }
-    var imageIsReady: ((UIImage) -> Void)?
+    var cachedImage: UIImage?
 
     init(imageURL: String) {
         self.imageURL = imageURL
     }
 
     func downloadImage() {
-        
         guard !isAlreadyDownloading else {return}
         
         isAlreadyDownloading = true
@@ -35,7 +29,6 @@ final class ImageHolder {
 
             case .success(let data):
                 self.cachedImage = UIImage(data: data)
-                print("POBRANO ", self.id )
             case .failure(let error):
                 print(error.localizedDescription)
             }

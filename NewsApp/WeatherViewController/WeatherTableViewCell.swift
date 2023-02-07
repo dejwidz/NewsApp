@@ -17,6 +17,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
         label.numberOfLines = 0
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -25,6 +26,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .semibold)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -33,6 +35,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -41,6 +44,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -49,6 +53,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -57,6 +62,7 @@ class WeatherTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -69,6 +75,7 @@ class WeatherTableViewCell: UITableViewCell {
         image.tintColor = UIColor.black
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFit
+        image.translatesAutoresizingMaskIntoConstraints = false
         return image
     }()
     
@@ -99,13 +106,45 @@ class WeatherTableViewCell: UITableViewCell {
         super.layoutSubviews()
         let w = contentView.frame.size.width
         let h = contentView.frame.size.height
-        dayNameLabel.frame = CGRect(x: w * 0.05, y: h * 0.05, width: w * 0.4, height: h * 0.2)
-        hourLabel.frame = CGRect(x: w * 0.05, y: h * 0.3, width: w * 0.4, height: h * 0.15)
-        temperatureLabel.frame = CGRect(x: w * 0.05, y: h * 0.45, width: w * 0.4, height: h * 0.15)
-        rainLabel.frame = CGRect(x: w * 0.05, y: h * 0.60, width: w * 0.4, height: h * 0.15)
-        snowLabel.frame = CGRect(x: w * 0.05, y: h * 0.75, width: w * 0.4, height: h * 0.15)
-        cloudsLabel.frame = CGRect(x: w * 0.05, y: h * 0.9, width: w * 0.4, height: h * 0.1)
-        image.frame = CGRect(x: w * 0.5, y: h * 0.05, width: w * 0.45, height: h * 0.9)
+        
+        NSLayoutConstraint.activate([
+        
+            dayNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            dayNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.05),
+            dayNameLabel.widthAnchor.constraint(equalToConstant: w * 0.4),
+            dayNameLabel.heightAnchor.constraint(equalToConstant: h * 0.15),
+            
+            hourLabel.topAnchor.constraint(equalTo: dayNameLabel.bottomAnchor),
+            hourLabel.leadingAnchor.constraint(equalTo: dayNameLabel.leadingAnchor),
+            hourLabel.widthAnchor.constraint(equalTo: dayNameLabel.widthAnchor),
+            hourLabel.heightAnchor.constraint(equalTo: dayNameLabel.heightAnchor),
+            
+            temperatureLabel.topAnchor.constraint(equalTo: hourLabel.bottomAnchor),
+            temperatureLabel.leadingAnchor.constraint(equalTo: hourLabel.leadingAnchor),
+            temperatureLabel.widthAnchor.constraint(equalTo: hourLabel.widthAnchor),
+            temperatureLabel.heightAnchor.constraint(equalTo: hourLabel.heightAnchor),
+            
+            rainLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor),
+            rainLabel.leadingAnchor.constraint(equalTo: temperatureLabel.leadingAnchor),
+            rainLabel.widthAnchor.constraint(equalTo: temperatureLabel.widthAnchor),
+            rainLabel.heightAnchor.constraint(equalTo: temperatureLabel.heightAnchor),
+            
+            snowLabel.topAnchor.constraint(equalTo: rainLabel.bottomAnchor),
+            snowLabel.leadingAnchor.constraint(equalTo: rainLabel.leadingAnchor),
+            snowLabel.widthAnchor.constraint(equalTo: rainLabel.widthAnchor),
+            snowLabel.heightAnchor.constraint(equalTo: rainLabel.heightAnchor),
+            
+            cloudsLabel.topAnchor.constraint(equalTo: snowLabel.bottomAnchor),
+            cloudsLabel.leadingAnchor.constraint(equalTo: snowLabel.leadingAnchor),
+            cloudsLabel.widthAnchor.constraint(equalTo: snowLabel.widthAnchor),
+            cloudsLabel.heightAnchor.constraint(equalTo: snowLabel.heightAnchor),
+            
+            image.topAnchor.constraint(equalTo: dayNameLabel.topAnchor),
+            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.05)),
+            image.widthAnchor.constraint(equalToConstant: w * 0.45),
+            image.bottomAnchor.constraint(equalTo: cloudsLabel.bottomAnchor)
+        ])
+
         setLabelsText()
         setImage()
     }

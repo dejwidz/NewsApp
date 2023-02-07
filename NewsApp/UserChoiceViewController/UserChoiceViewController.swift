@@ -15,8 +15,8 @@ class UserChoiceViewController: UIViewController {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
-        tableView.frame = CGRect(x: 0, y: 0, width: w, height: h)
         tableView.contentInsetAdjustmentBehavior = .always
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(UserChoiceTableViewCell.self, forCellReuseIdentifier: "userChoiceCell")
         return tableView
     }()
@@ -32,11 +32,22 @@ class UserChoiceViewController: UIViewController {
         viewModel.getUserChoiceArticlesFromModel()
         userChoiceTableView.delegate = self
         userChoiceTableView.dataSource = self
+        setupUserChoiceTableView()
     }
     
     override func viewWillLayoutSubviews() {
         navigationItem.backBarButtonItem?.title = "Back"
     }
+    
+    func setupUserChoiceTableView() {
+        NSLayoutConstraint.activate([
+            userChoiceTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            userChoiceTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            userChoiceTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            userChoiceTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+    }
+    
 }
 
 extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
@@ -57,14 +68,14 @@ extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let h = UIScreen.main.bounds.height
-        return h * 0.2
+        return 200
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = userChoiceTableView.cellForRow(at: indexPath) as? UserChoiceTableViewCell else {return}
         cell.image.alpha = 0.3
         cell.readButton.isHidden = false
+        print(UIScreen.main.bounds.height * 0.2)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

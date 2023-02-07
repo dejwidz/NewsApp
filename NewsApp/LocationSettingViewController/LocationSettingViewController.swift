@@ -8,6 +8,7 @@
 import UIKit
 import MapKit
 import CoreLocation
+import SwiftUI
 
 class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
@@ -16,11 +17,16 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     var currentUserLocation: CLLocation?
     private var locationIsNotSet = true
     
+    
+    var initialTopAnchor: NSLayoutConstraint?
+    var initialBottomAnchor: NSLayoutConstraint?
+    var heightAnchorForFirstAnimation: NSLayoutConstraint?
+    var heightAnchorForSecondAnimation: NSLayoutConstraint?
+    
     let currentPositionButton: UIButton = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
-        button.frame = CGRect(x: w * 0.1, y: h * 0.125, width: w * 0.8, height: h * 0.1)
         button.setTitle("Check weather for current position", for: .normal)
         button.addTarget(self, action: #selector(currentPositionButtonTapped(_:)), for: .touchUpInside)
         button.backgroundColor = UIColor.white
@@ -29,6 +35,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -42,7 +49,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
-        button.frame = CGRect(x: w * 0.1, y: h * 0.26, width: w * 0.8, height: h * 0.1)
         button.setTitle("Check weather for last position", for: .normal)
         button.addTarget(self, action: #selector(lastPositionButtonTapped(_:)), for: .touchUpInside)
         button.backgroundColor = UIColor.white
@@ -51,6 +57,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -62,7 +69,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
-        button.frame = CGRect(x: w * 0.1, y: h * 0.4, width: w * 0.8, height: h * 0.1)
         button.setTitle("Check weather for choosen position", for: .normal)
         button.addTarget(self, action: #selector(customPositionButtonTapped(_:)), for: .touchUpInside)
         button.backgroundColor = UIColor.white
@@ -71,6 +77,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         button.setTitleColor(UIColor.black, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
@@ -78,10 +85,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let map = MKMapView()
-        map.frame = CGRect(x: w * 0.1, y: -h * 0.2, width: w * 0.8, height: h * 0.1)
         map.layer.borderWidth = CGFloat(w * 0.01)
         map.layer.borderColor = UIColor.black.cgColor
         map.layer.cornerRadius = h * 0.025
+        map.translatesAutoresizingMaskIntoConstraints = false
         return map
     }()
     
@@ -96,17 +103,24 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         UIView.animate(withDuration: 1.1)
         {
             let h = UIScreen.main.bounds.height
-            let w = UIScreen.main.bounds.width
-            self.map.frame = CGRect(x: w * 0.1, y: h * 0.4, width: w * 0.8, height: h * 0.1)
+            
+            self.initialTopAnchor?.isActive = false
+            NSLayoutConstraint.activate([
+                self.map.topAnchor.constraint(equalTo: self.view.topAnchor, constant: h * 0.4),
+            ])
+            self.heightAnchorForFirstAnimation = self.map.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.1)
+            self.heightAnchorForFirstAnimation?.isActive = true
+            self.view.layoutIfNeeded()
         }
     }
     
     func animateMapFrameSize() {
-        UIView.animate(withDuration: 1, delay: 0.8, options: .allowAnimatedContent, animations: {
-            let h = UIScreen.main.bounds.height
-            let w = UIScreen.main.bounds.width
-            self.map.frame = CGRect(x: w * 0.1, y: h * 0.4, width: w * 0.8, height: h * 0.55)
-        }, completion: nil)
+        UIView.animate(withDuration: 1, delay: 0.9, options: .allowAnimatedContent, animations: {
+                self.heightAnchorForFirstAnimation?.isActive = false
+                self.heightAnchorForSecondAnimation = self.map.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.55)
+                self.heightAnchorForSecondAnimation?.isActive = true
+                self.view.layoutIfNeeded()
+                    }, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -118,13 +132,44 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         view.addSubview(currentPositionButton)
         view.addSubview(lastPositionButton)
         view.addSubview(customPositionButton)
+        view.addSubview(map)
+        setupInterface()
         view.backgroundColor = UIColor.white
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
         map.addGestureRecognizer(longPress)
+        
+        heightAnchorForFirstAnimation = customPositionButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         locationIsNotSet = true
+    }
+    
+    func setupInterface() {
+        let h = UIScreen.main.bounds.height
+
+        NSLayoutConstraint.activate([
+            currentPositionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: h * 0.1),
+            currentPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            currentPositionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
+            currentPositionButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
+            
+            lastPositionButton.topAnchor.constraint(equalTo: currentPositionButton.bottomAnchor, constant: h * 0.05),
+            lastPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            lastPositionButton.widthAnchor.constraint(equalTo: currentPositionButton.widthAnchor),
+            lastPositionButton.heightAnchor.constraint(equalTo: currentPositionButton.heightAnchor),
+            
+            customPositionButton.topAnchor.constraint(equalTo: lastPositionButton.bottomAnchor, constant: h * 0.05),
+            customPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            customPositionButton.widthAnchor.constraint(equalTo: lastPositionButton.widthAnchor),
+            customPositionButton.heightAnchor.constraint(equalTo: lastPositionButton.heightAnchor),
+            
+            map.widthAnchor.constraint(equalTo: customPositionButton.widthAnchor),
+            map.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        initialTopAnchor = map.topAnchor.constraint(equalTo: view.topAnchor, constant: -(h * 1.2))
+        initialTopAnchor?.isActive = true
     }
     
     @objc func longPressUccured(_ sender: UILongPressGestureRecognizer) {

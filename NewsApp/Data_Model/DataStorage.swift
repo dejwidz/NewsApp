@@ -77,18 +77,6 @@ class DataStorage {
         })
     }
     
-//    func loadImageWithNetworkingServices(article: LatestArticle) {
-//        NetworkingServices.shared.getImageWithAlamo(link: article.urlToImage, completion: { result in
-//            switch result {
-//            case .success(let data):
-//                self.image.image = UIImage(data: data)
-//            case .failure(let error):
-//                self.image.image = UIImage(systemName: "pause.fill")
-//                print(error.localizedDescription)
-//            }
-//        })
-//    }
-    
     func setLastLocation(newLocation: CLLocation) {
         guard !storedInformation.objects(UserLocation.self).isEmpty else {
             setFirstLocation()
