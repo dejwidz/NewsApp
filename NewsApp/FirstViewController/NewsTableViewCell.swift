@@ -14,6 +14,8 @@ class NewsTableViewCell: UITableViewCell {
     
     var identifier = "newsCell"
     var article: Article?
+    var imageHolder: ImageHolder?
+    
     
     let titleLabel: UILabel = {
         var label = UILabel()
@@ -116,6 +118,16 @@ class NewsTableViewCell: UITableViewCell {
                 print(error.localizedDescription)
             }
         })
+    }
+    
+    func setImageHolder(imageHolder: ImageHolder) {
+        self.imageHolder = imageHolder
+        imageHolder.imageIsReady = setupImage(image:)
+        self.image.image = imageHolder.cachedImage
+    }
+    
+    func setupImage(image: UIImage) {
+        self.image.image = image
     }
     
     override func prepareForReuse() {

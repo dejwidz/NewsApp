@@ -15,6 +15,12 @@ class ViewController: UIViewController {
     private let searchController = UISearchController()
     private var selectedRow = IndexPath(row: 0, section: 0)
     private var formerSelectedRow = IndexPath(row: 0, section: 0)
+    private var imageDataHolders: [ImageHolder]? {
+        didSet {
+            print("ZMIENIONO HOLDERSY, \(imageDataHolders?.count)")
+//            imageDataHolders?.forEach {$0.downloadImage()}
+        }
+    }
     
     let newsTableView: UITableView = {
         let w = UIScreen.main.bounds.width
@@ -61,6 +67,7 @@ class ViewController: UIViewController {
         view.addSubview(weatherButton)
         newsTableView.delegate = self
         newsTableView.dataSource = self
+        newsTableView.prefetchDataSource = self
         viewModel.delegate = self
         getArticles()
         
@@ -103,11 +110,25 @@ class ViewController: UIViewController {
         let index = NSIndexPath(row: 0, section: 0)
         newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
     }
+    
+    func setupImageHolders(longitude: Int) {
+        imageDataHolders = []
+        for i in 0...longitude - 1 {
+            imageDataHolders?.append(ImageHolder(imageURL: articlesToDisplay![i].urlToImage ?? ""))
+            imageDataHolders![i].id = i
+        }
+//        imageDataHolders?.forEach {$0.downloadImage()}
+
+//
+    }
+    
 }
 
 //MARK: - table view extension
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articlesToDisplay?.count ?? 0
     }
@@ -120,7 +141,7 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         cell.titleLabel.text = articlesToDisplay?[indexPath.row].title
         cell.descriptionLabel.text = articlesToDisplay?[indexPath.row].content
 //        cell.image.image = UIImage(systemName: "pause.fill")
-        cell.loadImageWithNetworkingServices()
+//        cell.loadImageWithNetworkingServices()
         cell.delegate = self
         
         
@@ -132,6 +153,23 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
             cell.saveButton.isHidden = false
             cell.selectionStyle = .none
         }
+        
+//        guard let ih = imageDataHolders?[indexPath.row] else {
+//            cell.loadImageWithNetworkingServices()
+//            return cell
+//        }
+        
+        guard let image = imageDataHolders?[indexPath.row].cachedImage else {
+            cell.loadImageWithNetworkingServices()
+            return cell
+        }
+        
+        cell.image.image = image
+        cell.setImageHolder(imageHolder: imageDataHolders![indexPath.row])
+        
+       
+        
+        
         return cell
     }
     
@@ -188,6 +226,20 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource {
         print(#function)
     }
     
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        for ip in indexPaths {
+            let imageH = imageDataHolders![ip.row]
+            imageH.imageURL = articlesToDisplay![ip.row].urlToImage
+            imageH.id = ip.row
+            imageH.downloadImage()
+
+            print("ŚCIĄGANIE ", ip.row)
+
+
+
+        }
+    }
+    
 }
 
 //MARK: - ViewModel Delegate extension
@@ -197,6 +249,7 @@ extension ViewController: FirstViewModeleDelegate {
     func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
+        setupImageHolders(longitude: articlesToDisplay!.count)
 //        selectedRow = nil
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
         scrollUp()

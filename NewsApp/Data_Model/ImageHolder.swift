@@ -6,23 +6,42 @@
 //
 
 import Foundation
-import RealmSwift
 import UIKit
 
-class ImageHolder: Object {
-    @Persisted var urlToImage: String?
-    @Persisted var ImageData: Data?
-    
-    override init() {}
-    
-    init(urlToImage: String?) {
-        self.urlToImage = urlToImage
+final class ImageHolder {
+    var imageData: Data?
+    var imageURL: String?
+    var isAlreadyDownloading = false
+    var id: Int?
+    var cachedImage: UIImage? {
+        didSet {
+            print("zaladowano image ", id)
+        }
     }
-    
-    func setImage(ImageData: Data) {
-        self.ImageData = ImageData
+    var imageIsReady: ((UIImage) -> Void)?
+
+    init(imageURL: String) {
+        self.imageURL = imageURL
     }
-    
+
+    func downloadImage() {
+        
+        guard !isAlreadyDownloading else {return}
+        
+        isAlreadyDownloading = true
+
+        NetworkingServices.shared.getImageWithAlamo(link: imageURL, completion: {result in
+            switch result {
+
+            case .success(let data):
+                self.cachedImage = UIImage(data: data)
+                print("POBRANO ", self.id )
+            case .failure(let error):
+                print(error.localizedDescription)
+            }
+        })
+
+    }
+
+
 }
-
-
