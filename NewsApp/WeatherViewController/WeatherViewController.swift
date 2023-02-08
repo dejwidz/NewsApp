@@ -24,7 +24,7 @@ class WeatherViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Weather forecast"
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = CustomColors.backColor
         viewModel.delegate = self
         weatherTableView.delegate = self
         weatherTableView.dataSource = self

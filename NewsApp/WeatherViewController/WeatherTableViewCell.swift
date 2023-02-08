@@ -17,6 +17,8 @@ class WeatherTableViewCell: UITableViewCell {
         var label = UILabel()
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -28,6 +30,8 @@ class WeatherTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -37,6 +41,8 @@ class WeatherTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -46,6 +52,8 @@ class WeatherTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -55,6 +63,8 @@ class WeatherTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -64,6 +74,8 @@ class WeatherTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -72,8 +84,8 @@ class WeatherTableViewCell: UITableViewCell {
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
         image.contentMode = .scaleAspectFill
-        image.backgroundColor = UIColor.white
-        image.tintColor = UIColor.black
+        image.backgroundColor = CustomColors.backColor
+        image.tintColor = CustomColors.fontColor
         image.clipsToBounds = true
         image.contentMode = .scaleAspectFit
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -105,6 +117,9 @@ class WeatherTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        
+        self.contentView.backgroundColor = CustomColors.backColor
+        
         let w = contentView.frame.size.width
         let h = contentView.frame.size.height
         

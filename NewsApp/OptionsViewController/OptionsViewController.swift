@@ -25,6 +25,7 @@ class OptionsViewController: UIViewController {
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(toDateChanged(_:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.tintColor = CustomColors.fontColor
         return datePicker
     }()
     
@@ -42,6 +43,7 @@ class OptionsViewController: UIViewController {
         datePicker.sizeToFit()
         datePicker.addTarget(self, action: #selector(fromDateChanged(_:)), for: .valueChanged)
         datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.tintColor = CustomColors.fontColor
         return datePicker
     }()
     
@@ -53,7 +55,7 @@ class OptionsViewController: UIViewController {
     let toDateLabel: UILabel = {
         let label = UILabel()
         label.text = "Select end date"
-        label.textColor = UIColor.black
+        label.textColor = CustomColors.fontColor
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -62,7 +64,7 @@ class OptionsViewController: UIViewController {
     let fromDateLabel: UILabel = {
         let label = UILabel()
         label.text = "Select start date"
-        label.textColor = UIColor.black
+        label.textColor = CustomColors.fontColor
         label.textAlignment = .right
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -106,7 +108,7 @@ class OptionsViewController: UIViewController {
         super.viewDidLoad()
         title = "Options"
         viewmodel.delegate = self
-        view.backgroundColor = .white
+        view.backgroundColor = CustomColors.backColor
         view.addSubview(toDate)
         view.addSubview(fromDate)
         view.addSubview(toDateLabel)

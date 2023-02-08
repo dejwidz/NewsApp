@@ -29,11 +29,11 @@ class ViewController: UIViewController {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = CustomColors.backColor
         button.layer.borderWidth = CGFloat(w * 0.01)
-        button.layer.borderColor = UIColor.black.cgColor
+        button.layer.borderColor = CustomColors.fontColor?.cgColor
         button.setTitle("Check weather", for: .normal)
-        button.setTitleColor(UIColor.black, for: .normal)
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
         button.addTarget(self, action: #selector(weatherButtonTapped(_:)), for: .touchUpInside)
@@ -100,11 +100,11 @@ class ViewController: UIViewController {
     func setupInterface() {
         let h = UIScreen.main.bounds.height
         
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = CustomColors.backColor
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "My choice", style: .plain, target: self, action: #selector(myChoiceButtonTapped))
-        navigationItem.rightBarButtonItem?.tintColor = .black
+        navigationItem.rightBarButtonItem?.tintColor = CustomColors.fontColor
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Options", style: .plain, target: self, action: #selector(optionsButtonTapped))
-        navigationItem.leftBarButtonItem?.tintColor = .black
+        navigationItem.leftBarButtonItem?.tintColor = CustomColors.fontColor
         navigationController?.navigationItem.searchController = searchController
         navigationItem.searchController = searchController
         searchController.searchResultsUpdater = self
@@ -112,6 +112,7 @@ class ViewController: UIViewController {
         searchController.automaticallyShowsCancelButton = true
         searchController.searchBar.placeholder = "type what you are interested in"
         navigationItem.hidesSearchBarWhenScrolling = false
+        navigationController?.navigationBar.tintColor = CustomColors.fontColor
         
         view.addSubview(newsTableView)
         view.addSubview(weatherButton)

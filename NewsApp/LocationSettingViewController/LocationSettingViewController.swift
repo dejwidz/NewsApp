@@ -28,10 +28,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let button = UIButton()
         button.setTitle("Check weather for current position", for: .normal)
         button.addTarget(self, action: #selector(currentPositionButtonTapped(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = CustomColors.backColor
         button.layer.borderWidth = CGFloat(w * 0.01)
-        button.layer.borderColor = UIColor.black.cgColor
-        button.setTitleColor(UIColor.black, for: .normal)
+        button.layer.borderColor = CustomColors.fontColor?.cgColor
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -50,10 +50,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let button = UIButton()
         button.setTitle("Check weather for last position", for: .normal)
         button.addTarget(self, action: #selector(lastPositionButtonTapped(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = CustomColors.backColor
         button.layer.borderWidth = CGFloat(w * 0.01)
-        button.layer.borderColor = UIColor.black.cgColor
-        button.setTitleColor(UIColor.black, for: .normal)
+        button.layer.borderColor = CustomColors.fontColor?.cgColor
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -70,10 +70,10 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         let button = UIButton()
         button.setTitle("Check weather for choosen position", for: .normal)
         button.addTarget(self, action: #selector(customPositionButtonTapped(_:)), for: .touchUpInside)
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = CustomColors.backColor
         button.layer.borderWidth = CGFloat(w * 0.01)
-        button.layer.borderColor = UIColor.black.cgColor
-        button.setTitleColor(UIColor.black, for: .normal)
+        button.layer.borderColor = CustomColors.fontColor?.cgColor
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.layer.cornerRadius = h * 0.025
         button.titleLabel?.layer.cornerRadius = h * 0.025
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -124,12 +124,12 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.tintColor = UIColor.black
+        navigationController?.navigationBar.tintColor = CustomColors.fontColor
         title = "Choose location"
         viewModel.delegate = self
         locationManager.delegate = self
         setupInterface()
-        view.backgroundColor = UIColor.white
+        view.backgroundColor = CustomColors.backColor
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
         map.addGestureRecognizer(longPress)
         

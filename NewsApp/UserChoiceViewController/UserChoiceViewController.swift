@@ -27,6 +27,7 @@ class UserChoiceViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "My Choice"
+        view.backgroundColor = CustomColors.backColor
         view.addSubview(userChoiceTableView)
         viewModel.delegate = self
         viewModel.getUserChoiceArticlesFromModel()

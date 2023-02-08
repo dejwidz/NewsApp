@@ -19,6 +19,8 @@ class UserChoiceTableViewCell: UITableViewCell {
         label.font = .systemFont(ofSize: 20, weight: .heavy)
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -28,6 +30,8 @@ class UserChoiceTableViewCell: UITableViewCell {
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         return label
     }()
     
@@ -48,7 +52,7 @@ class UserChoiceTableViewCell: UITableViewCell {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.black
         button.setTitle("Read now", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.addTarget(self, action: #selector(readButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -81,13 +85,10 @@ class UserChoiceTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.contentView.backgroundColor = CustomColors.backColor
         let w = contentView.frame.size.width
         let h = contentView.frame.size.height
-//        titleLabel.frame = CGRect(x: w * 0.02, y: h * 0.05, width: w * 0.5, height: h * 0.4)
-//        descriptionLabel.frame = CGRect(x: w * 0.02, y: h * 0.45, width: w * 0.5, height: h * 0.55)
-//        image.frame = CGRect(x: w * 0.52, y: h * 0.05, width: w * 0.45, height: h * 0.95)
-//        readButton.frame = CGRect(x: w * 0.6, y: h * 0.2, width: w * 0.3, height: h * 0.3)
-        
+
         NSLayoutConstraint.activate([
         
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: h * 0.05),
@@ -109,10 +110,7 @@ class UserChoiceTableViewCell: UITableViewCell {
             readButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
             readButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.3),
             readButton.heightAnchor.constraint(equalToConstant: h * 0.3)
-        
         ])
-        
-        
     }
     
     func loadImageWithNetworkingServices() {

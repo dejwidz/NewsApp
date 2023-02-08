@@ -25,6 +25,8 @@ class NewsTableViewCell: UITableViewCell {
         var label = UILabel()
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -35,6 +37,8 @@ class NewsTableViewCell: UITableViewCell {
         label.clipsToBounds = true
         label.numberOfLines = 0
         label.font = .systemFont(ofSize: 16, weight: .light)
+        label.textColor = CustomColors.fontColor
+        label.backgroundColor = CustomColors.backColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -56,7 +60,7 @@ class NewsTableViewCell: UITableViewCell {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.black
         button.setTitle("Read now", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.addTarget(self, action: #selector(readButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -68,7 +72,7 @@ class NewsTableViewCell: UITableViewCell {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.black
         button.setTitle("Read later", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(CustomColors.fontColor, for: .normal)
         button.addTarget(self, action: #selector(saveButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -106,6 +110,7 @@ class NewsTableViewCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        self.contentView.backgroundColor = CustomColors.backColor
         
         let w = contentView.frame.size.width
         let h = contentView.frame.size.height
@@ -166,7 +171,7 @@ class NewsTableViewCell: UITableViewCell {
         self.image.alpha = 1
         self.readButton.isHidden = true
         self.saveButton.isHidden = true
-        self.contentView.backgroundColor = .white
+        self.contentView.backgroundColor = CustomColors.backColor
         self.image.image = UIImage(named: "newsAppIcon")
     }
 }
