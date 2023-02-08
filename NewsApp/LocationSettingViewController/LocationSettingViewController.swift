@@ -19,7 +19,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
     
     var initialTopAnchor: NSLayoutConstraint?
-    var initialBottomAnchor: NSLayoutConstraint?
     var heightAnchorForFirstAnimation: NSLayoutConstraint?
     var heightAnchorForSecondAnimation: NSLayoutConstraint?
     
@@ -129,10 +128,6 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         title = "Choose location"
         viewModel.delegate = self
         locationManager.delegate = self
-        view.addSubview(currentPositionButton)
-        view.addSubview(lastPositionButton)
-        view.addSubview(customPositionButton)
-        view.addSubview(map)
         setupInterface()
         view.backgroundColor = UIColor.white
         let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
@@ -147,6 +142,11 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
     func setupInterface() {
         let h = UIScreen.main.bounds.height
+        
+        view.addSubview(currentPositionButton)
+        view.addSubview(lastPositionButton)
+        view.addSubview(customPositionButton)
+        view.addSubview(map)
 
         NSLayoutConstraint.activate([
             currentPositionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: h * 0.1),

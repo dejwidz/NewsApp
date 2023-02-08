@@ -11,6 +11,7 @@ class WeatherTableViewCell: UITableViewCell {
     
     var identifier = "weatherCell"
     var weatherData: HourlyWeather?
+    var nowIndicator = false
     
     let dayNameLabel: UILabel = {
         var label = UILabel()
@@ -152,6 +153,10 @@ class WeatherTableViewCell: UITableViewCell {
     fileprivate func setDayName() {
         guard let dayName = weatherData?.dayName else {return}
         dayNameLabel.text = dayName
+        
+        guard nowIndicator else {return}
+        dayNameLabel.text = "Now"
+        
     }
     
     fileprivate func setHour() {
@@ -295,6 +300,7 @@ class WeatherTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         self.layer.borderColor = UIColor.clear.cgColor
         self.layer.borderWidth = 0
+        self.nowIndicator = false
     }
     
     

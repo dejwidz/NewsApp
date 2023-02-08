@@ -81,6 +81,7 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
         
         cell.layer.borderWidth = UIScreen.main.bounds.width * 0.01
         cell.layer.borderColor = UIColor.black.cgColor
+        cell.nowIndicator = true
         
         return cell
     }
@@ -89,7 +90,7 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
         return 160
     }
         
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         weatherTableView.scrollToRow(at: IndexPath(row: currentHourWithoutMinuts, section: 0), at: .middle, animated: true)
     }
     
