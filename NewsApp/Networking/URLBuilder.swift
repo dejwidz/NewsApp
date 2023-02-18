@@ -47,7 +47,7 @@ final class URLBuilder {
         }
     }
     
-    func getGeneralURL() -> URL? {
+    private func getGeneralURL() -> URL? {
         if URLHasNotBeenSentToday {
             setGeneralDates()
             URLHasNotBeenSentToday = false
@@ -70,7 +70,7 @@ final class URLBuilder {
         return url
     }
     
-    func getURLWithTopic() -> URL? {
+    private func getURLWithTopic() -> URL? {
         let urlString = specificURLFirstPart +
         specificURLCountryIndicator +
         specificURLCountryName +
@@ -123,7 +123,7 @@ final class URLBuilder {
         generalURLQuery = newQuery
     }
     
-    func getURLWithQuery() -> URL? {
+    private func getURLWithQuery() -> URL? {
         let urlString = generalURLFirstPart +
         generalURLQueryMark +
         generalURLQuery +
@@ -136,7 +136,7 @@ final class URLBuilder {
         return url
     }
     
-    func getWeatherURL() -> URL? {
+    private func getWeatherURL() -> URL? {
         let latitude = DataStorage.shared.getLastLocationLatitude()
         let longitude = DataStorage.shared.getLastLocationLongitude()
         let urlString =  "https://api.open-meteo.com/v1/forecast?latitude=" +

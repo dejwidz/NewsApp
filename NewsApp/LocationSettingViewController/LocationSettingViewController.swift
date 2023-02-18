@@ -13,16 +13,16 @@ import SwiftUI
 class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
     private let viewModel = LocationSettingViewModel(model: LocationSettingModel())
-    let locationManager = CLLocationManager()
-    var currentUserLocation: CLLocation?
+    private let locationManager = CLLocationManager()
+    private var currentUserLocation: CLLocation?
     private var locationIsNotSet = true
     
     
-    var initialTopAnchor: NSLayoutConstraint?
-    var heightAnchorForFirstAnimation: NSLayoutConstraint?
-    var heightAnchorForSecondAnimation: NSLayoutConstraint?
+    private var initialTopAnchor: NSLayoutConstraint?
+    private var heightAnchorForFirstAnimation: NSLayoutConstraint?
+    private var heightAnchorForSecondAnimation: NSLayoutConstraint?
     
-    let currentPositionButton: UIButton = {
+    private let currentPositionButton: UIButton = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
@@ -38,13 +38,13 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         return button
     }()
     
-    @objc func currentPositionButtonTapped(_ sender: UIButton) {
+    @objc private  func currentPositionButtonTapped(_ sender: UIButton) {
         locationManager.requestWhenInUseAuthorization()
         locationManager.startUpdatingLocation()
         print("here")
     }
     
-    let lastPositionButton: UIButton = {
+    private let lastPositionButton: UIButton = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
@@ -60,11 +60,11 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         return button
     }()
     
-    @objc func lastPositionButtonTapped(_ sender: UIButton) {
+    @objc private func lastPositionButtonTapped(_ sender: UIButton) {
         viewModel.getWeatherForLastPosition()
     }
     
-    let customPositionButton: UIButton = {
+    private let customPositionButton: UIButton = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let button = UIButton()
@@ -80,7 +80,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         return button
     }()
     
-    let map: MKMapView = {
+    private let map: MKMapView = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let map = MKMapView()
@@ -91,14 +91,14 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         return map
     }()
     
-    @objc func customPositionButtonTapped(_ sender: UIButton) {
+    @objc private func customPositionButtonTapped(_ sender: UIButton) {
         sender.isHidden = true
         view.addSubview(map)
         animateMapPosition()
         animateMapFrameSize()
     }
     
-    func animateMapPosition() {
+    private func animateMapPosition() {
         UIView.animate(withDuration: 1.1)
         {
             let h = UIScreen.main.bounds.height
@@ -113,13 +113,13 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         }
     }
     
-    func animateMapFrameSize() {
+    private func animateMapFrameSize() {
         UIView.animate(withDuration: 1, delay: 0.9, options: .allowAnimatedContent, animations: {
-                self.heightAnchorForFirstAnimation?.isActive = false
-                self.heightAnchorForSecondAnimation = self.map.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.55)
-                self.heightAnchorForSecondAnimation?.isActive = true
-                self.view.layoutIfNeeded()
-                    }, completion: nil)
+            self.heightAnchorForFirstAnimation?.isActive = false
+            self.heightAnchorForSecondAnimation = self.map.heightAnchor.constraint(equalTo: self.view.heightAnchor, multiplier: 0.55)
+            self.heightAnchorForSecondAnimation?.isActive = true
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     override func viewDidLoad() {
@@ -137,17 +137,18 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         locationIsNotSet = true
     }
     
-    func setupInterface() {
+    private func setupInterface() {
         let h = UIScreen.main.bounds.height
         
         view.addSubview(currentPositionButton)
         view.addSubview(lastPositionButton)
         view.addSubview(customPositionButton)
         view.addSubview(map)
-
+        
         NSLayoutConstraint.activate([
             currentPositionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: h * 0.1),
             currentPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -172,7 +173,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         initialTopAnchor?.isActive = true
     }
     
-    @objc func longPressUccured(_ sender: UILongPressGestureRecognizer) {
+    @objc private func longPressUccured(_ sender: UILongPressGestureRecognizer) {
         let touchPoint = sender.location(in: self.map)
         let coordinates = map.convert(touchPoint, toCoordinateFrom: self.map)
         let annotation = MKPointAnnotation()

@@ -11,7 +11,7 @@ import SafariServices
 
 class UserChoiceViewController: UIViewController {
     
-    let userChoiceTableView: UITableView = {
+    private let userChoiceTableView: UITableView = {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         let tableView = UITableView()
@@ -22,7 +22,7 @@ class UserChoiceViewController: UIViewController {
     }()
     
     private let viewModel = UserChoiceViewModel(model: UserChoiceModel())
-    var articlesToShow: [UserChoiceArticle]?
+    private var articlesToShow: [UserChoiceArticle]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,10 +37,11 @@ class UserChoiceViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         navigationItem.backBarButtonItem?.title = "Back"
     }
     
-    func setupUserChoiceTableView() {
+    private func setupUserChoiceTableView() {
         NSLayoutConstraint.activate([
             userChoiceTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             userChoiceTableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
@@ -48,7 +49,6 @@ class UserChoiceViewController: UIViewController {
             userChoiceTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
-    
 }
 
 extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {

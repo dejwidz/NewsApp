@@ -24,7 +24,7 @@ class DataStorage {
         }
     }
     
-    func articleHasNotBeenAddedYet(newArticle: Article) -> Bool {
+    private func articleHasNotBeenAddedYet(newArticle: Article) -> Bool {
         var articleHasNotBeenAddedYet = true
         let userChoiceArticles = storedInformation.objects(UserChoiceArticle.self)
         for i in userChoiceArticles {
@@ -108,6 +108,5 @@ class DataStorage {
         let location = storedInformation.objects(UserLocation.self).first
         return (location?.getLongitude())!
     }
-    
 }
 

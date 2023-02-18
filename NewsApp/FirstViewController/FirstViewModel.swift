@@ -19,7 +19,6 @@ protocol FirstViewModeleDelegate: AnyObject {
 }
 
 final class FirstViewModel: FirstViewModelProtocol {
-
     
     weak var delegate: FirstViewModeleDelegate?
     private var model: FirstModelProtocol
@@ -46,7 +45,7 @@ final class FirstViewModel: FirstViewModelProtocol {
         model.getAriclesFromWeb()
     }
     
-    func prepareStringToMakeQuery(stringToPrepare: String) -> String {
+    private func prepareStringToMakeQuery(stringToPrepare: String) -> String {
         var tempString = stringToPrepare.lowercased()
         let prohibitSet = CharacterSet(charactersIn: " -_=+!@#$%^&*();.>,</?")
         tempString = tempString.trimmingCharacters(in: prohibitSet)

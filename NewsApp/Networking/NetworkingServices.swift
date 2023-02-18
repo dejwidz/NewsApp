@@ -43,7 +43,7 @@ final class NetworkingServices {
         }
     }
     
-    func prepareRequest() -> URLRequest? {
+    private func prepareRequest() -> URLRequest? {
         guard let url = URLBuilder.shared.getURL() else {
             return nil
         }
@@ -69,18 +69,4 @@ final class NetworkingServices {
             }
         }
     }
-
-//    func getImage(urlToImage: String) async -> Data?  {
-//        var imageData: Data? = nil
-//
-//        try? await NetworkingServices.shared.getImageWithAlamo(link: urlToImage, completion: { result in
-//            switch result {
-//            case .success(let data):
-//            imageData = data
-//            case .failure(let error):
-//               imageData = nil
-//            }
-//        })
-//        return imageData
-//    }
 }

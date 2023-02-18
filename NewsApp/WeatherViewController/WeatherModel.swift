@@ -16,15 +16,11 @@ protocol WeatherModelDelegate: AnyObject {
     func weatherHasBeenDownloaded(_ weatherModel: WeatherModelProtocol, weather: Weather)
 }
 
-final class WeatherModel {
+final class WeatherModel: WeatherModelProtocol {
     
     weak var delegate: WeatherModelDelegate?
     
     init() {}
-    
-}
-
-extension WeatherModel: WeatherModelProtocol {
     
     func getWeatherData() {
         NetworkingServices.shared.getDataFromWeb(typename: Weather(), completion: {[weak self] result in

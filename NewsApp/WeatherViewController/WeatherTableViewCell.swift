@@ -13,7 +13,7 @@ class WeatherTableViewCell: UITableViewCell {
     var weatherData: HourlyWeather?
     var nowIndicator = false
     
-    let dayNameLabel: UILabel = {
+    private let dayNameLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
@@ -24,7 +24,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let hourLabel: UILabel = {
+    private let hourLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.numberOfLines = 0
@@ -35,7 +35,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let temperatureLabel: UILabel = {
+    private let temperatureLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.numberOfLines = 0
@@ -46,7 +46,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let rainLabel: UILabel = {
+    private let rainLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.numberOfLines = 0
@@ -57,7 +57,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let snowLabel: UILabel = {
+    private let snowLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.numberOfLines = 0
@@ -68,7 +68,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let cloudsLabel: UILabel = {
+    private let cloudsLabel: UILabel = {
         var label = UILabel()
         label.clipsToBounds = true
         label.numberOfLines = 0
@@ -79,7 +79,7 @@ class WeatherTableViewCell: UITableViewCell {
         return label
     }()
     
-    let image: UIImageView = {
+    private let image: UIImageView = {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
@@ -165,41 +165,40 @@ class WeatherTableViewCell: UITableViewCell {
         setImage()
     }
     
-    fileprivate func setDayName() {
+    private func setDayName() {
         guard let dayName = weatherData?.dayName else {return}
         dayNameLabel.text = dayName
         
         guard nowIndicator else {return}
         dayNameLabel.text = "Now"
-        
     }
     
-    fileprivate func setHour() {
+    private func setHour() {
         guard let hour = weatherData?.hour else {return}
         hourLabel.text = hour
     }
     
-    fileprivate func setTemperature() {
+    private func setTemperature() {
         guard let temperature = weatherData?.temperature else {return}
         temperatureLabel.text = "Temperature: \(String(describing: temperature)) C"
     }
     
-    fileprivate func setRain() {
+    private func setRain() {
         guard let rain = weatherData?.rain else {return}
         rainLabel.text = "Rain: \(String(describing: rain)) mm"
     }
     
-    fileprivate func setSnow() {
+    private func setSnow() {
         guard let snow = weatherData?.snow else {return}
         snowLabel.text = "Snow: \(String(describing: snow)) cm"
     }
     
-    fileprivate func setClouds() {
+    private func setClouds() {
         guard let clouds = weatherData?.cloudcover else {return}
         cloudsLabel.text = "Clouds: \(String(describing: clouds)) %"
     }
     
-    func setLabelsText() {
+    private func setLabelsText() {
         setDayName()
         setHour()
         setTemperature()
@@ -208,12 +207,12 @@ class WeatherTableViewCell: UITableViewCell {
         setClouds()
     }
     
-    func getRowHour(hour: String) -> String {
+    private func getRowHour(hour: String) -> String {
         let hourArray = hour.split(separator: ":")
         return String(hourArray[0])
     }
     
-    func setImage() {
+    private func setImage() {
         var imageName = ""
         guard let hourString = weatherData?.hour else {return}
         let hour = Int(getRowHour(hour: hourString))
@@ -230,7 +229,7 @@ class WeatherTableViewCell: UITableViewCell {
         image.image = UIImage(systemName: imageName)
     }
     
-    func setImageForDay() -> String {
+    private func setImageForDay() -> String {
         guard let code = weatherData?.code,
               let rain = weatherData?.rain,
               let snow = weatherData?.snow,
@@ -271,7 +270,7 @@ class WeatherTableViewCell: UITableViewCell {
         return imageName
     }
     
-    func setImageForNight() -> String {
+    private func setImageForNight() -> String {
         guard let code = weatherData?.code,
               let rain = weatherData?.rain,
               let snow = weatherData?.snow,
@@ -313,11 +312,10 @@ class WeatherTableViewCell: UITableViewCell {
     }
     
     override func prepareForReuse() {
+        super.prepareForReuse()
         self.layer.borderColor = UIColor.clear.cgColor
         self.layer.borderWidth = 0
         self.nowIndicator = false
     }
-    
-    
 }
 

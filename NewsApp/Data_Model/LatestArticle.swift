@@ -18,7 +18,6 @@ final class LatestArticle: Object {
     @Persisted var urlToImage: String?
     @Persisted var publishedAt: String?
     @Persisted var content: String?
-//    @Persisted var imageData: Data?
     
     override init() {}
     

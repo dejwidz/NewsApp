@@ -13,7 +13,7 @@ protocol newsTableViewCellDelegate: AnyObject {
 }
 
 class NewsTableViewCell: UITableViewCell {
-
+    
     weak var delegate: newsTableViewCellDelegate?
     
     var identifier = "newsCell"
@@ -60,7 +60,7 @@ class NewsTableViewCell: UITableViewCell {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.black
         button.setTitle("Read now", for: .normal)
-        button.setTitleColor(CustomColors.fontColor, for: .normal)
+        button.setTitleColor(CustomColors.fontColorLight, for: .normal)
         button.addTarget(self, action: #selector(readButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -72,18 +72,18 @@ class NewsTableViewCell: UITableViewCell {
         button.layer.cornerRadius = 10
         button.backgroundColor = UIColor.black
         button.setTitle("Read later", for: .normal)
-        button.setTitleColor(CustomColors.fontColor, for: .normal)
+        button.setTitleColor(CustomColors.fontColorLight, for: .normal)
         button.addTarget(self, action: #selector(saveButtonTapped(_:)), for: .touchUpInside)
         button.isHidden = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
-    @objc func saveButtonTapped(_ sender: UIButton){
+    @objc private func saveButtonTapped(_ sender: UIButton){
         delegate?.saveButtonHasBeenTapped(self, article: article)
     }
     
-    @objc func readButtonTapped(_ sender: UIButton){
+    @objc private func readButtonTapped(_ sender: UIButton){
         delegate?.readButtonHasBeenTapped(self, link: article?.url)
     }
     
@@ -131,7 +131,7 @@ class NewsTableViewCell: UITableViewCell {
             image.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.45),
             image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.015)),
             
-            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: h * 0.15),
+            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: h * 0.1),
             readButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
             readButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.3),
             readButton.heightAnchor.constraint(equalToConstant: h * 0.3),
@@ -157,11 +157,10 @@ class NewsTableViewCell: UITableViewCell {
     
     func setImageHolder(imageHolder: ImageHolder) {
         self.imageHolder = imageHolder
-//        imageHolder.imageIsReady = setupImage(image:)
         self.image.image = imageHolder.cachedImage
     }
     
-    func setupImage(image: UIImage) {
+    private func setupImage(image: UIImage) {
         self.image.image = image
     }
     

@@ -28,7 +28,6 @@ final class UserChoiceViewModel: UserChoiceViewModelProtocol {
     func getUserChoiceArticlesFromModel() {
         model.getUserChoiceArticles()
     }
-    
 }
 
 extension UserChoiceViewModel: UserChoiceModelDelegate {

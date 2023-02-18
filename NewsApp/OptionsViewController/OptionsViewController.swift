@@ -16,7 +16,7 @@ class OptionsViewController: UIViewController {
     private var viewmodel = OptionsViewModel(model: OptionsModel())
     weak var delegate: OptionsDelegate?
     
-    let toDate: UIDatePicker = {
+    private let toDate: UIDatePicker = {
         let datePicker = UIDatePicker()
         let now = Date.now
         datePicker.datePickerMode = .date
@@ -29,12 +29,12 @@ class OptionsViewController: UIViewController {
         return datePicker
     }()
     
-    @objc func toDateChanged(_ sender: UIDatePicker) {
+    @objc private func toDateChanged(_ sender: UIDatePicker) {
         viewmodel.toDateHasChanged(sendedDate: sender.date)
         viewmodel.setEndDate(newDate: sender.date)
     }
     
-    let fromDate: UIDatePicker = {
+    private let fromDate: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
         let now = Date.now
@@ -47,12 +47,12 @@ class OptionsViewController: UIViewController {
         return datePicker
     }()
     
-    @objc func fromDateChanged(_ sender: UIDatePicker) {
+    @objc private func fromDateChanged(_ sender: UIDatePicker) {
         viewmodel.fromDateHasChanged(sendedDate: sender.date)
         viewmodel.setStartDate(newDate: sender.date)
     }
     
-    let toDateLabel: UILabel = {
+    private let toDateLabel: UILabel = {
         let label = UILabel()
         label.text = "Select end date"
         label.textColor = CustomColors.fontColor
@@ -61,7 +61,7 @@ class OptionsViewController: UIViewController {
         return label
     }()
     
-    let fromDateLabel: UILabel = {
+    private let fromDateLabel: UILabel = {
         let label = UILabel()
         label.text = "Select start date"
         label.textColor = CustomColors.fontColor
@@ -70,7 +70,7 @@ class OptionsViewController: UIViewController {
         return label
     }()
     
-    let countrySegmentedControl: UISegmentedControl = {
+    private let countrySegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["World", "US", "PL", "DE", "FR", "IT"])
         segment.selectedSegmentIndex = 0
         segment.backgroundColor = UIColor.black
@@ -81,13 +81,13 @@ class OptionsViewController: UIViewController {
         return segment
     }()
     
-    @objc func countrySelectedControlChanged(_ sender: UISegmentedControl) {
+    @objc private func countrySelectedControlChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
         viewmodel.countrySegmentedControlHasChanged(index: index)
         viewmodel.setCountryIndex(newIndex: index)
     }
     
-    let topicsSegmentedControl: UISegmentedControl = {
+    private let topicsSegmentedControl: UISegmentedControl = {
         let segment = UISegmentedControl(items: ["General", "Science", "Sport", "Bussines", "Technology"])
         segment.selectedSegmentIndex = 0
         segment.backgroundColor = UIColor.black
@@ -98,7 +98,7 @@ class OptionsViewController: UIViewController {
         return segment
     }()
     
-    @objc func topicsSegmentedControlChanged(_ sender: UISegmentedControl) {
+    @objc private func topicsSegmentedControlChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
         viewmodel.TopicsSegmentedControlHasChanged(index: index)
         viewmodel.setCategoryIndex(newIndex: index)
@@ -118,7 +118,7 @@ class OptionsViewController: UIViewController {
         setupInterface()
     }
     
-    func setupInterface() {
+    private func setupInterface() {
         let w = UIScreen.main.bounds.width
         let h = UIScreen.main.bounds.height
         
@@ -156,6 +156,7 @@ class OptionsViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         viewmodel.getEndDate()
         viewmodel.getStartDate()
         viewmodel.getCountryIndex()
@@ -163,6 +164,7 @@ class OptionsViewController: UIViewController {
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
         delegate?.newOptionsHasBeenSet(self)
     }
 }

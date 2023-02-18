@@ -13,7 +13,7 @@ class WeatherViewController: UIViewController {
     private var weatherToDisplay: [HourlyWeather] = []
     private var currentHourWithoutMinuts = 0
     
-    let weatherTableView: UITableView = {
+    private let weatherTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(WeatherTableViewCell.self, forCellReuseIdentifier: "weatherCell")
         tableView.contentInsetAdjustmentBehavior = .always
@@ -32,10 +32,11 @@ class WeatherViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
         viewModel.GetWeatherData()
     }
     
-    func setupWeatherTableView() {
+    private func setupWeatherTableView() {
         weatherTableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(weatherTableView)
         
@@ -46,8 +47,6 @@ class WeatherViewController: UIViewController {
             weatherTableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
     }
-    
-    
 }
 
 extension WeatherViewController: WeatherViewModelDelegate {
@@ -55,7 +54,6 @@ extension WeatherViewController: WeatherViewModelDelegate {
         self.currentHourWithoutMinuts = currentHourWithoutMinuts
         let currentHourIndexPath = IndexPath(row: currentHourWithoutMinuts, section: 0)
         weatherTableView.scrollToRow(at: currentHourIndexPath, at: .middle, animated: true)
-        
     }
     
     func weatherHasBeenBuilt(_ weatherViewModel: WeatherViewModelProtocol, weather: [HourlyWeather]) {
@@ -93,6 +91,4 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         weatherTableView.scrollToRow(at: IndexPath(row: currentHourWithoutMinuts, section: 0), at: .middle, animated: true)
     }
-    
-    
 }

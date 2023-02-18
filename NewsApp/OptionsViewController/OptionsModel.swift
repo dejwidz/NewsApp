@@ -30,11 +30,9 @@ protocol OptionsModelDelegate: AnyObject {
     func sendCategoryIndex(_ optionsModelProtocol: OptionsModel, index: Int)
 }
 
-final class OptionsModel {
+final class OptionsModel: OptionsModelProtocol {
     weak var delegate: OptionsModelDelegate?
-}
 
-extension OptionsModel: OptionsModelProtocol {
     func setStartDate(newDate: Date) {
         OptionsViewData.shared.setStartDate(newDate: newDate)
     }

@@ -28,11 +28,11 @@ final class WeatherViewModel {
         model.delegate = self
     }
     
-    var temperature: [Double] = []
-    var rain: [Double] = []
-    var cloudcover: [Double] = []
-    var snow: [Double] = []
-    var code: [Double] = []
+    private var temperature: [Double] = []
+    private var rain: [Double] = []
+    private var cloudcover: [Double] = []
+    private var snow: [Double] = []
+    private var code: [Double] = []
 }
 
 extension WeatherViewModel: WeatherViewModelProtocol {
@@ -62,7 +62,7 @@ extension WeatherViewModel: WeatherModelDelegate {
 
 extension WeatherViewModel {
     
-    func decodingPossibility() -> Bool {
+    private func decodingPossibility() -> Bool {
         guard self.temperature.count >= 24 &&
                 self.rain.count >= 24 &&
                 self.cloudcover.count >= 24 &&
@@ -73,14 +73,14 @@ extension WeatherViewModel {
         return true
     }
     
-    func buildHourlyWeatherArray(){
+    private func buildHourlyWeatherArray(){
         guard decodingPossibility() else {return}
         var weatherArray: [HourlyWeather] = []
         buildDailyWeather(weatherArray: &weatherArray, counter: -2)
         delegate?.weatherHasBeenBuilt(self, weather: weatherArray)
     }
     
-    func buildDailyWeather(weatherArray: inout [HourlyWeather], counter: Int) {
+    private func buildDailyWeather(weatherArray: inout [HourlyWeather], counter: Int) {
         guard decodingPossibility() && counter < 5 else {return}
         for i in 0...23 {
             let dayname = getDayName(counter: counter)
@@ -96,7 +96,7 @@ extension WeatherViewModel {
         buildDailyWeather(weatherArray: &weatherArray, counter: counter + 1)
     }
     
-    func getDayName(counter: Int) -> String {
+    private func getDayName(counter: Int) -> String {
         var dayName = ""
         switch counter {
         case -2:

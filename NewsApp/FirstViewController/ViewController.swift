@@ -40,19 +40,13 @@ class ViewController: UIViewController {
         return button
     }()
     
-    @objc func weatherButtonTapped(_ sender: UIButton) {
-        viewModel.setWeatherIndicator(weatherIndicator: true)
-        let vc = LocationSettingViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupInterface()
         title = "NewsApp"
         
         DataStorage.shared.setFirstLocation()
-        setupInterface()
         newsTableView.delegate = self
         newsTableView.dataSource = self
         newsTableView.prefetchDataSource = self
@@ -64,29 +58,34 @@ class ViewController: UIViewController {
         viewModel.setWeatherIndicator(weatherIndicator: false)
     }
     
+    @objc private func weatherButtonTapped(_ sender: UIButton) {
+        viewModel.setWeatherIndicator(weatherIndicator: true)
+        let vc = LocationSettingViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
     
-    @objc func myChoiceButtonTapped() {
+    @objc private func myChoiceButtonTapped() {
         let vc = UserChoiceViewController()
         present(vc, animated: true)
     }
     
-    @objc func optionsButtonTapped() {
+    @objc private func optionsButtonTapped() {
         let vc = OptionsViewController()
         vc.delegate = self
         navigationController?.present(vc, animated: true, completion: nil)
     }
     
-    func getArticles() {
+    private func getArticles() {
         viewModel.getArticlesToDisplay()
     }
     
-    func scrollUp() {
+    private func scrollUp() {
         guard newsTableView.numberOfRows(inSection: 0) > 0 else {return}
         let index = NSIndexPath(row: 0, section: 0)
         newsTableView.scrollToRow(at: index as IndexPath, at: .top, animated: true)
     }
     
-    func setupImageHolders(longitude: Int) {
+    private func setupImageHolders(longitude: Int) {
         imageDataHolders = []
         
         guard longitude > 1 else {return}
@@ -97,7 +96,7 @@ class ViewController: UIViewController {
         }
     }
     
-    func setupInterface() {
+    private func setupInterface() {
         let h = UIScreen.main.bounds.height
         
         view.backgroundColor = CustomColors.backColor
@@ -116,9 +115,8 @@ class ViewController: UIViewController {
         
         view.addSubview(newsTableView)
         view.addSubview(weatherButton)
-    
+        
         NSLayoutConstraint.activate([
-
             newsTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             newsTableView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.95),
             newsTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -135,7 +133,6 @@ class ViewController: UIViewController {
 //MARK: - table view extension
 
 extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articlesToDisplay?.count ?? 0
@@ -165,11 +162,11 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = newsTableView.cellForRow(at: indexPath) as? NewsTableViewCell else {return}
-
-            cell.readButton.isHidden = false
-            cell.saveButton.isHidden = false
-            cell.image.alpha = 0.6
-            newsTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
+        
+        cell.readButton.isHidden = false
+        cell.saveButton.isHidden = false
+        cell.image.alpha = 0.6
+        newsTableView.scrollToRow(at: indexPath, at: .middle, animated: true)
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -200,7 +197,7 @@ extension ViewController: FirstViewModeleDelegate {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
         setupImageHolders(longitude: articlesToDisplay!.count)
-//        selectedRow = nil
+        //        selectedRow = nil
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
         scrollUp()
     }
