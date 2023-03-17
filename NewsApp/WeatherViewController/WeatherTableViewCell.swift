@@ -7,7 +7,7 @@
 
 import UIKit
 
-class WeatherTableViewCell: UITableViewCell {
+final class WeatherTableViewCell: UITableViewCell {
     
     var identifier = "weatherCell"
     var weatherData: HourlyWeather?
@@ -124,7 +124,7 @@ class WeatherTableViewCell: UITableViewCell {
         let h = contentView.frame.size.height
         
         NSLayoutConstraint.activate([
-        
+            
             dayNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
             dayNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.05),
             dayNameLabel.widthAnchor.constraint(equalToConstant: w * 0.4),
@@ -160,7 +160,7 @@ class WeatherTableViewCell: UITableViewCell {
             image.widthAnchor.constraint(equalToConstant: w * 0.45),
             image.bottomAnchor.constraint(equalTo: cloudsLabel.bottomAnchor)
         ])
-
+        
         setLabelsText()
         setImage()
     }

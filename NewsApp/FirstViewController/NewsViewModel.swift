@@ -7,30 +7,30 @@
 
 import Foundation
 
-protocol FirstViewModelProtocol: AnyObject {
-    var delegate: FirstViewModeleDelegate? {get set}
+protocol NewsViewModelProtocol: AnyObject {
+    var delegate: NewsViewModelDelegate? {get set}
     func getArticlesToDisplay()
     func searchTextHasChanged(newText: String)
     func setWeatherIndicator(weatherIndicator: Bool)
 }
 
-protocol FirstViewModeleDelegate: AnyObject {
-    func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article])
+protocol NewsViewModelDelegate: AnyObject {
+    func articlesHasBeenDownloaded(_ newsViewModel: NewsViewModelProtocol, articles: [Article])
 }
 
-final class FirstViewModel: FirstViewModelProtocol {
+final class NewsViewModel: NewsViewModelProtocol {
     
-    weak var delegate: FirstViewModeleDelegate?
-    private var model: FirstModelProtocol
+    weak var delegate: NewsViewModelDelegate?
+    private var model: NewsModelProtocol
     
-    init(model: FirstModelProtocol) {
+    init(model: NewsModelProtocol) {
         self.model = model
         model.delegate = self
     }
     
     func getArticlesToDisplay() {
         model.sendStoredArticles()
-        model.getAriclesFromWeb()
+        model.getArticlesFromWeb()
     }
     
     func searchTextHasChanged(newText: String) {
@@ -38,11 +38,11 @@ final class FirstViewModel: FirstViewModelProtocol {
         guard stringPreparedToMakeQuery != "" else {
             model.sendStoredArticles()
             model.setNewQuery(newQuery: "")
-            model.getAriclesFromWeb()
+            model.getArticlesFromWeb()
             return
         }
         model.setNewQuery(newQuery: stringPreparedToMakeQuery)
-        model.getAriclesFromWeb()
+        model.getArticlesFromWeb()
     }
     
     private func prepareStringToMakeQuery(stringToPrepare: String) -> String {
@@ -59,16 +59,16 @@ final class FirstViewModel: FirstViewModelProtocol {
     
 }
 
-extension FirstViewModel: FirstModelDelegate {
-    func latestArticlesHasBeenSent(_ firstModel: FirstModelProtocol, articles: [Article]) {
+extension NewsViewModel: NewsModelDelegate {
+    func latestArticlesHasBeenSent(_ newsModel: NewsModelProtocol, articles: [Article]) {
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
     }
     
-    func articlesHasBeenDownloaded(_ firstModel: FirstModelProtocol, articles: [Article]) {
+    func articlesHasBeenDownloaded(_ newsModel: NewsModelProtocol, articles: [Article]) {
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
     }
     
-    func errorWhileDownloadingArticles(_ firstModel: FirstModelProtocol) {
+    func errorWhileDownloadingArticles(_ newsModel: NewsModelProtocol) {
         model.sendStoredArticles()
     }
 }

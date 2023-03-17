@@ -60,8 +60,9 @@ final class NetworkingServices {
         }
         AF.request(request).validate().responseDecodable(of: T.self) { response in
             switch response.result {
-            case .failure(_):
+            case .failure(let error):
                 completion(.failure(NetworkingErrors.wrongDecoding))
+                print(#function, error.localizedDescription)
                 break
             case .success(let data):
                 completion(.success(data))

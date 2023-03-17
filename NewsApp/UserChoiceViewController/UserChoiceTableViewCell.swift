@@ -7,7 +7,7 @@
 
 import UIKit
 
-class UserChoiceTableViewCell: UITableViewCell {
+final class UserChoiceTableViewCell: UITableViewCell {
     
     weak var delegate: UserChoiceTableViewCellDelegate?
     var identifier = "userChoiceCell"

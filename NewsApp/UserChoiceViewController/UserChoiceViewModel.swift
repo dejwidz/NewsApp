@@ -13,7 +13,7 @@ protocol UserChoiceViewModelProtocol: AnyObject {
 }
 
 protocol UserChoiceViewModelDelegate: AnyObject {
-    func userChoiceArticlesHasBeenDownloaded(_ userchoiceViewModel: UserChoiceViewModelProtocol, articles: [UserChoiceArticle])
+    func userChoiceArticlesHasBeenDownloaded(_ userChoiceViewModel: UserChoiceViewModelProtocol, articles: [UserChoiceArticle])
 }
 
 final class UserChoiceViewModel: UserChoiceViewModelProtocol {

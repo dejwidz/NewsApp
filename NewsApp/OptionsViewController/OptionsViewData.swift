@@ -41,11 +41,11 @@ final class OptionsViewData {
         return countryIndex
     }
     
-    func setcategoryIndex(newIndex: Int) {
+    func setCategoryIndex(newIndex: Int) {
         categoryIndex = newIndex
     }
     
-    func getcategoryIndex() -> Int {
+    func getCategoryIndex() -> Int {
         return categoryIndex
     }
 }

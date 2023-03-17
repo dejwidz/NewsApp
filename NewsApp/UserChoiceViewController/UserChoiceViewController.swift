@@ -9,7 +9,7 @@ import UIKit
 import Network
 import SafariServices
 
-class UserChoiceViewController: UIViewController {
+final class UserChoiceViewController: UIViewController {
     
     private let userChoiceTableView: UITableView = {
         let w = UIScreen.main.bounds.width

@@ -32,7 +32,7 @@ protocol OptionsModelDelegate: AnyObject {
 
 final class OptionsModel: OptionsModelProtocol {
     weak var delegate: OptionsModelDelegate?
-
+    
     func setStartDate(newDate: Date) {
         OptionsViewData.shared.setStartDate(newDate: newDate)
     }
@@ -58,20 +58,20 @@ final class OptionsModel: OptionsModelProtocol {
     }
     
     func setCategoryIndex(newIndex: Int) {
-        OptionsViewData.shared.setcategoryIndex(newIndex: newIndex)
+        OptionsViewData.shared.setCategoryIndex(newIndex: newIndex)
     }
     
     func getCategoryIndex() {
-        delegate?.sendCategoryIndex(self, index: OptionsViewData.shared.getcategoryIndex())
+        delegate?.sendCategoryIndex(self, index: OptionsViewData.shared.getCategoryIndex())
     }
     
     func countryHasChanged(newCountry: Countries) {
         guard newCountry.rawValue != "" else {
-            URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndcatorValue: false)
+            URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: false)
             return
         }
         URLBuilder.shared.setCountry(newCountry: newCountry)
-        URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndcatorValue: true)
+        URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: true)
     }
     
     func categoryHasChanged(newCategory: Categories) {

@@ -13,7 +13,6 @@ struct Weather: Codable {
 }
 
 struct Hourly: Codable {
-    
     var time: [String]?
     var temperature_2m: [Double]?
     var rain: [Double]?

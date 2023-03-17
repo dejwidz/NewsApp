@@ -9,8 +9,8 @@ import Foundation
 
 protocol OptionsViewModelProtocol: AnyObject {
     var delegate: OptionsViewModelDelegate? {get set}
-    func toDateHasChanged(sendedDate: Date)
-    func fromDateHasChanged(sendedDate: Date)
+    func toDateHasChanged(sentDate: Date)
+    func fromDateHasChanged(sentDate: Date)
     func countrySegmentedControlHasChanged(index: Int)
     func TopicsSegmentedControlHasChanged(index: Int)
     func setStartDate(newDate: Date)
@@ -76,20 +76,20 @@ extension OptionsViewModel: OptionsViewModelProtocol {
         model.getCategoryIndex()
     }
     
-    func toDateHasChanged(sendedDate: Date) {
+    func toDateHasChanged(sentDate: Date) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd"
-        let stringDate = dateFormatter.string(from: sendedDate)
-        let maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: sendedDate)
+        let stringDate = dateFormatter.string(from: sentDate)
+        let maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: sentDate)
         delegate?.newMaximalDateForFromDate(self, newDate: maximumDate!)
         model.toDateHasChanged(toDate: stringDate)
     }
     
-    func fromDateHasChanged(sendedDate: Date) {
+    func fromDateHasChanged(sentDate: Date) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "YYYY-MM-dd"
-        let stringDate = dateFormatter.string(from: sendedDate)
-        let minimalDate = Calendar.current.date(byAdding: .day, value: 1, to: sendedDate)
+        let stringDate = dateFormatter.string(from: sentDate)
+        let minimalDate = Calendar.current.date(byAdding: .day, value: 1, to: sentDate)
         delegate?.newMinimalDateForToDate(self, newDate: minimalDate!)
         model.fromDateHasChanged(fromDate: stringDate)
     }
@@ -122,7 +122,7 @@ extension OptionsViewModel: OptionsViewModelProtocol {
         case 2:
             model.categoryHasChanged(newCategory: .sport)
         case 3:
-            model.categoryHasChanged(newCategory: .bussines)
+            model.categoryHasChanged(newCategory: .business)
         case 4:
             model.categoryHasChanged(newCategory: .technology)
         default:

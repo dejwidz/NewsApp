@@ -8,9 +8,9 @@
 import UIKit
 import SafariServices
 
-class ViewController: UIViewController {
+final class NewsViewController: UIViewController {
     
-    private let viewModel = FirstViewModel(model: FirstModel())
+    private let viewModel = NewsViewModel(model: NewsModel())
     private var articlesToDisplay: [Article]?
     private let searchController = UISearchController()
     private var imageDataHolders: [ImageHolder]?
@@ -132,7 +132,7 @@ class ViewController: UIViewController {
 
 //MARK: - table view extension
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
+extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDataSourcePrefetching {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return articlesToDisplay?.count ?? 0
@@ -186,14 +186,13 @@ extension ViewController: UITableViewDelegate, UITableViewDataSource, UITableVie
             imageHolder.downloadImage()
         }
     }
-    
 }
 
 //MARK: - ViewModel Delegate extension
 
-extension ViewController: FirstViewModeleDelegate {
+extension NewsViewController: NewsViewModelDelegate {
     
-    func articlesHasBeenDownloaded(_ firstViewModel: FirstViewModelProtocol, articles: [Article]) {
+    func articlesHasBeenDownloaded(_ firstViewModel: NewsViewModelProtocol, articles: [Article]) {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
         setupImageHolders(longitude: articlesToDisplay!.count)
@@ -205,7 +204,7 @@ extension ViewController: FirstViewModeleDelegate {
 
 //MARK: - cell Delegate extension
 
-extension ViewController: newsTableViewCellDelegate {
+extension NewsViewController: newsTableViewCellDelegate {
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?) {
         DataStorage.shared.addUserChoiceArticle(newArticle: article!)
     }
@@ -220,7 +219,7 @@ extension ViewController: newsTableViewCellDelegate {
 
 //MARK: - searching extension
 
-extension ViewController: UISearchResultsUpdating {
+extension NewsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         let temporaryString = searchController.searchBar.text
         DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
@@ -233,7 +232,7 @@ extension ViewController: UISearchResultsUpdating {
 
 //MARK: - OptionsViewController Delegate extension
 
-extension ViewController: OptionsDelegate {
+extension NewsViewController: OptionsDelegate {
     func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController) {
         getArticles()
     }

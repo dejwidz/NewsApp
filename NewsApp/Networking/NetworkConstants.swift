@@ -11,7 +11,7 @@ enum Categories: String {
     case general = "general"
     case science = "science"
     case sport = "sports"
-    case bussines = "business"
+    case business = "business"
     case technology = "technology"
 }
 

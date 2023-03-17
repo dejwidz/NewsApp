@@ -9,7 +9,7 @@ import Foundation
 import RealmSwift
 import CoreLocation
 
-class DataStorage {
+final class DataStorage {
     
     static var shared = DataStorage()
     private var storedInformation = try! Realm()

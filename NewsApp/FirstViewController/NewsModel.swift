@@ -9,26 +9,26 @@ import Foundation
 import RealmSwift
 
 
-protocol FirstModelProtocol: AnyObject {
-    var delegate: FirstModelDelegate? {get set}
-    func getAriclesFromWeb()
+protocol NewsModelProtocol: AnyObject {
+    var delegate: NewsModelDelegate? {get set}
+    func getArticlesFromWeb()
     func sendStoredArticles()
     func setNewQuery(newQuery: String)
     func setWeatherIndicator(weatherIndicator: Bool)
 }
 
-protocol FirstModelDelegate: AnyObject {
-    func articlesHasBeenDownloaded(_ firstModel: FirstModelProtocol, articles: [Article])
-    func latestArticlesHasBeenSent(_ firstModel: FirstModelProtocol, articles: [Article])
-    func errorWhileDownloadingArticles(_ firstModel: FirstModelProtocol)
+protocol NewsModelDelegate: AnyObject {
+    func articlesHasBeenDownloaded(_ newsModel: NewsModelProtocol, articles: [Article])
+    func latestArticlesHasBeenSent(_ newsModel: NewsModelProtocol, articles: [Article])
+    func errorWhileDownloadingArticles(_ newsModel: NewsModelProtocol)
 }
 
-final class FirstModel: FirstModelProtocol {
-    weak var delegate: FirstModelDelegate?
+final class NewsModel: NewsModelProtocol {
+    weak var delegate: NewsModelDelegate?
     
     init() {}
     
-    func getAriclesFromWeb() {
+    func getArticlesFromWeb() {
         NetworkingServices.shared.getDataFromWeb(typename: News(), completion: {[weak self] result in
             switch result {
             case .success(let news):
@@ -55,5 +55,4 @@ final class FirstModel: FirstModelProtocol {
     func setWeatherIndicator(weatherIndicator: Bool) {
         URLBuilder.shared.setWeatherIndicator(newWeatherIndicator: weatherIndicator)
     }
-    
 }

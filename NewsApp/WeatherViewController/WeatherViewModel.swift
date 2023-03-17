@@ -15,7 +15,7 @@ protocol WeatherViewModelProtocol: AnyObject {
 
 protocol WeatherViewModelDelegate: AnyObject {
     func weatherHasBeenBuilt(_ weatherViewModel: WeatherViewModelProtocol, weather: [HourlyWeather])
-    func currentHourWithoutMinuts(_ weatherViewModel: WeatherViewModelProtocol, currentHourWithoutMinuts: Int)
+    func currentHourWithoutMinutes(_ weatherViewModel: WeatherViewModelProtocol, currentHourWithoutMinutes: Int)
 }
 
 final class WeatherViewModel {
@@ -30,7 +30,7 @@ final class WeatherViewModel {
     
     private var temperature: [Double] = []
     private var rain: [Double] = []
-    private var cloudcover: [Double] = []
+    private var cloudCover: [Double] = []
     private var snow: [Double] = []
     private var code: [Double] = []
 }
@@ -41,7 +41,7 @@ extension WeatherViewModel: WeatherViewModelProtocol {
         formatter.dateFormat = "HH"
         let hour = formatter.string(from: .now)
         let hourInt = Int(hour)!
-        delegate?.currentHourWithoutMinuts(self, currentHourWithoutMinuts: hourInt)
+        delegate?.currentHourWithoutMinutes(self, currentHourWithoutMinutes: hourInt)
     }
     
     func GetWeatherData() {
@@ -53,7 +53,7 @@ extension WeatherViewModel: WeatherModelDelegate {
     func weatherHasBeenDownloaded(_ weatherModel: WeatherModelProtocol, weather: Weather) {
         self.temperature = weather.hourly?.temperature_2m ?? []
         self.rain = weather.hourly?.rain ?? []
-        self.cloudcover = weather.hourly?.cloudcover ?? []
+        self.cloudCover = weather.hourly?.cloudcover ?? []
         self.snow = weather.hourly?.snowfall ?? []
         self.code = weather.hourly?.weathercode ?? []
         buildHourlyWeatherArray()
@@ -65,7 +65,7 @@ extension WeatherViewModel {
     private func decodingPossibility() -> Bool {
         guard self.temperature.count >= 24 &&
                 self.rain.count >= 24 &&
-                self.cloudcover.count >= 24 &&
+                self.cloudCover.count >= 24 &&
                 self.snow.count >= 24 &&
                 self.code.count >= 24 else {
             return false
@@ -87,7 +87,7 @@ extension WeatherViewModel {
             let hour = "\(i):00"
             let temperatureLevel = self.temperature.remove(at: 0)
             let rainLevel = self.rain.remove(at: 0)
-            let cloudcoverLevel = self.cloudcover.remove(at: 0)
+            let cloudcoverLevel = self.cloudCover.remove(at: 0)
             let snowLevel = self.snow.remove(at: 0)
             let weatherCode = self.code.remove(at: 0)
             let newHourlyWeather = HourlyWeather(dayName: dayname, hour: hour, temperature: temperatureLevel, rain: rainLevel, cloudcover: cloudcoverLevel, snow: snowLevel, code: weatherCode)

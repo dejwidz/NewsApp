@@ -10,7 +10,7 @@ import MapKit
 import CoreLocation
 import SwiftUI
 
-class LocationSettingViewController: UIViewController, MKMapViewDelegate {
+final class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
     private let viewModel = LocationSettingViewModel(model: LocationSettingModel())
     private let locationManager = CLLocationManager()
@@ -130,7 +130,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         locationManager.delegate = self
         setupInterface()
         view.backgroundColor = CustomColors.backColor
-        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressUccured(_:)))
+        let longPress = UILongPressGestureRecognizer(target: self, action: #selector(longPressOccured(_:)))
         map.addGestureRecognizer(longPress)
         
         heightAnchorForFirstAnimation = customPositionButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
@@ -173,7 +173,7 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         initialTopAnchor?.isActive = true
     }
     
-    @objc private func longPressUccured(_ sender: UILongPressGestureRecognizer) {
+    @objc private func longPressOccured(_ sender: UILongPressGestureRecognizer) {
         let touchPoint = sender.location(in: self.map)
         let coordinates = map.convert(touchPoint, toCoordinateFrom: self.map)
         let annotation = MKPointAnnotation()
@@ -181,8 +181,8 @@ class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         annotation.title = "Here"
         map.addAnnotation(annotation)
         let latitude = coordinates.latitude
-        let longitutde = coordinates.longitude
-        let weatherLocation = CLLocation(latitude: latitude, longitude: longitutde)
+        let longitude = coordinates.longitude
+        let weatherLocation = CLLocation(latitude: latitude, longitude: longitude)
         guard locationIsNotSet else {return}
         locationIsNotSet = false
         viewModel.setUpNewPosition(newPosition: weatherLocation)

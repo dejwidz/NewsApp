@@ -11,9 +11,9 @@ protocol OptionsDelegate: AnyObject {
     func newOptionsHasBeenSet(_ optionsViewController: OptionsViewController)
 }
 
-class OptionsViewController: UIViewController {
+final class OptionsViewController: UIViewController {
     
-    private var viewmodel = OptionsViewModel(model: OptionsModel())
+    private var viewModel = OptionsViewModel(model: OptionsModel())
     weak var delegate: OptionsDelegate?
     
     private let toDate: UIDatePicker = {
@@ -30,8 +30,8 @@ class OptionsViewController: UIViewController {
     }()
     
     @objc private func toDateChanged(_ sender: UIDatePicker) {
-        viewmodel.toDateHasChanged(sendedDate: sender.date)
-        viewmodel.setEndDate(newDate: sender.date)
+        viewModel.toDateHasChanged(sentDate: sender.date)
+        viewModel.setEndDate(newDate: sender.date)
     }
     
     private let fromDate: UIDatePicker = {
@@ -48,8 +48,8 @@ class OptionsViewController: UIViewController {
     }()
     
     @objc private func fromDateChanged(_ sender: UIDatePicker) {
-        viewmodel.fromDateHasChanged(sendedDate: sender.date)
-        viewmodel.setStartDate(newDate: sender.date)
+        viewModel.fromDateHasChanged(sentDate: sender.date)
+        viewModel.setStartDate(newDate: sender.date)
     }
     
     private let toDateLabel: UILabel = {
@@ -83,8 +83,8 @@ class OptionsViewController: UIViewController {
     
     @objc private func countrySelectedControlChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
-        viewmodel.countrySegmentedControlHasChanged(index: index)
-        viewmodel.setCountryIndex(newIndex: index)
+        viewModel.countrySegmentedControlHasChanged(index: index)
+        viewModel.setCountryIndex(newIndex: index)
     }
     
     private let topicsSegmentedControl: UISegmentedControl = {
@@ -100,14 +100,14 @@ class OptionsViewController: UIViewController {
     
     @objc private func topicsSegmentedControlChanged(_ sender: UISegmentedControl) {
         let index = sender.selectedSegmentIndex
-        viewmodel.TopicsSegmentedControlHasChanged(index: index)
-        viewmodel.setCategoryIndex(newIndex: index)
+        viewModel.TopicsSegmentedControlHasChanged(index: index)
+        viewModel.setCategoryIndex(newIndex: index)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Options"
-        viewmodel.delegate = self
+        viewModel.delegate = self
         view.backgroundColor = CustomColors.backColor
         view.addSubview(toDate)
         view.addSubview(fromDate)
@@ -157,10 +157,10 @@ class OptionsViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        viewmodel.getEndDate()
-        viewmodel.getStartDate()
-        viewmodel.getCountryIndex()
-        viewmodel.getCategoryIndex()
+        viewModel.getEndDate()
+        viewModel.getStartDate()
+        viewModel.getCountryIndex()
+        viewModel.getCategoryIndex()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

@@ -12,7 +12,7 @@ protocol newsTableViewCellDelegate: AnyObject {
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
 }
 
-class NewsTableViewCell: UITableViewCell {
+final class NewsTableViewCell: UITableViewCell {
     
     weak var delegate: newsTableViewCellDelegate?
     
