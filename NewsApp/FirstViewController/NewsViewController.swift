@@ -10,10 +10,11 @@ import SafariServices
 
 final class NewsViewController: UIViewController {
     
-    private let viewModel = NewsViewModel(model: NewsModel())
+    private let viewModel = NewsViewModel(model: NewsModel(netDataSupplier: NetworkingServices.shared, urlManager: URLBuilder.shared, latestArticleManager: DataStorage.shared, locationManager: DataStorage.shared))
     private var articlesToDisplay: [Article]?
     private let searchController = UISearchController()
     private var imageDataHolders: [ImageHolder]?
+    private var debouncer: Debouncing?
     
     let newsTableView: UITableView = {
         let tableView = UITableView()
@@ -46,7 +47,8 @@ final class NewsViewController: UIViewController {
         setupInterface()
         title = "NewsApp"
         
-        DataStorage.shared.setFirstLocation()
+        viewModel.setFirsLocation()
+        debouncer = Debouncer(delay: 2)
         newsTableView.delegate = self
         newsTableView.dataSource = self
         newsTableView.prefetchDataSource = self
@@ -65,7 +67,7 @@ final class NewsViewController: UIViewController {
     }
     
     @objc private func myChoiceButtonTapped() {
-        let vc = UserChoiceViewController()
+        let vc = UserChoiceViewController(userChoiceArticlesManager: DataStorage.shared)
         present(vc, animated: true)
     }
     
@@ -90,9 +92,9 @@ final class NewsViewController: UIViewController {
         
         guard longitude > 1 else {return}
         
-        for i in 0...longitude - 1 {
-            imageDataHolders?.append(ImageHolder(imageURL: articlesToDisplay![i].urlToImage ?? ""))
-            imageDataHolders![i].id = i
+        for element in 0...longitude - 1 {
+            imageDataHolders?.append(ImageHolder(imageURL: articlesToDisplay![element].urlToImage ?? "", netDataManager: NetworkingServices.shared))
+            imageDataHolders![element].id = element
         }
     }
     
@@ -125,7 +127,7 @@ final class NewsViewController: UIViewController {
             weatherButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             weatherButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             weatherButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            weatherButton.heightAnchor.constraint(equalToConstant: h * 0.1)
+            weatherButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1)
         ])
     }
 }
@@ -179,10 +181,10 @@ extension NewsViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     }
     
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        for ip in indexPaths {
-            let imageHolder = imageDataHolders![ip.row]
-            imageHolder.imageURL = articlesToDisplay![ip.row].urlToImage
-            imageHolder.id = ip.row
+        for indexpath in indexPaths {
+            let imageHolder = imageDataHolders![indexpath.row]
+            imageHolder.imageURL = articlesToDisplay![indexpath.row].urlToImage
+            imageHolder.id = indexpath.row
             imageHolder.downloadImage()
         }
     }
@@ -196,7 +198,6 @@ extension NewsViewController: NewsViewModelDelegate {
         self.articlesToDisplay = articles
         newsTableView.reloadData()
         setupImageHolders(longitude: articlesToDisplay!.count)
-        //        selectedRow = nil
         navigationController?.navigationItem.searchController?.searchBar.resignFirstResponder()
         scrollUp()
     }
@@ -204,7 +205,7 @@ extension NewsViewController: NewsViewModelDelegate {
 
 //MARK: - cell Delegate extension
 
-extension NewsViewController: newsTableViewCellDelegate {
+extension NewsViewController: NewsTableViewCellDelegate {
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?) {
         DataStorage.shared.addUserChoiceArticle(newArticle: article!)
     }
@@ -221,12 +222,10 @@ extension NewsViewController: newsTableViewCellDelegate {
 
 extension NewsViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
-        let temporaryString = searchController.searchBar.text
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 2) {
-            if temporaryString == searchController.searchBar.text {
-                self.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
-            }
-        }
+        debouncer?.callback = { [weak self] in
+            self?.viewModel.searchTextHasChanged(newText: searchController.searchBar.text!)
+                }
+                debouncer?.call()
     }
 }
 

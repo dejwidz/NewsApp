@@ -7,23 +7,21 @@
 
 import UIKit
 
-protocol newsTableViewCellDelegate: AnyObject {
+protocol NewsTableViewCellDelegate: AnyObject {
     func readButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, link: String?)
     func saveButtonHasBeenTapped(_ newsTableViewCell: NewsTableViewCell, article: Article?)
 }
 
 final class NewsTableViewCell: UITableViewCell {
     
-    weak var delegate: newsTableViewCellDelegate?
+    weak var delegate: NewsTableViewCellDelegate?
     
     var identifier = "newsCell"
     var article: Article?
     var imageHolder: ImageHolder?
     
-    
     let titleLabel: UILabel = {
         var label = UILabel()
-        label.clipsToBounds = true
         label.font = .systemFont(ofSize: 20, weight: .heavy)
         label.textColor = CustomColors.fontColor
         label.backgroundColor = CustomColors.backColor
@@ -48,7 +46,7 @@ final class NewsTableViewCell: UITableViewCell {
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
         image.isHidden = false
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleAspectFit
         image.backgroundColor = UIColor.white
         image.tintColor = UIColor.black
         image.translatesAutoresizingMaskIntoConstraints = false
@@ -93,6 +91,7 @@ final class NewsTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupInterface()
     }
     
     required init?(coder: NSCoder) {
@@ -101,42 +100,43 @@ final class NewsTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    func setupInterface() {
+        self.contentView.backgroundColor = CustomColors.backColor
+        
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
         contentView.addSubview(image)
         contentView.addSubview(readButton)
         contentView.addSubview(saveButton)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        self.contentView.backgroundColor = CustomColors.backColor
-        
-        let w = contentView.frame.size.width
-        let h = contentView.frame.size.height
         
         NSLayoutConstraint.activate([
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: h * 0.05),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.02),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             titleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
-            titleLabel.heightAnchor.constraint(equalToConstant: h * 0.4),
+            titleLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.4),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            descriptionLabel.heightAnchor.constraint(equalToConstant: h * 0.5),
+            descriptionLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5),
             
             image.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             image.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
             image.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.45),
-            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.015)),
+            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
-            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: h * 0.1),
+            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: 20),
             readButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
             readButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.3),
-            readButton.heightAnchor.constraint(equalToConstant: h * 0.3),
+            readButton.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.3),
             
-            saveButton.topAnchor.constraint(equalTo: readButton.bottomAnchor, constant: h * 0.1),
+            saveButton.topAnchor.constraint(equalTo: readButton.bottomAnchor, constant: 20),
             saveButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
             saveButton.widthAnchor.constraint(equalTo: readButton.widthAnchor),
             saveButton.heightAnchor.constraint(equalTo: readButton.heightAnchor)
@@ -144,15 +144,15 @@ final class NewsTableViewCell: UITableViewCell {
     }
     
     func loadImageWithNetworkingServices() {
-        NetworkingServices.shared.getImageWithAlamo(link: article?.urlToImage, completion: { result in
-            switch result {
-            case .success(let data):
-                self.image.image = UIImage(data: data)
-            case .failure(let error):
-                self.image.image = UIImage(named: "newsAppIcon")
-                print(error.localizedDescription)
-            }
-        })
+//        NetworkingServices.shared.getImage(link: article?.urlToImage, completion: { result in
+//            switch result {
+//            case .success(let data):
+//                self.image.image = UIImage(data: data)
+//            case .failure(let error):
+//                self.image.image = UIImage(named: "newsAppIcon")
+//                print(error.localizedDescription)
+//            }
+//        })
     }
     
     func setImageHolder(imageHolder: ImageHolder) {
@@ -174,6 +174,3 @@ final class NewsTableViewCell: UITableViewCell {
         self.image.image = UIImage(named: "newsAppIcon")
     }
 }
-
-
-

@@ -39,7 +39,7 @@ final class UserChoiceTableViewCell: UITableViewCell {
         let image = UIImageView()
         image.clipsToBounds = true
         image.layer.cornerRadius = 10
-        image.contentMode = .scaleAspectFill
+        image.contentMode = .scaleAspectFit
         image.backgroundColor = UIColor.white
         image.tintColor = UIColor.black
         image.isHidden = false
@@ -69,6 +69,7 @@ final class UserChoiceTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupInterface()
     }
     
     required init?(coder: NSCoder) {
@@ -77,44 +78,46 @@ final class UserChoiceTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(image)
-        contentView.addSubview(readButton)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+    }
+    
+    func setupInterface() {
         self.contentView.backgroundColor = CustomColors.backColor
-        let w = contentView.frame.size.width
-        let h = contentView.frame.size.height
+        
+        contentView.addSubview(titleLabel)
+        contentView.addSubview(descriptionLabel)
+        contentView.addSubview(image)
+        contentView.addSubview(readButton)
         
         NSLayoutConstraint.activate([
             
-            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: h * 0.05),
-            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.02),
+            titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 8),
             titleLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
-            titleLabel.heightAnchor.constraint(equalToConstant: h * 0.4),
+            titleLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.4),
             
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             descriptionLabel.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
             descriptionLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor),
-            descriptionLabel.heightAnchor.constraint(equalToConstant: h * 0.5),
+            descriptionLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.5),
             
             image.topAnchor.constraint(equalTo: titleLabel.topAnchor),
             image.bottomAnchor.constraint(equalTo: descriptionLabel.bottomAnchor),
             image.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.45),
-            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.015)),
+            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -8),
             
-            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: h * 0.15),
+            readButton.topAnchor.constraint(equalTo: image.topAnchor, constant: 30),
             readButton.centerXAnchor.constraint(equalTo: image.centerXAnchor),
             readButton.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.3),
-            readButton.heightAnchor.constraint(equalToConstant: h * 0.3)
-        ])
+            readButton.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.3)
+            ])
     }
     
     func loadImageWithNetworkingServices() {
-        NetworkingServices.shared.getImageWithAlamo(link: article?.urlToImage, completion: { result in
+        NetworkingServices.shared.getImage(link: article?.urlToImage, completion: { result in
             switch result {
             case .success(let data):
                 self.image.image = UIImage(data: data)

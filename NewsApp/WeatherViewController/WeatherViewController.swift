@@ -9,8 +9,8 @@ import UIKit
 
 final class WeatherViewController: UIViewController {
     
-    private let viewModel = WeatherViewModel(model: WeatherModel())
-    private var weatherToDisplay: [HourlyWeather] = []
+    private let viewModel = WeatherViewModel(model: WeatherModel(netDataSupplier: NetworkingServices.shared), dateManager: GeneralDateFormatter.shared)
+    private var weatherToDisplay: [WeatherInfo] = []
     private var currentHourWithoutMinutes = 0
     
     private let weatherTableView: UITableView = {
@@ -56,10 +56,10 @@ extension WeatherViewController: WeatherViewModelDelegate {
         weatherTableView.scrollToRow(at: currentHourIndexPath, at: .middle, animated: true)
     }
     
-    func weatherHasBeenBuilt(_ weatherViewModel: WeatherViewModelProtocol, weather: [HourlyWeather]) {
+    func weatherHasBeenBuilt(_ weatherViewModel: WeatherViewModelProtocol, weather: [WeatherInfo]) {
         weatherToDisplay = weather
         weatherTableView.reloadData()
-        viewModel.getCurrentHourWithoutMinuts()
+        viewModel.getCurrentHourWithoutMinutes()
     }
 }
 
@@ -70,7 +70,7 @@ extension WeatherViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = weatherTableView.dequeueReusableCell(withIdentifier: "weatherCell") as! WeatherTableViewCell
-        cell.weatherData = weatherToDisplay[indexPath.row]
+        cell.configure(withData: weatherToDisplay[indexPath.row])
         cell.selectionStyle = .none
         
         guard indexPath.row == currentHourWithoutMinutes else {

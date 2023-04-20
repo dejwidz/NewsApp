@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 
 struct CustomColors {
-    static let fontColor = UIColor(named: "dark&light")
-    static let backColor = UIColor(named: "background")
+    
+    static let fontColor = UIColor(named: "fontColor")
+    static let backColor = UIColor(named: "backColor")
     static let fontColorLight = UIColor(named: "fontColorLight")
 }

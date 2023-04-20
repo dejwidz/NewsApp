@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct HourlyWeather {
+struct WeatherInfo {
     let dayName: String
     let hour: String
     let temperature: Double
     let rain: Double
-    let cloudcover: Double
+    let cloudCover: Double
     let snow: Double
     let code: Double
     
@@ -21,7 +21,7 @@ struct HourlyWeather {
         self.hour = hour
         self.temperature = temperature
         self.rain = rain
-        self.cloudcover = cloudcover
+        self.cloudCover = cloudcover
         self.snow = snow
         self.code = code
     }

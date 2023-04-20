@@ -31,7 +31,13 @@ protocol OptionsModelDelegate: AnyObject {
 }
 
 final class OptionsModel: OptionsModelProtocol {
+    
     weak var delegate: OptionsModelDelegate?
+    private var urlManager: URLManager?
+    
+    init(urlManager: URLManager) {
+        self.urlManager = urlManager
+    }
     
     func setStartDate(newDate: Date) {
         OptionsViewData.shared.setStartDate(newDate: newDate)
@@ -67,22 +73,22 @@ final class OptionsModel: OptionsModelProtocol {
     
     func countryHasChanged(newCountry: Countries) {
         guard newCountry.rawValue != "" else {
-            URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: false)
+            urlManager?.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: false)
             return
         }
-        URLBuilder.shared.setCountry(newCountry: newCountry)
-        URLBuilder.shared.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: true)
+        urlManager?.setCountry(newCountry: newCountry)
+        urlManager?.setUserIsInterestedInSpecificTopicIndicator(newIndicatorValue: true)
     }
     
     func categoryHasChanged(newCategory: Categories) {
-        URLBuilder.shared.setCategory(newCategory: newCategory)
+        urlManager?.setCategory(newCategory: newCategory)
     }
     
     func fromDateHasChanged(fromDate: String) {
-        URLBuilder.shared.setDateFrom(newDateFrom: fromDate)
+        urlManager?.setDateFrom(newDateFrom: fromDate)
     }
     
     func toDateHasChanged(toDate: String) {
-        URLBuilder.shared.setDateTo(newDateTo: toDate)
+        urlManager?.setDateTo(newDateTo: toDate)
     }
 }

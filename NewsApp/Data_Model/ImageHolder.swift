@@ -14,9 +14,11 @@ final class ImageHolder {
     var isAlreadyDownloading = false
     var id: Int?
     var cachedImage: UIImage?
+    var netDataManager: NetDataSupplier?
     
-    init(imageURL: String) {
+    init(imageURL: String, netDataManager: NetDataSupplier) {
         self.imageURL = imageURL
+        self.netDataManager = netDataManager
     }
     
     func downloadImage() {
@@ -24,7 +26,7 @@ final class ImageHolder {
         
         isAlreadyDownloading = true
         
-        NetworkingServices.shared.getImageWithAlamo(link: imageURL, completion: {result in
+        netDataManager?.getImage(link: imageURL, completion: {result in
             switch result {
                 
             case .success(let data):

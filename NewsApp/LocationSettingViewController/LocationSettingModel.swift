@@ -21,14 +21,18 @@ protocol LocationSettingModelDelegate: AnyObject {
 final class LocationSettingModel {
     
     weak var delegate: LocationSettingModelDelegate?
+    private var locationManager: LocationManager?
     private var position: CLLocation?
     
-    init() {}
+    
+    init(locationManager: LocationManager) {
+        self.locationManager = locationManager
+    }
 }
 
 extension LocationSettingModel: LocationSettingModelProtocol {
     func setUpNewPosition(newPosition: CLLocation) {
-        DataStorage.shared.setLastLocation(newLocation: newPosition)
+        locationManager?.setLastLocation(newLocation: newPosition)
         delegate?.locationHasBeenSet(self)
     }
 }

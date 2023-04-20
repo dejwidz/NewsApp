@@ -13,7 +13,7 @@ protocol OptionsDelegate: AnyObject {
 
 final class OptionsViewController: UIViewController {
     
-    private var viewModel = OptionsViewModel(model: OptionsModel())
+    private var viewModel = OptionsViewModel(model: OptionsModel(urlManager: URLBuilder.shared), dateManager: GeneralDateFormatter.shared)
     weak var delegate: OptionsDelegate?
     
     private let toDate: UIDatePicker = {
@@ -88,7 +88,7 @@ final class OptionsViewController: UIViewController {
     }
     
     private let topicsSegmentedControl: UISegmentedControl = {
-        let segment = UISegmentedControl(items: ["General", "Science", "Sport", "Bussines", "Technology"])
+        let segment = UISegmentedControl(items: ["General", "Science", "Sport", "Business", "Technology"])
         segment.selectedSegmentIndex = 0
         segment.backgroundColor = UIColor.black
         UISegmentedControl.appearance().setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.white], for: .normal)
@@ -119,18 +119,15 @@ final class OptionsViewController: UIViewController {
     }
     
     private func setupInterface() {
-        let w = UIScreen.main.bounds.width
-        let h = UIScreen.main.bounds.height
-        
         NSLayoutConstraint.activate([
             toDateLabel.topAnchor.constraint(equalTo: view.topAnchor),
-            toDateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: w * 0.05),
+            toDateLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             toDateLabel.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.5),
-            toDateLabel.heightAnchor.constraint(equalToConstant: h * 0.1),
+            toDateLabel.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
             
             toDate.topAnchor.constraint(equalTo: toDateLabel.topAnchor),
             toDate.leadingAnchor.constraint(equalTo: toDateLabel.trailingAnchor, constant: 5),
-            toDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(w * 0.1)),
+            toDate.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             toDate.heightAnchor.constraint(equalTo: toDateLabel.heightAnchor),
             
             fromDateLabel.topAnchor.constraint(equalTo: toDateLabel.bottomAnchor),
@@ -144,11 +141,11 @@ final class OptionsViewController: UIViewController {
             fromDate.heightAnchor.constraint(equalTo: toDate.heightAnchor),
             
             countrySegmentedControl.topAnchor.constraint(equalTo: fromDateLabel.bottomAnchor),
-            countrySegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: w * 0.01),
-            countrySegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -(w * 0.01)),
+            countrySegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
+            countrySegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
             countrySegmentedControl.heightAnchor.constraint(equalTo: toDateLabel.heightAnchor),
             
-            topicsSegmentedControl.topAnchor.constraint(equalTo: countrySegmentedControl.bottomAnchor, constant: h * 0.03),
+            topicsSegmentedControl.topAnchor.constraint(equalTo: countrySegmentedControl.bottomAnchor, constant: 25),
             topicsSegmentedControl.leadingAnchor.constraint(equalTo: countrySegmentedControl.leadingAnchor),
             topicsSegmentedControl.widthAnchor.constraint(equalTo: countrySegmentedControl.widthAnchor),
             topicsSegmentedControl.heightAnchor.constraint(equalTo: countrySegmentedControl.heightAnchor)

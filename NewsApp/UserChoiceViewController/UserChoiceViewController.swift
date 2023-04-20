@@ -21,8 +21,18 @@ final class UserChoiceViewController: UIViewController {
         return tableView
     }()
     
-    private let viewModel = UserChoiceViewModel(model: UserChoiceModel())
+    private let viewModel = UserChoiceViewModel(model: UserChoiceModel(userChoiceArticlesManager: DataStorage.shared))
     private var articlesToShow: [UserChoiceArticle]?
+    private var userChoiceArticlesManager: UserChoiceArticlesManager?
+    
+    init(userChoiceArticlesManager: UserChoiceArticlesManager) {
+        super.init(nibName: nil, bundle: nil)
+        self.userChoiceArticlesManager = userChoiceArticlesManager
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +101,7 @@ extension UserChoiceViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         guard editingStyle == .delete else {return}
-        DataStorage.shared.deleteArticleFromUserChoice(articleToDelete: articlesToShow![indexPath.row])
+        userChoiceArticlesManager?.deleteArticleFromUserChoice(articleToDelete: articlesToShow![indexPath.row])
         userChoiceTableView.beginUpdates()
         articlesToShow?.remove(at: indexPath.row)
         userChoiceTableView.deleteRows(at: [indexPath], with: .right)

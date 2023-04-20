@@ -17,12 +17,16 @@ protocol UserChoiceModelDelegate: AnyObject {
 }
 
 final class UserChoiceModel: UserChoiceModelProtocol {
-    weak var delegate: UserChoiceModelDelegate?
     
-    init(){}
+    weak var delegate: UserChoiceModelDelegate?
+    private var userChoiceArticlesManager: UserChoiceArticlesManager?
+    
+    init(userChoiceArticlesManager: UserChoiceArticlesManager){
+        self.userChoiceArticlesManager = userChoiceArticlesManager
+    }
     
     func getUserChoiceArticles() {
-        let articlesToReturn = DataStorage.shared.getUserChoiceArticles()
-        delegate?.userChoiceArticlesHasBeenDownloaded(self, articles: articlesToReturn)
+        let articlesToReturn = userChoiceArticlesManager?.getUserChoiceArticles()
+        delegate?.userChoiceArticlesHasBeenDownloaded(self, articles: articlesToReturn ?? [])
     }
 }

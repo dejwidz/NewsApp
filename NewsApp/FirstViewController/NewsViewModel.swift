@@ -12,6 +12,7 @@ protocol NewsViewModelProtocol: AnyObject {
     func getArticlesToDisplay()
     func searchTextHasChanged(newText: String)
     func setWeatherIndicator(weatherIndicator: Bool)
+    func setFirsLocation()
 }
 
 protocol NewsViewModelDelegate: AnyObject {
@@ -26,6 +27,10 @@ final class NewsViewModel: NewsViewModelProtocol {
     init(model: NewsModelProtocol) {
         self.model = model
         model.delegate = self
+    }
+    
+    func setFirsLocation() {
+        model.setFirstLocation()
     }
     
     func getArticlesToDisplay() {
@@ -47,25 +52,28 @@ final class NewsViewModel: NewsViewModelProtocol {
     
     private func prepareStringToMakeQuery(stringToPrepare: String) -> String {
         var tempString = stringToPrepare.lowercased()
-        let prohibitSet = CharacterSet(charactersIn: " -_=+!@#$%^&*();.>,</?")
-        tempString = tempString.trimmingCharacters(in: prohibitSet)
+//        let prohibitSet = CharacterSet(charactersIn: " -_=+!@#$%^&*();.>,</?")
+//        tempString = tempString.trimmingCharacters(in: prohibitSet)
         tempString = tempString.replacingOccurrences(of: " ", with: "-")
+        tempString.unicodeScalars.removeAll(where: { !CharacterSet.urlUserAllowed.contains($0) })
+    print("ZAPYTANIE  ",tempString)
         return tempString
     }
     
     func setWeatherIndicator(weatherIndicator: Bool) {
         model.setWeatherIndicator(weatherIndicator: weatherIndicator)
     }
-    
 }
+
+//MARK: - model Delegate extension
 
 extension NewsViewModel: NewsModelDelegate {
     func latestArticlesHasBeenSent(_ newsModel: NewsModelProtocol, articles: [Article]) {
         delegate?.articlesHasBeenDownloaded(self, articles: articles)
     }
     
-    func articlesHasBeenDownloaded(_ newsModel: NewsModelProtocol, articles: [Article]) {
-        delegate?.articlesHasBeenDownloaded(self, articles: articles)
+    func articlesHasBeenDownloaded(_ newsModel: NewsModelProtocol?, articles: [Article]?) {
+        delegate?.articlesHasBeenDownloaded(self, articles: articles ?? [])
     }
     
     func errorWhileDownloadingArticles(_ newsModel: NewsModelProtocol) {

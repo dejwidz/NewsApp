@@ -8,15 +8,13 @@
 import UIKit
 import MapKit
 import CoreLocation
-import SwiftUI
 
 final class LocationSettingViewController: UIViewController, MKMapViewDelegate {
     
-    private let viewModel = LocationSettingViewModel(model: LocationSettingModel())
+    private let viewModel = LocationSettingViewModel(model: LocationSettingModel(locationManager: DataStorage.shared))
     private let locationManager = CLLocationManager()
     private var currentUserLocation: CLLocation?
     private var locationIsNotSet = true
-    
     
     private var initialTopAnchor: NSLayoutConstraint?
     private var heightAnchorForFirstAnimation: NSLayoutConstraint?
@@ -150,17 +148,17 @@ final class LocationSettingViewController: UIViewController, MKMapViewDelegate {
         view.addSubview(map)
         
         NSLayoutConstraint.activate([
-            currentPositionButton.topAnchor.constraint(equalTo: view.topAnchor, constant: h * 0.1),
+            currentPositionButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             currentPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             currentPositionButton.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.8),
             currentPositionButton.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.1),
             
-            lastPositionButton.topAnchor.constraint(equalTo: currentPositionButton.bottomAnchor, constant: h * 0.05),
+            lastPositionButton.topAnchor.constraint(equalTo: currentPositionButton.bottomAnchor, constant: 30),
             lastPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             lastPositionButton.widthAnchor.constraint(equalTo: currentPositionButton.widthAnchor),
             lastPositionButton.heightAnchor.constraint(equalTo: currentPositionButton.heightAnchor),
             
-            customPositionButton.topAnchor.constraint(equalTo: lastPositionButton.bottomAnchor, constant: h * 0.05),
+            customPositionButton.topAnchor.constraint(equalTo: lastPositionButton.bottomAnchor, constant: 30),
             customPositionButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             customPositionButton.widthAnchor.constraint(equalTo: lastPositionButton.widthAnchor),
             customPositionButton.heightAnchor.constraint(equalTo: lastPositionButton.heightAnchor),

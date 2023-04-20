@@ -9,10 +9,12 @@ import Foundation
 
 
 struct Weather: Codable {
-    var hourly: Hourly?
+    
+    var hourly: WeatherData?
 }
 
-struct Hourly: Codable {
+struct WeatherData: Codable {
+    
     var time: [String]?
     var temperature_2m: [Double]?
     var rain: [Double]?

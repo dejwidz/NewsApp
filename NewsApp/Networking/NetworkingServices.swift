@@ -9,11 +9,15 @@ import Foundation
 import UIKit
 import Alamofire
 
-final class NetworkingServices {
+protocol NetDataSupplier {
+    func getImage(link: String?, completion: @escaping ((Result<Data, Error>) -> Void))
+    func getDataFromWeb<T: Decodable>(typename: T, completion: @escaping ((Result<T, Error>) -> Void))
+}
+
+final class NetworkingServices: NetDataSupplier {
     
     static var shared = NetworkingServices()
     private init () {}
-    var articlesToReturn: [Article]?
     
     enum NetworkingErrors: Error {
         case wrongURL
@@ -21,7 +25,7 @@ final class NetworkingServices {
         case wrongDecoding
     }
     
-    func getImageWithAlamo(link: String?, completion: @escaping ((Result<Data, Error>) -> Void)) {
+    func getImage(link: String?, completion: @escaping ((Result<Data, Error>) -> Void)) {
         guard let link = link else {
             completion(.failure(NetworkingErrors.wrongURL))
             return

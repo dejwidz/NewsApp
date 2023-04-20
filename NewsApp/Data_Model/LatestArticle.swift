@@ -7,7 +7,6 @@
 
 import Foundation
 import RealmSwift
-import UIKit
 
 final class LatestArticle: Object {
     
@@ -21,7 +20,7 @@ final class LatestArticle: Object {
     
     override init() {}
     
-    init(newArticle: Article) {
+    init(_ newArticle: Article) {
         self.author = newArticle.author
         self.title = newArticle.title
         self.descriptionn = newArticle.description

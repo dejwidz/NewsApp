@@ -8,11 +8,11 @@
 import Foundation
 
 enum Categories: String {
-    case general = "general"
-    case science = "science"
-    case sport = "sports"
-    case business = "business"
-    case technology = "technology"
+    case general 
+    case science
+    case sport
+    case business
+    case technology
 }
 
 enum Countries: String {

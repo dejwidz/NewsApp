@@ -36,10 +36,12 @@ final class OptionsViewModel {
     
     weak var delegate: OptionsViewModelDelegate?
     private var model: OptionsModelProtocol
+    private var dateManager: DateManager?
     
-    init(model: OptionsModelProtocol) {
+    init(model: OptionsModelProtocol, dateManager: DateManager) {
         self.model = model
         model.delegate = self
+        self.dateManager = dateManager
     }
 }
 
@@ -77,18 +79,14 @@ extension OptionsViewModel: OptionsViewModelProtocol {
     }
     
     func toDateHasChanged(sentDate: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-dd"
-        let stringDate = dateFormatter.string(from: sentDate)
+        guard let stringDate = dateManager?.dateInFormatYYYYMMdd(forDate: sentDate) else { return }
         let maximumDate = Calendar.current.date(byAdding: .day, value: -1, to: sentDate)
         delegate?.newMaximalDateForFromDate(self, newDate: maximumDate!)
         model.toDateHasChanged(toDate: stringDate)
     }
     
     func fromDateHasChanged(sentDate: Date) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "YYYY-MM-dd"
-        let stringDate = dateFormatter.string(from: sentDate)
+        guard let stringDate = dateManager?.dateInFormatYYYYMMdd(forDate: sentDate) else { return }
         let minimalDate = Calendar.current.date(byAdding: .day, value: 1, to: sentDate)
         delegate?.newMinimalDateForToDate(self, newDate: minimalDate!)
         model.fromDateHasChanged(fromDate: stringDate)

@@ -10,6 +10,7 @@ import RealmSwift
 import CoreLocation
 
  final class UserLocation: Object {
+     
     @Persisted private var latitude: String?
     @Persisted private var longitude: String?
      

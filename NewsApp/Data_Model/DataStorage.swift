@@ -9,7 +9,26 @@ import Foundation
 import RealmSwift
 import CoreLocation
 
-final class DataStorage {
+protocol UserChoiceArticlesManager {
+    func addUserChoiceArticle(newArticle: Article)
+    func getUserChoiceArticles() -> [UserChoiceArticle]
+    func deleteArticleFromUserChoice(articleToDelete: UserChoiceArticle)
+}
+
+protocol LatestArticlesManager {
+    func setLatestArticles(latestArticles: [Article])
+    func getLatestArticles() -> [Article]
+    func deleteLatestArticles()
+}
+
+protocol LocationManager {
+    func setLastLocation(newLocation: CLLocation)
+    func setFirstLocation(_ firstLocation: CLLocation)
+    func getLastLocationLatitude() -> String
+    func getLastLocationLongitude() -> String
+}
+
+final class DataStorage: UserChoiceArticlesManager, LatestArticlesManager, LocationManager {
     
     static var shared = DataStorage()
     private var storedInformation = try! Realm()
@@ -19,17 +38,21 @@ final class DataStorage {
     func addUserChoiceArticle(newArticle: Article) {
         guard articleHasNotBeenAddedYet(newArticle: newArticle) else { return }
         let newUserChoiceArticle = UserChoiceArticle(newArticle: newArticle)
-        try! storedInformation.write {
-            storedInformation.add(newUserChoiceArticle)
+        do {
+            try storedInformation.write {
+                storedInformation.add(newUserChoiceArticle)
+            }
         }
+        catch {}
     }
     
     private func articleHasNotBeenAddedYet(newArticle: Article) -> Bool {
         var articleHasNotBeenAddedYet = true
         let userChoiceArticles = storedInformation.objects(UserChoiceArticle.self)
-        for i in userChoiceArticles {
-            if i.url == newArticle.url {
+        for article in userChoiceArticles {
+            if article.url == newArticle.url {
                 articleHasNotBeenAddedYet = false
+                break
             }
         }
         return articleHasNotBeenAddedYet
@@ -38,75 +61,80 @@ final class DataStorage {
     func getUserChoiceArticles() -> [UserChoiceArticle] {
         let userChoiceArticles = storedInformation.objects(UserChoiceArticle.self)
         var articlesToReturn: [UserChoiceArticle] = []
-        for i in userChoiceArticles {
-            articlesToReturn.append(i)
-        }
+        userChoiceArticles.forEach { articlesToReturn.append($0) }
         return articlesToReturn
     }
     
     func deleteArticleFromUserChoice(articleToDelete: UserChoiceArticle) {
-        try! storedInformation.write {
-            storedInformation.delete(articleToDelete)
+        do {
+            try storedInformation.write {
+                storedInformation.delete(articleToDelete)
+            }
         }
+        catch {}
     }
     
     func setLatestArticles(latestArticles: [Article]) {
         deleteLatestArticles()
-        for i in latestArticles {
-            let latestArticle = LatestArticle(newArticle: i)
-            try! storedInformation.write({
-                storedInformation.add(latestArticle)
-            })
+        latestArticles.forEach {
+            let latestArticle = LatestArticle($0)
+            do {
+                try storedInformation.write({
+                    storedInformation.add(latestArticle)
+                })
+            }
+            catch  {}
         }
     }
     
     func getLatestArticles() -> [Article] {
         let articles = storedInformation.objects(LatestArticle.self)
         var articlesToReturn: [Article] = []
-        for i in articles {
-            let nextArticle = Article(newArticle: i)
+        articles.forEach {
+            let nextArticle = Article(newArticle: $0)
             articlesToReturn.append(nextArticle)
         }
         return articlesToReturn
     }
     
     func deleteLatestArticles() {
-        try! storedInformation.write({
-            let latestArticles = storedInformation.objects(LatestArticle.self)
-            storedInformation.delete(latestArticles)
-        })
+        do {
+            try storedInformation.write({
+                let latestArticles = storedInformation.objects(LatestArticle.self)
+                storedInformation.delete(latestArticles)
+            })
+        }
+        catch {}
     }
     
     func setLastLocation(newLocation: CLLocation) {
-        guard !storedInformation.objects(UserLocation.self).isEmpty else {
-            setFirstLocation()
-            return
+        guard !storedInformation.objects(UserLocation.self).isEmpty else { return }
+        do {
+            try storedInformation.write {
+                let location = storedInformation.objects(UserLocation.self).first
+                location?.setLocation(newLocation: newLocation)
+            }
         }
-        try! storedInformation.write {
-            let location = storedInformation.objects(UserLocation.self).first
-            location?.setLocation(newLocation: newLocation)
-        }
+        catch {}
     }
     
-    func setFirstLocation() {
-        guard storedInformation.objects(UserLocation.self).isEmpty else {
-            return
-        }
-        let location = UserLocation(location: CLLocation.init(latitude: +37.78583400, longitude: -122.40641700))
+    func setFirstLocation(_ firstLocation: CLLocation) {
+        guard storedInformation.objects(UserLocation.self).isEmpty else { return }
+        let location = UserLocation(location: CLLocation.init(latitude: firstLocation.coordinate.latitude, longitude: firstLocation.coordinate.longitude))
         
-        try! storedInformation.write {
-            storedInformation.add(location)
+        do {
+            try storedInformation.write {
+                storedInformation.add(location)
+            }
         }
+        catch  {}
     }
     
     func getLastLocationLatitude() -> String {
-        let location = storedInformation.objects(UserLocation.self).first
-        return (location?.getLatitude())!
+        return storedInformation.objects(UserLocation.self).first?.getLatitude() ?? ""
     }
     
     func getLastLocationLongitude() -> String {
-        let location = storedInformation.objects(UserLocation.self).first
-        return (location?.getLongitude())!
+        return storedInformation.objects(UserLocation.self).first?.getLongitude() ?? ""
     }
 }
-

@@ -13,20 +13,23 @@ protocol WeatherModelProtocol: AnyObject {
 }
 
 protocol WeatherModelDelegate: AnyObject {
-    func weatherHasBeenDownloaded(_ weatherModel: WeatherModelProtocol, weather: Weather)
+    func weatherHasBeenDownloaded(_ weatherModel: WeatherModelProtocol?, weather: Weather)
 }
 
 final class WeatherModel: WeatherModelProtocol {
     
     weak var delegate: WeatherModelDelegate?
+    private var netDataSupplier: NetDataSupplier?
     
-    init() {}
+    init(netDataSupplier: NetDataSupplier) {
+        self.netDataSupplier = netDataSupplier
+    }
     
     func getWeatherData() {
-        NetworkingServices.shared.getDataFromWeb(typename: Weather(), completion: {[weak self] result in
+        netDataSupplier?.getDataFromWeb(typename: Weather(), completion: {[weak self] result in
             switch result {
             case .success(let weather):
-                self?.delegate?.weatherHasBeenDownloaded(self!, weather: weather)
+                self?.delegate?.weatherHasBeenDownloaded(self, weather: weather)
             case .failure(let error):
                 print(error.localizedDescription)
             }

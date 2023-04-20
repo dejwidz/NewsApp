@@ -10,7 +10,7 @@ import UIKit
 final class WeatherTableViewCell: UITableViewCell {
     
     var identifier = "weatherCell"
-    var weatherData: HourlyWeather?
+    var weatherData: WeatherInfo?
     var nowIndicator = false
     
     private let dayNameLabel: UILabel = {
@@ -98,6 +98,8 @@ final class WeatherTableViewCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?){
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupInterface()
+        
     }
     
     required init?(coder: NSCoder) {
@@ -106,6 +108,15 @@ final class WeatherTableViewCell: UITableViewCell {
     
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+    func setupInterface() {
+        self.contentView.backgroundColor = CustomColors.backColor
+
         contentView.addSubview(dayNameLabel)
         contentView.addSubview(hourLabel)
         contentView.addSubview(temperatureLabel)
@@ -113,54 +124,48 @@ final class WeatherTableViewCell: UITableViewCell {
         contentView.addSubview(snowLabel)
         contentView.addSubview(cloudsLabel)
         contentView.addSubview(image)
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        
-        self.contentView.backgroundColor = CustomColors.backColor
-        
-        let w = contentView.frame.size.width
-        let h = contentView.frame.size.height
-        
+
         NSLayoutConstraint.activate([
-            
+
             dayNameLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
-            dayNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: w * 0.05),
-            dayNameLabel.widthAnchor.constraint(equalToConstant: w * 0.4),
-            dayNameLabel.heightAnchor.constraint(equalToConstant: h * 0.15),
-            
+            dayNameLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            dayNameLabel.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.4),
+            dayNameLabel.heightAnchor.constraint(equalTo: contentView.heightAnchor, multiplier: 0.15),
+
             hourLabel.topAnchor.constraint(equalTo: dayNameLabel.bottomAnchor),
             hourLabel.leadingAnchor.constraint(equalTo: dayNameLabel.leadingAnchor),
             hourLabel.widthAnchor.constraint(equalTo: dayNameLabel.widthAnchor),
             hourLabel.heightAnchor.constraint(equalTo: dayNameLabel.heightAnchor),
-            
+
             temperatureLabel.topAnchor.constraint(equalTo: hourLabel.bottomAnchor),
             temperatureLabel.leadingAnchor.constraint(equalTo: hourLabel.leadingAnchor),
             temperatureLabel.widthAnchor.constraint(equalTo: hourLabel.widthAnchor),
             temperatureLabel.heightAnchor.constraint(equalTo: hourLabel.heightAnchor),
-            
+
             rainLabel.topAnchor.constraint(equalTo: temperatureLabel.bottomAnchor),
             rainLabel.leadingAnchor.constraint(equalTo: temperatureLabel.leadingAnchor),
             rainLabel.widthAnchor.constraint(equalTo: temperatureLabel.widthAnchor),
             rainLabel.heightAnchor.constraint(equalTo: temperatureLabel.heightAnchor),
-            
+
             snowLabel.topAnchor.constraint(equalTo: rainLabel.bottomAnchor),
             snowLabel.leadingAnchor.constraint(equalTo: rainLabel.leadingAnchor),
             snowLabel.widthAnchor.constraint(equalTo: rainLabel.widthAnchor),
             snowLabel.heightAnchor.constraint(equalTo: rainLabel.heightAnchor),
-            
+
             cloudsLabel.topAnchor.constraint(equalTo: snowLabel.bottomAnchor),
             cloudsLabel.leadingAnchor.constraint(equalTo: snowLabel.leadingAnchor),
             cloudsLabel.widthAnchor.constraint(equalTo: snowLabel.widthAnchor),
             cloudsLabel.heightAnchor.constraint(equalTo: snowLabel.heightAnchor),
-            
+
             image.topAnchor.constraint(equalTo: dayNameLabel.topAnchor),
-            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -(w * 0.05)),
-            image.widthAnchor.constraint(equalToConstant: w * 0.45),
+            image.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            image.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.45),
             image.bottomAnchor.constraint(equalTo: cloudsLabel.bottomAnchor)
         ])
-        
+    }
+    
+    func configure(withData: WeatherInfo) {
+        self.weatherData = withData
         setLabelsText()
         setImage()
     }
@@ -194,7 +199,7 @@ final class WeatherTableViewCell: UITableViewCell {
     }
     
     private func setClouds() {
-        guard let clouds = weatherData?.cloudcover else {return}
+        guard let clouds = weatherData?.cloudCover else {return}
         cloudsLabel.text = "Clouds: \(String(describing: clouds)) %"
     }
     
@@ -233,7 +238,7 @@ final class WeatherTableViewCell: UITableViewCell {
         guard let code = weatherData?.code,
               let rain = weatherData?.rain,
               let snow = weatherData?.snow,
-              let clouds = weatherData?.cloudcover
+              let clouds = weatherData?.cloudCover
         else {return ""}
         
         var imageName = ""
@@ -274,7 +279,7 @@ final class WeatherTableViewCell: UITableViewCell {
         guard let code = weatherData?.code,
               let rain = weatherData?.rain,
               let snow = weatherData?.snow,
-              let clouds = weatherData?.cloudcover
+              let clouds = weatherData?.cloudCover
         else {return ""}
         
         var imageName = ""
@@ -319,3 +324,5 @@ final class WeatherTableViewCell: UITableViewCell {
     }
 }
 
+ 
+ 
